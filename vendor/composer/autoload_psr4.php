@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Orhanerday\\OpenAi\\' => array($vendorDir . '/orhanerday/open-ai/src'),
+    'Automattic\\WooCommerce\\' => array($vendorDir . '/automattic/woocommerce/src/WooCommerce'),
 );
