@@ -24,6 +24,9 @@ $g10 = get10($page,$perpage);
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+<script type="text/javascript" src="/PJ2/generatenewtitle.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
 <script>
     function getPrducts($page,$perage,$searchTitle) {
         //var query_parameter = document.getElementById("name").value;
@@ -47,7 +50,7 @@ $g10 = get10($page,$perpage);
 <script type="text/javascript">
   function addtoList($name,$id,$img,$price,$link){
      //console.log(JSON.parse("<?php echo $g10[0]->name ?>"));
-      $('#listAdd tr:last').after('<tr><td>'+$id+'</td><td><button type="button" id="gennewtitle'+$id+'"class="btn btn-secondary btn-sm">New title</button></td><td><textarea class="form-control" id="title '+ $id +'" rows="1">'+$name+'</textarea></td><td><div class="zoomsss"><img src="'+$img+'" class="img-fluid img-thumbnail" width="60px"></div></td>><td>'+ $price +'</td>><td></td><td></td></tr>');
+      $('#listAdd tr:last').after('<tr><td>'+$id+'</td><td><button onclick="generatenewtitle(\''+$name+'\' , '+$id+')" type="button" style="display:flex" id="gennewtitle-'+$id+'"class="btn btn-secondary btn-sm">New title</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewtitle-'+$id+'loading" role="status"><span class="sr-only">Loading...</span> </div> </td><td><textarea class="form-control" id="title'+ $id +'" rows="1">'+$name+'</textarea></td><td><div class="zoomsss"><img src="'+$img+'" class="img-fluid img-thumbnail" width="60px"></div></td>><td>'+ $price +'</td><td><textarea class="form-control" id="content'+ $id +'" rows="1"></textarea></td><td><button type="button" id="gennewcontent'+$id+'"class="btn btn-secondary btn-sm">New content</button></td></tr>');
     }
 </script>
 

@@ -102,8 +102,8 @@ $searchTxt = "text";
           <th scope="col">Title</th>
           <th scope="col">Image</th>
           <th scope="col">Price</th>
-          <th scope="col">Remove</th>
-          <th scope="col">View</th>
+          <th scope="col">Description</th>
+          <th scope="col">New des</th>
         </tr>
       </thead>
       <tbody>
