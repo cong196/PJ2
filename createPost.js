@@ -9,11 +9,8 @@ function createPostJS($title,$content) {
        $('#txtResult').css('display', 'none');
     }
     ds();
-    console.log(content);
     $.post("createpost.php", { content: content, title:title},
     function(data) {
-        //console.log(data);
-        console.log(data);
         if(data == '0') { //Lỗi
             $('#txtResult').css('color', 'red');
             $('#txtResult').css('display', 'flex');
