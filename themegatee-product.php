@@ -68,7 +68,7 @@ $testvvv = "10";
 }
 
 .zoomsss:hover {
-  transform: scale(3.5);
+  transform: scale(6.5);
 }
 </style>
 

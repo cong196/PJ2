@@ -36,7 +36,7 @@
 
 
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-
+<script type="text/javascript" src="/PJ2/processimg.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -46,7 +46,6 @@
 .masthead {
   height: 100vh;
   min-height: 500px;
-  background-image: url('backgroound1.png');
   background-size: 1000px 1000px;
   background-position: center;
   background-repeat: no-repeat;
@@ -65,11 +64,37 @@
   <div class="container h-100">
     <div class="row h-100 align-items-center">
       <div class="col-12 text-center">
+
+
+      	<form class="row g-3">
+      <div class="col-7">
+        <label for="sssss" class="visually-hidden">Post title</label>
+        <input class="form-control" type="text" id="sssss" placeholder="Post title" aria-label="default input example">
+      </div>
+      <div class="col-5">
+        <button type="button" style="display:flex" class="btn btn-primary mb-3" id="gennewtitlepost" onclick="submit111()">Generate new title</button>
+
+        <button class="btn btn-primary" style="display:none" id="gennewtitlepost-loading" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...
+        </button>
+
+
+      </div>
+  </form>
+
+
+
       </div>
     </div>
   </div>
 </header>
-
+<script type="text/javascript">
+	function submit111(){
+			
+			var url = document.getElementById('sssss').value;
+			submitImg(url);
+	}
+</script>
 
 </body>
 </html>   

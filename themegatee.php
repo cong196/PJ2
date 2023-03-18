@@ -34,7 +34,7 @@ $searchTxt = "text";
 
 <script type="text/javascript" src="/PJ2/gennewposttitle.js"></script>
 <script type="text/javascript" src="/PJ2/createPost.js"></script>
-
+<script type="text/javascript" src="/PJ2/generatenewintro.js"></script>
 <link rel="stylesheet" href="/PJ2/mystyle.css">
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 
@@ -114,6 +114,7 @@ $searchTxt = "text";
     <div class="masthead">
 
     <div style="padding-top: 20px;">
+
     <form class="row g-3">
       <div class="col-7">
         <label for="inputtitlepost" class="visually-hidden">Post title</label>
@@ -129,6 +130,27 @@ $searchTxt = "text";
 
       </div>
   </form>
+
+  <form class="row g-3">
+      <div class="col-7">
+        <label for="txtintropost" class="visually-hidden">Intro</label>
+        <textarea class="form-control" id="txtintropost" rows="3"></textarea>
+      </div>
+      <div class="col-5">
+        <button type="button" style="display:flex" class="btn btn-primary mb-3" id="gennewIntro" onclick="gennewintro()">Generate new intro</button>
+
+        <button class="btn btn-primary" style="display:none" id="gennewIntro-loading" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+
+
+      </div>
+  </form>
+
+  <label for="imgfeatured" class="form-label">Featured Image URL</label>
+  <input class="form-control" type="text" placeholder="Enter image url" id="imgfeatured" aria-label="default input example">
+
+
 </div>
 
 
@@ -170,6 +192,10 @@ $searchTxt = "text";
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+
+          <label for="imgfeaturedinmodal" class="form-label">Featured Image URL</label>
+          <input class="form-control" type="text" placeholder="Enter image url" id="imgfeaturedinmodal" aria-label="default input example">
+          <br/>
 
           <label for="desc">Description</label>
           <textarea class="ckeditor" id="desc" name="desc" rows="57"></textarea>
@@ -225,11 +251,18 @@ $searchTxt = "text";
       }
     }
 
-    function setDataCheckEdt(){
-      
+    function gennewintro(){
+      var title = document.getElementById('txtposttitle').value;
+      if(title == ''){
+          alert('Enter post title..');
+      } else {
+          generatenewintro(title);
+      }
+    }
 
+    function setDataCheckEdt(){
        var arrData=[];
-       var content = '';
+       var content = '<p>' + $("#txtintropost").val() +'</p>';
        // loop over each table row (tr)
        $("#listAdd tr").each(function(){
             var currentRow=$(this);
@@ -253,18 +286,19 @@ $searchTxt = "text";
 
                 arrData.push(obj);*/
 
-                content = content + '<h2>'+ title + '</h2><p>' + description + '</p><img class="alignnone" src="' + image + '" alt="'+ title +'" width="700" height="700" /> <p>Buy it now from '+ price +' here : <a href="'+ link +'">'+ title +'</a></p>';
+                content = content + '<h2>'+ title + '</h2><p>' + description + '</p><img class="alignnone" src="' + image + '" alt="'+ title +'" width="700" height="700" /> <p>Buy it now from $'+ price +' here : <a href="'+ link +'">'+ title +'</a></p>';
             }
             
        });
 
        CKEDITOR.instances['desc'].setData(content);
-      
+       $("#imgfeaturedinmodal").val($("#imgfeatured").val());
     }
     function btncreatePost(){
         var titleValue = $("#txtposttitle").val();
+        var urlimg = $("#imgfeaturedinmodal").val();
         var data = CKEDITOR.instances.desc.getData();
-        createPostJS(titleValue,data);
+        createPostJS(titleValue,data,urlimg);
     }
 
   </script>
