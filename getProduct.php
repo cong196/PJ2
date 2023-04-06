@@ -28,6 +28,16 @@ function get10($pg, $perpage,$searchTitle){
 
 $g10 = get10($page,$perpage,$searchTitle); 
 
+
+function clean($string) {
+    $new_string = str_replace(
+        [",", "<", "'", "!", "'"], // 1. special chars to remove
+        "",                   // 2. replacement for the chars
+        $string               // 3. the original string
+    );
+    return $new_string;
+  }
+  
 ?>
 <table class="table table-image">
       <thead>
@@ -57,7 +67,7 @@ $g10 = get10($page,$perpage,$searchTitle);
           <td><?php echo $g10[$prz]->price ?></td>
         
           <td>
-              <button id="<?php echo $g10[$prz]->id .'-add' ?>" type="button" class="btn btn-primary" style="display:flex" onclick="addtoList(<?php echo "'".$g10[$prz]->name. "',".  $g10[$prz]->id . ",'". $imgprt ."','". $g10[$prz]->price . "','". substr(substr($g10[$prz]->permalink,31),0,-1) ."'"?>)"> Add</button>
+              <button id="<?php echo $g10[$prz]->id .'-add' ?>" type="button" class="btn btn-primary" style="display:flex" onclick="addtoList(<?php echo "'". clean($g10[$prz]->name). "',".  $g10[$prz]->id . ",'". $imgprt ."','". $g10[$prz]->price . "','". substr(substr($g10[$prz]->permalink,31),0,-1) ."'"?>)"> Add</button>
 
           </td>
           <td><a href="<?php echo $g10[$prz]->permalink?>" target="_blank"><i class="bi bi-eye"></i></a></td>
