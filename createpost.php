@@ -24,8 +24,8 @@
         if( 'Created' === wp_remote_retrieve_response_message( $request ) ) {
             $body = json_decode( wp_remote_retrieve_body( $request ) );
             $featured_image_id = $body->id;
-            echo $featured_image_id;
-            //return $featured_image_id;
+            //echo $featured_image_id;
+            return $featured_image_id;
 
             $goodContent = str_replace('\"', '"', $content);
             $api_response = wp_remote_post('https://themegatee.com/wp-json/wp/v2/posts', array(
