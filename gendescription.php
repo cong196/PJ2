@@ -1,6 +1,7 @@
 <?php 
 require __DIR__ . '/vendor/autoload.php';
 use Orhanerday\OpenAi\OpenAi;
+include "config.php";
 $title =  $_POST['title'];
 $customprompt =  $_POST['prompt'];
 //echo $customprompt;
@@ -10,7 +11,7 @@ if($customprompt == '') {
 } else {
     $prompt = $customprompt;
 }
-    $open_ai = new OpenAi('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');
+    $open_ai = new OpenAi(getChatGPTKey());
     $complete = $open_ai->completion([
         'model' => 'text-davinci-003',
         'prompt' => $prompt,
@@ -28,7 +29,7 @@ if($customprompt == '') {
     $result = str_replace("\"","",$result1);
 
     $prompt2 = 'make a title for this content: ' . $result;
-    $open_ai2 = new OpenAi('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');
+    $open_ai2 = new OpenAi(getChatGPTKey());
     $complete2 = $open_ai2->completion([
         'model' => 'text-davinci-003',
         'prompt' => $prompt2,

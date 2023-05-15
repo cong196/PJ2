@@ -19,7 +19,7 @@ function generateDescription($title,$id,$prompt,$urlimg) {
         $('#gendes-' + id).css('display', 'flex');
         //console.log(data);
         var data1 = CKEDITOR.instances['content-'+id].getData();
-        CKEDITOR.instances['content-'+id].setData(data + '<br/>' +  data1);
+        CKEDITOR.instances['content-'+id].setData(data + '<br/> <img class="alignnone" title="' + title + '" src=" '+ urlimg +' " alt="' + title + '" width="600" />' +  data1);
         
     });
 

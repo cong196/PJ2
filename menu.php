@@ -21,6 +21,8 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/PJ2/themegatee.php">Creat Post</a>
           <a class="dropdown-item" href="/PJ2/themegatee-editproduct.php?page=1&perpage=10&searchTitle=">Edit product</a>
+          <a class="dropdown-item" href="/PJ2/themega-editdraftproduct.php?page=1&perpage=10&searchTitle=">Edit draft product</a>
+          <a class="dropdown-item" href="/PJ2/themegatee-setting.php">Setting</a>
         </div>
       </li>
 
