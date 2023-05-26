@@ -4,7 +4,7 @@ $url = '';
 $ck = '';
 $cs = '';
 function getChatGPTKey(){
-    return "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";
+    return "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";
 }
 
 function getKey($site){

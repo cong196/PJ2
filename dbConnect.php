@@ -128,7 +128,8 @@ function deletTableTag($site){
 }
 
 function updateCategory($site,$id,$name,$slug){
-    $dbh = mysqli_connect('localhost', 'root', ''); 
+    $dbh = mysqli_connect('localhost', 'root', '');
+    $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
@@ -138,7 +139,7 @@ function updateCategory($site,$id,$name,$slug){
         } else {
             if($site == 'themegatee') {
 
-             $sql_stmt = "INSERT INTO themegatee_category VALUES ($id,'".$name."','".$slug."')";
+             $sql_stmt = "INSERT INTO themegatee_category VALUES ($id,'".$name2."','".$slug."')";
              $result = mysqli_query($dbh,$sql_stmt);
             }
             // Câu lệnh select
@@ -149,7 +150,8 @@ function updateCategory($site,$id,$name,$slug){
 }
 
 function updateTag($site,$id,$name,$slug){
-    $dbh = mysqli_connect('localhost', 'root', ''); 
+    $dbh = mysqli_connect('localhost', 'root', '');
+    $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
@@ -159,7 +161,7 @@ function updateTag($site,$id,$name,$slug){
         } else {
             if($site == 'themegatee') {
 
-             $sql_stmt = "INSERT INTO themegatee_tag VALUES ($id,'".$name."','".$slug."')";
+             $sql_stmt = "INSERT INTO themegatee_tag VALUES ($id,'".$name2."','".$slug."')";
              $result = mysqli_query($dbh,$sql_stmt);
             }
             // Câu lệnh select
