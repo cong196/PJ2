@@ -4,7 +4,7 @@ $title =  $_POST['title'];
 $prompt = 'make another title for following title : '. $title;
 	require __DIR__ . '/vendor/autoload.php';
 	use Orhanerday\OpenAi\OpenAi;
-	$open_ai = new OpenAi('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');
+	$open_ai = new OpenAi('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');
 	// get prompt parameter
 	//$prompt = $_GET['prompt'];
 	// set api data

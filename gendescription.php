@@ -2,12 +2,21 @@
 require __DIR__ . '/vendor/autoload.php';
 use Orhanerday\OpenAi\OpenAi;
 include "config.php";
+include "dbConnect.php";
 $title =  $_POST['title'];
 $customprompt =  $_POST['prompt'];
+$edtKeyword = $_POST['edtKeyword'];
+$selectmainCategory = $_POST['selectmainCategory'];
+$curPageName = $_POST['curPageName'];
 //echo $customprompt;
 $prompt = '';
 if($customprompt == '') {
-    $prompt = 'write a describe about : '. $title;
+    if($edtKeyword == ''){
+        $prompt = 'write a describe about : '. $title;
+    } else {
+        $prompt = 'write a describe about : '. $title .', focus to design. make paragraph contain "'.$edtKeyword.'" word and have least at 50 words';
+    }
+    
 } else {
     $prompt = $customprompt;
 }
@@ -27,7 +36,6 @@ if($customprompt == '') {
     $rs = $rs1['choices'][0]['text'];
     $result1 = trim($rs);
     $result = str_replace("\"","",$result1);
-
     $prompt2 = 'make a title for this content: ' . $result;
     $open_ai2 = new OpenAi(getChatGPTKey());
     $complete2 = $open_ai2->completion([
@@ -45,5 +53,45 @@ if($customprompt == '') {
     $result3 = trim($rs3);
     $result3 = str_replace("\"","",$result3);
 
-    echo '<h2>'.$result3. '</h2> <p>'. $result .'</p>';
+    $linkkw = '';
+    $linkrelated = [];
+
+    $closingContent = '';
+
+    if($edtKeyword !== '' && $selectmainCategory !== ''){
+
+        $c1 = getclosingParagraph();
+        $closingContent = $c1["content"];
+
+        // link category chen vao keyword
+        $linkkw = getlinkCategory($curPageName,$selectmainCategory);
+
+        //link sp cung category.
+        $linkrelated = getRandomRelatedProduct($curPageName,$selectmainCategory);
+        //$czzzzz = $linkkw["slug"];
+        //echo $link;
+        if($linkrelated != 0) {
+            $insLink = "<strong><a href=". $linkrelated["slug"] .">". $linkrelated["name"] . "</a></strong>";
+            $position = strrpos($closingContent, 'ProductB');
+            if ($position !== false) {
+                $closingContent = substr_replace($closingContent, $insLink, $position, strlen('ProductB'));
+            }
+        }
+    }
+
+    
+
+    // Chèn link category
+    if($linkkw != ''){
+        $insLink = "<strong><a href=". $linkkw .">". $edtKeyword . "</a></strong>";
+        $position = strrpos($result, $edtKeyword);
+        if ($position !== false) {
+            $result = substr_replace($result, $insLink, $position, strlen($edtKeyword));
+        }
+    }
+
+    //echo $curPageName . $selectmainCategory;
+
+    echo '<h2>'.$result3. '</h2> <p>'. $result .'</p>BD0011'. $closingContent;
+
 ?>

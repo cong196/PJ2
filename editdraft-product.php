@@ -81,12 +81,15 @@ $testvvv = "10";
 </script>
 
 <script type="text/javascript">
-  function pregenDes($id){
+  function pregenDes($id, $curPageName){
     var customprompt = $('#editprompt-' + $id).val();
+    var edtKeywords = $('#edtKeyword-' + $id).val();
     var title = $('#txttitle-' + $id).val();
     var tt = title.replace(/[^a-zA-Z ]/g, "");
-    var url =  $('#img' + $id).prop('src')
-    generateDescription(tt,$id,customprompt,url);
+    var url =  $('#img' + $id).prop('src');
+    var selectmainCategory = $('#mainCategory-' + $id).val();
+    var selectmainCategory2 = selectmainCategory.toString();
+    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName);
   }
 
 </script>
@@ -140,8 +143,25 @@ $testvvv = "10";
           <td>
             <textarea id="content-<?php echo $g10[$prz]->id ?>" name="content" class="ckeditor" cols="70" rows="2"><?php echo $g10[$prz]->description; ?></textarea>
           </td>
-          <td><textarea class="form-control" id="editprompt-<?php echo $g10[$prz]->id; ?>" rows="1"></textarea></td>
-          <td><button onclick="pregenDes(<?php echo $g10[$prz]->id ; ?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
+          <td>
+            <textarea class="form-control" id="editprompt-<?php echo $g10[$prz]->id; ?>" rows="3"></textarea>
+            <br/>
+            <textarea class="form-control" id="edtKeyword-<?php echo $g10[$prz]->id; ?>" rows="1" placeholder="Keyword"></textarea>
+            <br/>
+            <select id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
+              <?php 
+                  $index = 0;
+                  while($index < count($someArray)) {
+              ?>
+                <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+              <?php
+                  $index++;
+                  }
+              ?>
+              </select>
+              
+          </td>
+          <td><button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="gendes-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
 

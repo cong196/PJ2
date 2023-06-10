@@ -34,10 +34,14 @@
 
 
 
+<!--<link rel="stylesheet" href="/PJ2/mystyle.css"> -->
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="/PJ2/getCategoryDB.js"></script>
 <script type="text/javascript" src="/PJ2/getCategorySite.js"></script>
+<script type="text/javascript" src="/PJ2/test123.js"></script>
 <script type="text/javascript" src="/PJ2/getTagSite.js"></script>
+<script type="text/javascript" src="/PJ2/getProductLink.js"></script>
+<script type="text/javascript" src="/PJ2/getnewProductLink.js"></script>
 <style>
 
 </style>
@@ -110,6 +114,52 @@
 </div>
 </div>
 
+<div style="background-color:#F0F0F0; margin-top: 15px;">
+<h3 style="padding-left:25px;padding-top: 25px;">Update product link</h3>
+
+<div style="padding-left: 25px; padding-top: 25px;">
+  <button type="button" id="btngetProductLink" onclick="getProductLink('themegatee')" class="btn btn-primary">Get all products</button>
+
+<button id="btngetProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden"></span>
+</button>
+
+</div>
+
+
+<div style="padding-left: 25px; padding-top: 25px;">
+<div class="row">
+  <div class="col-1">
+    <button type="button" id="btngetnewProductLink" onclick="getnewProductLink('themegatee')" class="btn btn-primary">Get new products</button>
+    <button id="btngetnewProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <span class="visually-hidden"></span>
+    </button>
+  </div>
+  <div class="col-1">
+    
+    <input type="number" id="txtgetnewProductLink" class="form-control" placeholder="Enter number">
+  </div>
+</div>
+</div>
+
+<div style="padding-left: 25px; padding-top: 25px;">
+  <button type="button" id="btnDeleteProductLink" onclick="deleteProductLink('themegatee')" class="btn btn-danger">Delete all products</button>
+<button id="btnDeleteProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden"></span>
+</button>
+</div>
+
+
+<br/>
+</div>
+
+
+<br/>
+<br/>
+<br/>
 </body>
 </html>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>

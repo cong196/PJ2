@@ -4,7 +4,7 @@ $title2 =  $_POST['title'];
 $prompt2 = 'Write a paragraph with the following content: '. $title2;
 	require __DIR__ . '/vendor/autoload.php';
 	use Orhanerday\OpenAi\OpenAi;
-	$open_ai2 = new OpenAi('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');
+	$open_ai2 = new OpenAi('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');
 	$complete2 = $open_ai2->completion([
 	    'model' => 'text-davinci-003',
 	    'prompt' => $prompt2,

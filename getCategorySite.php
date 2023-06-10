@@ -32,7 +32,7 @@
 	deletTableCategory($pagename);
 	
 	while($i0 < count($listCat)) {
-		updateCategory($pagename,$listCat[$i0]->id,$listCat[$i0]->name,$listCat[$i0]->slug);
+		updateCategory($pagename,$listCat[$i0]->id,$listCat[$i0]->name,$listCat[$i0]->slug,$listCat[$i0]->parent);
 		$i0++;
 	}
 
@@ -41,7 +41,7 @@
 		$i1 = 0;
 		$listCat = get30Category($site,$page,30);
 		while($i1 < count($listCat)) {
-			updateCategory($pagename,$listCat[$i1]->id,$listCat[$i1]->name,$listCat[$i1]->slug);
+			updateCategory($pagename,$listCat[$i1]->id,$listCat[$i1]->name,$listCat[$i1]->slug,$listCat[$i1]->parent);
 			$i1++;
 		}
 		
