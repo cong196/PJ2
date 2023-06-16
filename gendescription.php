@@ -85,12 +85,10 @@ if($customprompt == '') {
         }
     }
 
-    
-
     // Chèn link category
     if($linkkw != ''){
-        $insLink = "<strong><a href=". $linkkw .">". $edtKeyword . "</a></strong>";
-        
+        $insLink = "<strong><a href=". $linkkw ." style=\"color:#0969da\">". $edtKeyword . "</a></strong>";
+
         $tempResult = strtolower($result);
         $tempKeyword = strtolower($edtKeyword);
 
