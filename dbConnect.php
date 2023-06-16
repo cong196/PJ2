@@ -181,7 +181,7 @@ function updateProductlink($site,$id,$name,$slug,$category){
             die("Unable to select database: " . mysqli_error());
             // Thông báo lỗi nếu chọn CSDL thất bại
         } else {
-            if($site == 'themegatee') {
+            if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee') {
                  $slug = 'https://themegatee.com/product/' . $slug;
                  $sql_stmt = "INSERT INTO themegaproductlink VALUES ($id,'".$name2."','".$slug."','".$category."')";
                  $result = mysqli_query($dbh,$sql_stmt);

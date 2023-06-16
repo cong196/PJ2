@@ -18,7 +18,11 @@ if($customprompt == '') {
     }
     
 } else {
-    $prompt = $customprompt;
+    if($edtKeyword == ''){
+        $prompt = $customprompt;
+    } else {
+        $prompt = $customprompt . '. Make paragraph contain "'.$edtKeyword.'" word and have least at 50 words';
+    }
 }
     $open_ai = new OpenAi(getChatGPTKey());
     $complete = $open_ai->completion([
@@ -76,6 +80,8 @@ if($customprompt == '') {
             if ($position !== false) {
                 $closingContent = substr_replace($closingContent, $insLink, $position, strlen('ProductB'));
             }
+        } else {
+            $closingContent = '';
         }
     }
 
@@ -84,7 +90,12 @@ if($customprompt == '') {
     // Chèn link category
     if($linkkw != ''){
         $insLink = "<strong><a href=". $linkkw .">". $edtKeyword . "</a></strong>";
-        $position = strrpos($result, $edtKeyword);
+        
+        $tempResult = strtolower($result);
+        $tempKeyword = strtolower($edtKeyword);
+
+        $position = strrpos($tempResult, $tempKeyword);
+
         if ($position !== false) {
             $result = substr_replace($result, $insLink, $position, strlen($edtKeyword));
         }

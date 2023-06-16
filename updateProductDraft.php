@@ -32,6 +32,19 @@
       return $response->id;
     };
 
+    function get1Product($site,$page){
+      $woocommerce = new Client(
+            $site->url, 
+            $site->ck, 
+            $site->cs,
+          [
+              'version' => 'wc/v3',
+          ]
+      );
+      $listCategory = $woocommerce->get('products/?orderby=date&status=publish&page=1&per_page=1');
+       return $listCategory;
+    };
+
     //$data = [];
 
     date_default_timezone_set('America/Los_Angeles');
@@ -73,8 +86,14 @@
     }
     
     $response = updateproduct($data,$site,$id);
-    echo $response;
+    $prd1 = get1Product($site,1);
+    $ids1 = array_column($prd1[0]->categories, 'id');
+    $idText1 = implode(', ', $ids1);
+    updateProductlink($s,$prd1[0]->id,$prd1[0]->name,$prd1[0]->slug, $idText1);
 
+    echo $response; 
+
+    
     /*$data = [
         'name' => $title,
         'description' => $des,
