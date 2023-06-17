@@ -56,6 +56,7 @@ $testvvv = "10";
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/PJ2/updateProductDraft.js"></script>
+<script type="text/javascript" src="/PJ2/deleteProduct.js"></script>
 
 
 <script>
@@ -89,7 +90,23 @@ $testvvv = "10";
     var url =  $('#img' + $id).prop('src');
     var selectmainCategory = $('#mainCategory-' + $id).val();
     var selectmainCategory2 = selectmainCategory.toString();
-    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName);
+    var slug = $('#txtslug-' + $id).val();
+    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug);
+  }
+
+  function deleteProduct($idtext) {
+    /*var table = document.getElementById("listdraftProducts");
+    table.deleteRow(1);*/
+    //var values = $idtext.split('-');
+    //var btnDelete = document.getElementById(values[0]);
+    var output = $idtext.replace('del', '');
+
+    var element = document.getElementById('btnYesDel-' + output);
+    if(getComputedStyle(element).getPropertyValue('display') == 'none') {
+        element.style.display = 'flex';
+    } else {
+        element.style.display = 'none';
+    }
   }
 
 </script>
@@ -136,6 +153,10 @@ $testvvv = "10";
         <tr style="vertical-align:initial">
           <td scope="row"><?php echo $g10[$prz]->id ?></td>
           <td scope="row"><textarea class="form-control" id="txttitle-<?php echo $g10[$prz]->id; ?>" rows="1"><?php echo $g10[$prz]->name?></textarea>
+            <br/>
+            <strong>slug</strong>
+            <textarea class="form-control" id="txtslug-<?php echo $g10[$prz]->id; ?>" rows="2"><?php echo $g10[$prz]->name?></textarea>
+
           </td>
           <td>
             <div class="zoomsss"><img id="img<?php echo $g10[$prz]->id;?>" src="<?php echo $imgprt ?>" class="img-fluid img-thumbnail" width="100px"></div>
@@ -214,6 +235,13 @@ $testvvv = "10";
              <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">Save</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="saveinfo-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
+              <br/>
+              <button onclick="deleteProduct(<?php echo "'".$g10[$prz]->id .'-'. $prz. "'"?>)" type="button" id="delete-<?php echo $g10[$prz]->id . '-'. $prz;?>"class="btn btn-danger btn-sm">Delete</button><br/><p></p>
+
+
+              <button style="display:none" onclick="jsProduct(this,<?php echo "'".$curPageName."'" ?>,<?php echo "'".$g10[$prz]->id .'-'. $prz. "'"?>)" type="button" id="btnYesDel-<?php echo $g10[$prz]->id . '-'. $prz;?>"class="btn btn-danger btn-sm">Yes</button>
+
+              <div style="display:none" class="spinner-border spinner-border-sm" id="savedelete-<?php echo $g10[$prz]->id . '-'. $prz;?>loading" role="status"><span class="sr-only"></span> </div>
 
           </td>
           <td><a href="<?php echo $g10[$prz]->permalink?>" target="_blank"><i class="bi bi-eye"></i></a></td>

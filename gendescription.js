@@ -1,4 +1,4 @@
-function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName) {
+function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName,$slug) {
 
     var title = $title;
     var id = $id;
@@ -7,9 +7,7 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
     var edtKeyword = $edtKeyword;
     var selectmainCategory = $selectmainCategory;
     var curPageName = $curPageName;
-
-    console.log(selectmainCategory);
-
+    var slug = $slug;
     function loadlayout(){
         $('#gendes-' + id+'loading').css('display', 'flex');
         $('#gendes-' + id).css('display', 'none');
@@ -24,7 +22,7 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
         //console.log(data);
         var data1 = CKEDITOR.instances['content-'+id].getData();
         var parts = data.split("BD0011");
-        CKEDITOR.instances['content-'+id].setData(parts[0] + '<img class="alignnone" title="' + title + '" src=" '+ urlimg +' " alt="' + title + '" width="600" />' +  data1 + '<p>' + parts[1] + '</p>');
+        CKEDITOR.instances['content-'+id].setData(parts[0] + '<img class="aligncenter" title="' + title + '" src=" '+ urlimg +' " alt="' + slug + '" width="600" />' +  data1 + '<p>' + parts[1] + '</p>');
 
     });
 

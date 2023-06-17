@@ -11,7 +11,7 @@
     $category = $_POST['category'];
     $publishss = $_POST['publishss'];
     $selectTag = $_POST['selectTag'];
-    
+    $slug = $_POST['slug'];
     //$selectCategory = json_encode($_POST['selectCategory']);
 
     //print($selectCategory);
@@ -45,15 +45,18 @@
        return $listCategory;
     };
 
-    //$data = [];
+    $slug = strtolower($slug);
+    $slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $slug);
+    $slug = str_replace(' ', '-', $slug);
 
     date_default_timezone_set('America/Los_Angeles');
     $date = date('y-m-d h:i:s');
-
+    $des = str_replace('<img', '<img class="aligncenter"', $des);
     $data = [
             'name' => $title,
             'description' => $des,
-            "date_created" => $date
+            'date_created' => $date,
+            'slug' => $slug
     ];
 
     if($category != '') {
@@ -91,24 +94,6 @@
     $idText1 = implode(', ', $ids1);
     updateProductlink($s,$prd1[0]->id,$prd1[0]->name,$prd1[0]->slug, $idText1);
 
-    echo $response; 
-
-    
-    /*$data = [
-        'name' => $title,
-        'description' => $des,
-        'categories' => [['id'=>123]]
-    ];
-
-    $woocommerce = new Client(
-    $site->url, 
-    $site->ck, 
-    $site->cs,
-        [
-            'version' => 'wc/v3',
-        ]
-    );
-    $response = $woocommerce->put('products/'. $id, $data);
-    echo $response->id;*/    
+    echo $response;    
 
 ?>

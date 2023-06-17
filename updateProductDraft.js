@@ -3,6 +3,7 @@ function updateProductDraft($id,$site) {
     var site = $site;
     var des = CKEDITOR.instances['content-'+id].getData();
     var title = $('#txttitle-' + id).val();
+    var slug = $('#txtslug-' + id).val();
     var selectCategory = $('#selectCategoryyy-' + id).val();
     //alert(selectCategory);
     //console.log(selectCategory);
@@ -17,8 +18,6 @@ function updateProductDraft($id,$site) {
            pls = 0;
     }
 
-    
-
     //console.log(selectTag2);
     function loadlayout(){
         $('#saveinfo-' + id+'loading').css('display', 'flex');
@@ -26,7 +25,7 @@ function updateProductDraft($id,$site) {
     }
     loadlayout();
     
-    $.post("updateProductDraft.php", { id:id, title:title, des:des, site: site , category:lscv, publishss:pls, selectTag:selectTag2},
+    $.post("updateProductDraft.php", { id:id, title:title, des:des, site: site , category:lscv, publishss:pls, selectTag:selectTag2, slug:slug},
     function(data) {
         
         var datatextbox = 'content-'+id;

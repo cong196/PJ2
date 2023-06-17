@@ -99,7 +99,8 @@ if($customprompt == '') {
         }
     }
 
-    //echo $curPageName . $selectmainCategory;
+    $close2 = getClosing($curPageName);
+    $closingContent = $closingContent ."<p>".$close2."</p>";
 
     echo '<h2>'.$result3. '</h2> <p>'. $result .'</p>BD0011'. $closingContent;
 
