@@ -245,7 +245,7 @@ function getclosingParagraph(){
 
 function getClosing($site){
     
-    $conn = new mysqli('localhost', 'root', '','project1');
+    $conn = new mysqli('localhost', 'root', '','PJ2');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         return 0;
