@@ -120,7 +120,7 @@ $searchTxt = $_GET['searchTitle'];
         let searchPerPage = document.getElementById("searchPerPage").value;
         //alert(searchPerPage);
         //getPrducts(searchPage,searchPerPage,searchTitle);
-        window.location.href = '/PJ2/themegatee-editproduct?page=' + searchPage + '&perpage='+ searchPerPage + '&searchTitle='+ searchTitle;
+        window.location.href = '/PJ2/themega-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&searchTitle='+ searchTitle;
     }
   </script>
 
