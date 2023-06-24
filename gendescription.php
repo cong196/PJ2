@@ -8,6 +8,7 @@ $customprompt =  $_POST['prompt'];
 $edtKeyword = $_POST['edtKeyword'];
 $selectmainCategory = $_POST['selectmainCategory'];
 $curPageName = $_POST['curPageName'];
+$edttitle = $_POST['edttitle'];
 //echo $customprompt;
 $prompt = '';
 if($customprompt == '') {
@@ -71,7 +72,7 @@ if($customprompt == '') {
         $linkkw = getlinkCategory($curPageName,$selectmainCategory);
 
         //link sp cung category.
-        $linkrelated = getRandomRelatedProduct($curPageName,$selectmainCategory);
+        $linkrelated = getRandomRelatedProduct($curPageName,$selectmainCategory,$edttitle);
         //$czzzzz = $linkkw["slug"];
         //echo $link;
         if($linkrelated != 0) {
