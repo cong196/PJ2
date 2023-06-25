@@ -91,7 +91,15 @@ $testvvv = "10";
     var selectmainCategory = $('#mainCategory-' + $id).val();
     var selectmainCategory2 = selectmainCategory.toString();
     var slug = $('#txtslug-' + $id).val();
-    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug);
+    var edttitle = $('#edtTitle-' + $id).val();
+
+    var element = document.getElementById('img2-' + $id);
+    var img2 = '';
+    if(element){
+      img2 = $('#img2-' + $id).prop('src');
+    }
+
+    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2);
   }
 
   function deleteProduct($idtext) {
@@ -160,6 +168,17 @@ $testvvv = "10";
           </td>
           <td>
             <div class="zoomsss"><img id="img<?php echo $g10[$prz]->id;?>" src="<?php echo $imgprt ?>" class="img-fluid img-thumbnail" width="100px"></div>
+            <br/>
+            <?php 
+              if(count($g10[$prz]->images) == 1) {
+                ?>
+              <?php
+              } else {
+                ?>
+                <div class="zoomsss"><img id="img2-<?php echo $g10[$prz]->id;?>" src="<?php echo $g10[$prz]->images[1]->src ?>" class="img-fluid img-thumbnail" width="100px"></div>
+            <?php }
+            ?>
+            
           </td>
           <td>
             <textarea id="content-<?php echo $g10[$prz]->id ?>" name="content" class="ckeditor" cols="70" rows="2"><?php echo $g10[$prz]->description; ?></textarea>
@@ -181,6 +200,10 @@ $testvvv = "10";
               ?>
               </select>
               
+              <br/>
+            <br/>
+            <textarea class="form-control" id="edtTitle-<?php echo $g10[$prz]->id; ?>" rows="1"></textarea>
+
           </td>
           <td><button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
 

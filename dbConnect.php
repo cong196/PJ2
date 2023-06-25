@@ -208,7 +208,7 @@ function getlinkCategory($site,$id){
     }
 }
 
-function getRandomRelatedProduct($site,$id){
+function getRandomRelatedProduct($site,$id,$title){
     $conn = new mysqli('localhost', 'root', '','PJ2');
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -216,7 +216,12 @@ function getRandomRelatedProduct($site,$id){
     } else {
             $sql = "";
             if($site == 'themega-editdraftproduct.php') {
-                $sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                //$sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                if($title != ''){
+                    $sql = "SELECT * FROM `themegaproductlink` WHERE `name` LIKE '%".$title."%' AND `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                } else {
+                    $sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                }
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
