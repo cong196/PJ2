@@ -2,6 +2,7 @@
 function getdataCategory($site){
         $dbh = mysqli_connect('localhost', 'root', ''); 
             // Kết nối tới MySQL server
+        //iUooo6)qQ?5t4591
         if (!$dbh){
             die("Unable to connect to MySQL: " . mysqli_error());
             // Nếu kết nối thất bại thì đưa ra thông báo lỗi
