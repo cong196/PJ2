@@ -9,6 +9,9 @@
 
    $listTag = getdataTag('themegatee');
    $listTag2 = json_decode($listTag, true);
+
+   $listPostcat = getdataPostCategory('themegatee');
+   $listPostcategory = json_decode($listPostcat, true);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +30,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -38,24 +41,25 @@
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="/PJ2/getCategoryDB.js"></script>
 <script type="text/javascript" src="/PJ2/getCategorySite.js"></script>
-<script type="text/javascript" src="/PJ2/test123.js"></script>
 <script type="text/javascript" src="/PJ2/getTagSite.js"></script>
 <script type="text/javascript" src="/PJ2/getProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getnewProductLink.js"></script>
+<script type="text/javascript" src="/PJ2/getPostcategory.js"></script>
 <style>
 
 </style>
 <script type="text/javascript">
 
 </script>
+
 </head>
 
 <body>
+
 <?php include 'menu.php'; ?>
 
-
 <div style="background-color:#F0F0F0">
-<h3 style="padding-left:25px;padding-top: 25px;">Category</h3>
+<h3 style="padding-left:25px;padding-top: 65px;">Category</h3>
 <div style="padding-left: 25px; padding-top: 25px;">
   <button type="button" id="btnButton" onclick="getCategoriesSite('themegatee')" class="btn btn-primary">Update category from store</button>
 
@@ -154,6 +158,34 @@
 
 
 <br/>
+</div>
+
+<div style="background-color:#F0F0F0; margin-top: 15px;">
+<h3 style="padding-left:25px;padding-top: 25px;">Post category</h3>
+<div style="padding-left: 25px; padding-top: 25px;">
+  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('themegatee')" class="btn btn-primary">Update Post category</button>
+
+<button id="btnButtonPostcategory-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden"></span>
+</button>
+</div>
+
+<div style="padding:25px">
+<div id="data"> 
+    <select id="selectlistPostcategory" class="form-control selectpicker" multiple data-live-search="true">
+    <?php 
+        $index2 = 0;
+        while($index2 < count($listPostcategory)) {
+    ?>
+      <option value="<?php echo $listPostcategory[$index2]["id"] ?>"><?php echo $listPostcategory[$index2]["name"] ?></option>
+    <?php
+        $index2++;
+        }
+    ?>
+    </select>
+</div>
+</div>
 </div>
 
 

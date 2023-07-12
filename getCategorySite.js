@@ -14,7 +14,7 @@ function getCategoriesSite($site) {
     function(data) {
         
         //location.reload();
-        console.log(data);
+        //console.log(data);
         doneCSS();
     });
 

@@ -1,10 +1,12 @@
 <?php 
 
 $title =  $_POST['title'];
+$sites =  $_POST['site'];
 $prompt = 'make another title for following title : '. $title;
 	require __DIR__ . '/vendor/autoload.php';
 	use Orhanerday\OpenAi\OpenAi;
-	$open_ai = new OpenAi('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');
+	include "config.php";
+	$open_ai = new OpenAi(getChatGPTKey());
 	// get prompt parameter
 	//$prompt = $_GET['prompt'];
 	// set api data

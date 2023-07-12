@@ -1,14 +1,15 @@
-function generatenewtitle($title,$id) {
+function generatenewtitle($title,$id,$site) {
 
     var title = $title;
     var id = $id;
+    var site = $site;
     function loadlayout(){
         $('#gennewtitle-' + id+'loading').css('display', 'flex');
         $('#gennewtitle-' + id).css('display', 'none');
     }
     loadlayout();
     
-    $.post("generatenewtitle.php", { title:title },
+    $.post("generatenewtitle.php", { title:title, site:site },
     function(data) {
     
         $('#gennewtitle-' + id+'loading').css('display', 'none');

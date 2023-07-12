@@ -1,4 +1,10 @@
 <?php 
+use Automattic\WooCommerce\Client;
+require __DIR__ . '/vendor/autoload.php';
+include "dbConnect.php";
+include "config.php";
+$curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
+
 $page = 1;
 settype($page, "int");
 
@@ -7,7 +13,14 @@ $nextpage = 1;
 $perpage = 10;
 settype($perpage, "int");
 
-$searchTxt = "text"; 
+$searchTxt = "text";
+
+$list = getdataCategory($curPageName);
+$someArray = json_decode($list, true);
+
+$listPostcat = getdataPostCategory('themegatee');
+$listPostcategory = json_decode($listPostcat, true);
+
 ?>
 
 <!DOCTYPE html>
@@ -19,18 +32,33 @@ $searchTxt = "text";
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css"> -->
+
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script type="text/javascript" src="/PJ2/gennewposttitle.js"></script>
 <script type="text/javascript" src="/PJ2/createPost.js"></script>
@@ -38,8 +66,6 @@ $searchTxt = "text";
 <link rel="stylesheet" href="/PJ2/mystyle.css">
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 <style>
 
 .masthead {
@@ -132,12 +158,37 @@ $searchTxt = "text";
   </form>
 
   <form class="row g-3">
+    <div class="col-7">
+    <div class="input-group mb-3 col-7">
+      <span class="input-group-text" id="txtintroKeyword">Keyword</span>
+      <input type="text" class="form-control" id="introKeyword" aria-describedby="basic-addon3">
+    </div>
+  </div>
+    <div class="col-7">
+    <select class="form-control selectpicker" id="keywordcategory" data-live-search="true">
+                <?php 
+                    $index = 0;
+                    while($index < count($someArray)) {
+                ?>
+                  <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                <?php
+                    $index++;
+                    }
+                ?>
+    </select>
+  </div>
+  </form>
+<br/>
+  <form class="row g-3">
       <div class="col-7">
-        <label for="txtintropost" class="visually-hidden">Intro</label>
-        <textarea class="form-control" id="txtintropost" rows="3"></textarea>
+        <!-- <label for="txtintropost" class="visually-hidden">Intro</label>
+        <textarea class="form-control" id="txtintropost" rows="3"></textarea> -->
+        <label for="txtintropost">Intro</label>
+        <textarea class="ckeditor" id="txtintropost" name="txtintropost" rows="2"></textarea>
+
       </div>
       <div class="col-5">
-        <button type="button" style="display:flex" class="btn btn-primary mb-3" id="gennewIntro" onclick="gennewintro()">Generate new intro</button>
+        <button type="button" style="display:flex" class="btn btn-primary mb-3" id="gennewIntro" onclick="gennewintro(<?php echo "'".$curPageName."'" ?>)">Generate new intro</button>
 
         <button class="btn btn-primary" style="display:none" id="gennewIntro-loading" type="button" disabled>
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -146,11 +197,6 @@ $searchTxt = "text";
 
       </div>
   </form>
-
-  <label for="imgfeatured" class="form-label">Featured Image URL</label>
-  <input class="form-control" type="text" placeholder="Enter image url" id="imgfeatured" aria-label="default input example">
-
-
 </div>
 
 
@@ -158,7 +204,7 @@ $searchTxt = "text";
       <thead>
         <tr>
           <th scope="col">ID</th>
-          <th scope="col">NewTitle</th>
+          <th scope="col"></th>
           <th scope="col">Title</th>
           <th scope="col">Image</th>
           <th scope="col">Price</th>
@@ -182,7 +228,6 @@ $searchTxt = "text";
 
 </div>
 
-
 <!-- Modal -->
 <div class="modal fade modal-fullscreen-sm-down" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-fullscreen">
@@ -193,13 +238,48 @@ $searchTxt = "text";
       </div>
       <div class="modal-body">
 
-          <label for="imgfeaturedinmodal" class="form-label">Featured Image URL</label>
-          <input class="form-control" type="text" placeholder="Enter image url" id="imgfeaturedinmodal" aria-label="default input example">
+          <label for="imgfeaturedinmodal" class="form-label">Featured Image</label>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon3">Upload from URL</span>
+            <input type="text" class="form-control" id="imgfeaturedinmodal" aria-describedby="basic-addon3">
+          </div>
+
           <br/>
+
+          <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" id="imageFile" name="imageFile" accept="image/*">
+            <button type="submit" id="uploadButton" class="btn btn-primary btn-sm">Upload</button>
+            <!-- <div id="loadingIcon" class="d-none">
+              <i class="fa fa-spinner fa-spin"></i> Uploading...
+            </div> -->
+            <div class="spinner-grow spinner-grow-sm d-none" id="loadingIcon" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+
+          </form>
+          <br/>
+          <p>Image ID: <strong id="imageIdUploaded">000</strong>.</p>
+
+          <div class="col-2">
+          <p>Post category</p>
+          <select class="form-control selectpicker" id="postcategory" multiple data-live-search="true">
+                <?php 
+                    $index = 0;
+                    while($index < count($listPostcategory)) {
+                ?>
+                  <option value="<?php echo $listPostcategory[$index]["id"] ?>"><?php echo $listPostcategory[$index]["name"] ?></option>
+                <?php
+                    $index++;
+                }
+                ?>
+          </select>
+        </div>
 
           <label for="desc">Description</label>
           <textarea class="ckeditor" id="desc" name="desc" rows="57"></textarea>
 
+          
         </div>
       <div class="modal-footer">
 
@@ -233,6 +313,10 @@ $searchTxt = "text";
         var modal       = $(this);
         //var title = button.data('title'); alert(title);
         var title = document.getElementById('txtposttitle').value;
+        var imageIdElement = document.getElementById('imageIdUploaded');
+        var fileInput = document.getElementById('imageFile');
+        imageIdElement.textContent = '000';
+        fileInput.value = '';
         modal.find('.modal-title').text(title);
         $('#btnCreatePost').css('display', 'flex');
         $('#btncloseModal').css('display', 'flex');
@@ -251,18 +335,21 @@ $searchTxt = "text";
       }
     }
 
-    function gennewintro(){
+    function gennewintro(page){
       var title = document.getElementById('txtposttitle').value;
       if(title == ''){
           alert('Enter post title..');
       } else {
-          generatenewintro(title);
+          var kwintro = document.getElementById("introKeyword").value;
+          var keywordcategory = $('#keywordcategory').val().toString();
+          generatenewintro(title,kwintro,keywordcategory,page);
       }
     }
 
     function setDataCheckEdt(){
        var arrData=[];
-       var content = '<p>' + $("#txtintropost").val() +'</p>';
+       var data1 = CKEDITOR.instances['txtintropost'].getData();
+       var content = '<p>' + data1 +'</p>';
        // loop over each table row (tr)
        $("#listAdd tr").each(function(){
             var currentRow=$(this);
@@ -291,17 +378,81 @@ $searchTxt = "text";
             
        });
 
+       while (content.includes("<p></p>") || content.includes("<p><p>") || content.includes("</p></p>") ) {
+            content = content.replace("<p></p>", "");
+            content = content.replace("<p><p>", "<p>");
+            content = content.replace("</p></p>", "</p>");
+            //console.log(contentDescription);
+        }
+        
        CKEDITOR.instances['desc'].setData(content);
-       $("#imgfeaturedinmodal").val($("#imgfeatured").val());
+       
     }
     function btncreatePost(){
         var titleValue = $("#txtposttitle").val();
         var urlimg = $("#imgfeaturedinmodal").val();
         var data = CKEDITOR.instances.desc.getData();
-        createPostJS(titleValue,data,urlimg);
+        var imageId = $("#imageIdUploaded").text();
+        var selectPostCategory = $('#postcategory').val();
+        if(selectPostCategory == '' || selectPostCategory == null) {
+          alert('Select post category !');
+        } else {
+          createPostJS(titleValue,data,urlimg,imageId,selectPostCategory);
+          //alert(selectPostCategory);
+        }
+       
     }
 
   </script>
 
+  <script>
+  document.getElementById('uploadForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var fileInput = document.getElementById('imageFile');
+    var file = fileInput.files[0];
+    if(file == '' || !file) {
+      alert('Choose image');
+      return;
+    } else {
+        var formData = new FormData();
+        formData.append('file', file);
+        
+        var request = new XMLHttpRequest();
+        request.open('POST', 'https://themegatee.com/wp-json/wp/v2/media');
+        request.setRequestHeader('Authorization', 'Basic ' + btoa('khajob96:vjkdh65734$%#$'));
+        request.onreadystatechange = function() {
+          if (request.readyState === 4) {
+            var uploadButton = document.getElementById('uploadButton');
+            var loadingIcon = document.getElementById('loadingIcon');
+            var imageIdElement = document.getElementById('imageIdUploaded');
+            
+            if (request.status === 201) {
+              var response = JSON.parse(request.responseText);
+              var imageId = response.id;
+              imageIdElement.textContent = imageId;
+              fileInput.value = '';
+              //console.log('Image uploaded successfully! ID: ' + imageId);
+            } else {
+              //console.log('Image upload failed. Status: ' + request.status);
+              imageIdElement.textContent = 'Image upload failed. Status: ' + request.status;
+            }
+            
+            loadingIcon.classList.add('d-none');
+            uploadButton.classList.remove('d-none');
+          }
+        };
+        
+        var uploadButton = document.getElementById('uploadButton');
+        var loadingIcon = document.getElementById('loadingIcon');
+        
+        loadingIcon.classList.remove('d-none');
+        uploadButton.classList.add('d-none');
+        
+        request.send(formData);
+    }
+  });
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 </body>
 </html>

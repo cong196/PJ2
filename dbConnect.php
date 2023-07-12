@@ -11,8 +11,43 @@ function getdataCategory($site){
                 die("Unable to select database: " . mysqli_error());
                 // Thông báo lỗi nếu chọn CSDL thất bại
             } else {
-                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php') {
+                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
                     $sql_stmt = "SELECT * FROM themegatee_category"; 
+                    // Câu lệnh select
+                    $result = mysqli_query($dbh,$sql_stmt);
+                    $rows = mysqli_num_rows($result); 
+                    $responseCategory = array();
+                    if ($rows) {
+                        while ($row = mysqli_fetch_array($result)) {
+                            $responseCategory [] = array(
+                                'id' => $row['id'],
+                                'name' => $row['name'],
+                                'slug' => $row['slug']
+                            );
+                        } 
+                    }
+                    mysqli_close($dbh);
+                    return json_encode($responseCategory);
+            }
+            mysqli_close($dbh);
+        }
+    }
+}
+
+function getdataPostCategory($site){
+        $dbh = mysqli_connect('localhost', 'root', ''); 
+            // Kết nối tới MySQL server
+        //iUooo6)qQ?5t4591
+        if (!$dbh){
+            die("Unable to connect to MySQL: " . mysqli_error());
+            // Nếu kết nối thất bại thì đưa ra thông báo lỗi
+        } else {
+            if (!mysqli_select_db($dbh,'PJ2')){
+                die("Unable to select database: " . mysqli_error());
+                // Thông báo lỗi nếu chọn CSDL thất bại
+            } else {
+                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
+                    $sql_stmt = "SELECT * FROM themegatee_postcategory"; 
                     // Câu lệnh select
                     $result = mysqli_query($dbh,$sql_stmt);
                     $rows = mysqli_num_rows($result); 
@@ -89,6 +124,25 @@ function deletTableCategory($site){
     }
 }
 
+function deletTablePostCategory($site){
+    
+    $dbh = mysqli_connect('localhost', 'root', ''); 
+    if (!$dbh){
+        die("Unable to connect to MySQL: " . mysqli_error());
+    } else {
+        if (!mysqli_select_db($dbh,'PJ2')){
+            die("Unable to select database: " . mysqli_error());
+            // Thông báo lỗi nếu chọn CSDL thất bại
+        } else {
+            if($site == 'themegatee') {
+                 $sql_stmt = "DELETE FROM themegatee_postcategory"; 
+                 $result = mysqli_query($dbh,$sql_stmt);
+            }
+        }
+        mysqli_close($dbh);
+    }
+}
+
 function deletTableTag($site){
     
     $dbh = mysqli_connect('localhost', 'root', ''); 
@@ -126,6 +180,26 @@ function updateCategory($site,$id,$name,$slug, $parent){
         }    
     }
 }
+
+function updatePostCategory($site,$id,$name,$slug, $parent){
+    $dbh = mysqli_connect('localhost', 'root', '');
+    $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
+    if (!$dbh){
+        die("Unable to connect to MySQL: " . mysqli_error());
+    } else {
+        if (!mysqli_select_db($dbh,'PJ2')){
+            die("Unable to select database: " . mysqli_error());
+        } else {
+            if($site == 'themegatee') {
+             $sql_stmt = "INSERT INTO themegatee_postcategory VALUES ($id,'".$name2."','".$slug."','".$parent."')";
+             $result = mysqli_query($dbh,$sql_stmt);
+            }
+            
+            mysqli_close($dbh);
+        }    
+    }
+}
+
 
 function updateTag($site,$id,$name,$slug){
     $dbh = mysqli_connect('localhost', 'root', '');
@@ -187,7 +261,7 @@ function getlinkCategory($site,$id){
         return 0;
     } else {
             $sql = "";
-            if($site == 'themega-editdraftproduct.php') {
+            if($site == 'themega-editdraftproduct.php' || $site == 'themegatee.php' || $site == 'themegatee') {
                 $sql = "SELECT * FROM themegatee_category WHERE id = $id;";
                 $result = $conn->query($sql);
                 $row = $result->fetch_assoc();

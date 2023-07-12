@@ -1,10 +1,12 @@
 <?php 
 
 $title =  $_POST['title'];
-$prompt = 'make another title for following title : '. $title;
+/*$prompt = 'make another title for following title : '. $title;*/
+$prompt = 'generate title for post about : '. $title;
 	require __DIR__ . '/vendor/autoload.php';
 	use Orhanerday\OpenAi\OpenAi;
-	$open_ai = new OpenAi('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');
+	include "config.php";
+	$open_ai = new OpenAi(getChatGPTKey());
 	// get prompt parameter
 	//$prompt = $_GET['prompt'];
 	// set api data

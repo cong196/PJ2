@@ -14,7 +14,7 @@ function get10($pg, $perpage){
       ]
   );
 
-  $prds = $woocommerce->get('products/?page=1&per_page=10');
+  $prds = $woocommerce->get('products/?status=publish&page=1&per_page=10');
     return $prds;
 };
 
@@ -28,7 +28,8 @@ $testvvv = "10";
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
  -->
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+
 <script type="text/javascript" src="/PJ2/generatenewtitle.js"></script>
 <script type="text/javascript" src="/PJ2/generatenewcontent.js"></script>
 
@@ -55,7 +56,9 @@ $testvvv = "10";
 <script type="text/javascript">
   function addtoList($name,$id,$img,$price,$link){
      //console.log(JSON.parse("<?php echo $g10[0]->name ?>"));
-      $('#listAdd tr:last').after('<tr><td>'+$id+'</td><td><button onclick="generatenewtitle(\''+$name+'\' , '+$id+')" type="button" style="display:flex" id="gennewtitle-'+$id+'"class="btn btn-secondary btn-sm">New title</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewtitle-'+$id+'loading" role="status"><span class="sr-only"></span> </div> </td><td><textarea class="form-control" id="title'+ $id +'" rows="1">'+$name+'</textarea></td><td><div class="zoomsss"><img src="'+$img+'" class="img-fluid img-thumbnail" width="60px"></div></td>><td>'+ $price +'</td><td><textarea class="form-control" id="content'+ $id +'" rows="1">'+$name+'</textarea></td><td><button onclick="genContent(\''+$name+'\' , '+$id+')" type="button" style="display:flex" id="gennewcontent'+$id+'" class="btn btn-secondary btn-sm">New content</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewcontent-'+$id+'loading" role="status"><span class="sr-only"></span> </div></td><td><a href="https://themegatee.com/product/'+$link+'" target="_blank"><i class="bi bi-eye"></i></a></td></tr>');
+      /*$('#listAdd tr:last').after('<tr><td>'+$id+'</td><td><button onclick="generatenewtitle(\''+$name+'\' , '+$id+','+'"themegatee")" type="button" style="display:flex" id="gennewtitle-'+$id+'"class="btn btn-secondary btn-sm">New title</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewtitle-'+$id+'loading" role="status"><span class="sr-only"></span> </div> </td><td><textarea class="form-control" id="title'+ $id +'" rows="1">'+$name+'</textarea></td><td><div class="zoomsss"><img src="'+$img+'" class="img-fluid img-thumbnail" width="60px"></div></td>><td>'+ $price +'</td><td><textarea class="form-control" id="content'+ $id +'" rows="1">'+$name+'</textarea></td><td><button onclick="genContent(\''+$name+'\' , '+$id+')" type="button" style="display:flex" id="gennewcontent'+$id+'" class="btn btn-secondary btn-sm">New content</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewcontent-'+$id+'loading" role="status"><span class="sr-only"></span> </div></td><td><a href="https://themegatee.com/product/'+$link+'" target="_blank"><i class="bi bi-eye"></i></a></br><button type="button" class="btn btn-secondary btn-sm remove-button">Remove</button></td></tr>');*/
+
+        $('#listAdd tr:last').after('<tr><td>' + $id + '</td><td><button onclick="generatenewtitle(\'' + $name + '\' , ' + $id + ',\'themegatee\')" type="button" style="display:flex" id="gennewtitle-' + $id + '" class="btn btn-secondary btn-sm">New title</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewtitle-' + $id + 'loading" role="status"><span class="sr-only"></span></div></td><td><textarea class="form-control" id="title' + $id + '" rows="1">' + $name + '</textarea></td><td><div class="zoomsss"><img src="' + $img + '" class="img-fluid img-thumbnail" width="60px"></div></td><td>' + $price + '</td><td><textarea class="form-control" id="content' + $id + '" rows="1">' + $name + '</textarea></td><td><button onclick="genContent(\'' + $name + '\' , ' + $id + ')" type="button" style="display:flex" id="gennewcontent' + $id + '" class="btn btn-secondary btn-sm">New content</button> <div style="display:none" class="spinner-border spinner-border-sm" id="gennewcontent-' + $id + 'loading" role="status"><span class="sr-only"></span></div></td><td><a href="https://themegatee.com/product/' + $link + '" target="_blank"><i class="bi bi-eye"></i></a><br><button type="button" class="btn btn-secondary btn-sm remove-button">Remove</button></td></tr>');
     }
 
 
@@ -133,6 +136,13 @@ $testvvv = "10";
 </div>
 
 
+<script type="text/javascript">
+    $(document).ready(function() {
+      $('.remove-button').on('click', function() {
+        $(this).closest('tr').remove();
+      });
+  });
+</script>
 
 
 
