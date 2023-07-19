@@ -32,10 +32,11 @@
 
 		return $data;
 	};
-
+	
 	$cur = 50;
 	$page = 1;
 	$listCat = get50Category($api_url,$username,$password,$page);
+	echo json_encode($listCat);
 	$next = 1;
 	$i0 = 0;
 	deletTablePostCategory($pagename);
