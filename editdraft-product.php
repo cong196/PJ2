@@ -41,23 +41,38 @@ $listTag = getdataTag($curPageName);
 $listTag2 = json_decode($listTag, true);
 
 $testvvv = "10";
-
+$minwords = "55";
 ?>
 
 <!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
-
 <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
  -->
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="/PJ2/gendescription.js"></script>
 <script type="text/javascript" src="/PJ2/updateProduct.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/PJ2/updateProductDraft.js"></script>
 <script type="text/javascript" src="/PJ2/deleteProduct.js"></script>
+<style>
+    /* Custom CSS for the floating button and dragging */
+    .floating-button {
+      position: fixed;
+      bottom: 150px;
+      right: 50px;
+      z-index: 9999;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
 
+    .floating-button:active {
+      cursor: grabbing; /* Set cursor to grabbing when button is being dragged */
+    }
+
+  </style>
 
 <script>
     function getPrducts($page,$perage,$searchTitle) {
@@ -93,15 +108,27 @@ $testvvv = "10";
     var selectmainCategory2 = selectmainCategory.toString();
     var slug = $('#txtslug-' + $id).val();
     var edttitle = $('#edtTitle-' + $id).val();
-
     var element = document.getElementById('img2-' + $id);
     var img2 = '';
     if(element){
       img2 = $('#img2-' + $id).prop('src');
     }
 
-    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2);
+    var storedValue1 = $('#customRange' + $id).val();
+    var storedValueModel1 = 1;
+    if($('#radioModeldavinci003' + $id).prop('checked')) {
+      storedValueModel1 = 1;
+    } else {
+      if($('#radioModel35tubo' + $id).prop('checked')) {
+        storedValueModel1 = 2;
+      } else {
+
+      }
+    }
+
+    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1);
   }
+
 
   function deleteProduct($idtext) {
     /*var table = document.getElementById("listdraftProducts");
@@ -117,7 +144,10 @@ $testvvv = "10";
         element.style.display = 'none';
     }
   }
-
+  function deleteRow($btn,$id) {
+    var row = $btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+  }
 </script>
 
 <style>
@@ -130,13 +160,60 @@ $testvvv = "10";
   transform: scale(3.5);
 }
 </style>
+<div class="floating-button">
+    <button class="btn btn-info" onclick="showModalSetting()"><i class="fa-solid fa-gear"></i></button>
+</div>
+
+<!-- Small Modal -->
+<div class="modal fade" id="modalSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Setting</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <b>Model</b>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="group5" id="radioModeldavinci003all" value="radioModeldavinci003all" checked>
+                <label class="form-check-label" for="radioModeldavinci003all">
+                  text-davinci-003
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="group5" id="radioModel35tuboall" value="radioModel35tuboall">
+                <label class="form-check-label" for="radioModel35tuboall">
+                  gpt-3.5-turbo
+                </label>
+              </div>
+              <br/>
+              <label for="customRange3" class="form-label">Minimum words</label>
+              <input type="range" class="form-range" value="<?php echo isset($_COOKIE['customRange3']) ? $_COOKIE['customRange3'] : $minwords; ?>" min="50" max="150" step="1" id="customRange3" oninput="showVal(this.value)" onchange="showVal(this.value)">
+              <span>Value: </span><span id="valBox"><?php echo $minwords ?></span>
+
+              <!-- <br/>
+              <button class="btn btn-primary btn-sm"><i class="fa-solid fa-gear"></i>Default</button> -->
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" onclick="clickSave()" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <div class="w-100 p-3">
   <div class="row">
 
 
     <div class="col-12" id="dataProducts">
-    <table class="table table-image">
+    <table class="table table-image" id="listdraftProducts">
       <thead>
         <tr>
           <th scope="col">ID</th>
@@ -161,11 +238,11 @@ $testvvv = "10";
 
         <tr style="vertical-align:initial">
           <td scope="row"><?php echo $g10[$prz]->id ?></td>
-          <td scope="row"><textarea class="form-control" id="txttitle-<?php echo $g10[$prz]->id; ?>" rows="1"><?php echo $g10[$prz]->name?></textarea>
+          <td scope="row">
+            <textarea class="form-control" id="txttitle-<?php echo $g10[$prz]->id; ?>" rows="1"><?php echo $g10[$prz]->name?></textarea>
             <br/>
             <strong>slug</strong>
             <textarea class="form-control" id="txtslug-<?php echo $g10[$prz]->id; ?>" rows="2"><?php echo $g10[$prz]->name?></textarea>
-
           </td>
           <td>
             <div class="zoomsss"><img id="img<?php echo $g10[$prz]->id;?>" src="<?php echo $imgprt ?>" class="img-fluid img-thumbnail" width="100px"></div>
@@ -200,14 +277,39 @@ $testvvv = "10";
                   }
               ?>
               </select>
-              
-              <br/>
+            
+            <br/>
             <br/>
             <textarea class="form-control" id="edtTitle-<?php echo $g10[$prz]->id; ?>" rows="1"></textarea>
 
           </td>
-          <td><button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
+          <td>
 
+
+              <b>Model</b>
+              
+               <div class="form-check">
+                <input class="form-check-input" type="radio" name="group<?php echo $g10[$prz]->id?>" id="radioModeldavinci003<?php echo $g10[$prz]->id?>" value="option2" checked>
+                <label class="form-check-label" for="radioModeldavinci003<?php echo $g10[$prz]->id?>">
+                  text-davinci-003
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="group<?php echo $g10[$prz]->id?>" id="radioModel35tubo<?php echo $g10[$prz]->id?>" value="option1">
+                <label class="form-check-label" for="radioModel35tubo<?php echo $g10[$prz]->id?>">
+                  gpt-3.5-turbo
+                </label>
+              </div>
+
+              <br/>
+              <span>Minimum words</span><br/>
+              <input style="width: 100px;" type="range" class="form-range" value=60 min="50" max="150" step="1" id="customRange<?php echo $g10[$prz]->id?>" oninput="showValRangeId(this.value,<?php echo $g10[$prz]->id?>)" onchange="showValRangeId(this.value,<?php echo $g10[$prz]->id?>)">
+              <br/>
+              <span>Value: </span><span id="valBox<?php echo $g10[$prz]->id?>"><?php echo $minwords ?></span>
+
+              <br/><br/>
+              <button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
               <div style="display:none" class="spinner-border spinner-border-sm" id="gendes-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
 
           </td>
@@ -240,13 +342,13 @@ $testvvv = "10";
 
               <br/>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radPublish-<?php echo $g10[$prz]->id;?>">
+                <input class="form-check-input" type="radio" name="groupPub<?php echo $g10[$prz]->id?>" id="radPublish-<?php echo $g10[$prz]->id;?>" checked>
                 <label class="form-check-label" for="radPublish-<?php echo $g10[$prz]->id;?>">
                   Publish
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radDefault-<?php echo $g10[$prz]->id;?>" checked>
+                <input class="form-check-input" type="radio" name="groupPub<?php echo $g10[$prz]->id?>" id="radDefault-<?php echo $g10[$prz]->id;?>">
                 <label class="form-check-label" for="radDefault-<?php echo $g10[$prz]->id;?>">
                   Default
                 </label>
@@ -259,6 +361,8 @@ $testvvv = "10";
              <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">Save</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="saveinfo-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
+
+          
               <br/>
               <button onclick="deleteProduct(<?php echo "'".$g10[$prz]->id .'-'. $prz. "'"?>)" type="button" id="delete-<?php echo $g10[$prz]->id . '-'. $prz;?>"class="btn btn-danger btn-sm">Delete</button><br/><p></p>
 
@@ -284,3 +388,161 @@ $testvvv = "10";
 </div>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
+
+<script>
+
+  
+
+  $(document).ready(function() {
+    let isDragging = false;
+    let offset = { x: 0, y: 0 };
+
+    // Mouse down event to start dragging
+    $('.floating-button').on('mousedown', function(event) {
+      isDragging = true;
+      offset.x = event.clientX - parseInt($('.floating-button').css('left'));
+      offset.y = event.clientY - parseInt($('.floating-button').css('top'));
+    });
+
+    // Mouse move event for dragging
+    $(document).on('mousemove', function(event) {
+      if (isDragging) {
+        $('.floating-button').css({
+          top: event.clientY - offset.y,
+          left: event.clientX - offset.x
+        });
+      }
+    });
+
+    // Mouse up event to stop dragging
+    $(document).on('mouseup', function() {
+      isDragging = false;
+    });
+
+  });
+
+  function showVal(newVal){
+    document.getElementById("valBox").innerHTML=newVal;
+  }
+  function showValRangeId(newVal,id){
+    document.getElementById("valBox" + id).innerHTML=newVal;
+  }
+
+  $('#modalSettings').on('show.bs.modal', function (e) {
+      const storedValue = localStorage.getItem('customRange3');
+      if (storedValue !== null) {
+        document.getElementById('customRange3').value = storedValue;
+        showVal(storedValue);
+      } else {
+          localStorage.setItem('customRange3', '60');
+          document.getElementById('customRange3').value = 60;
+          showVal(60);
+      }
+
+      /*document.getElementById("customRange3").value= <?php echo $minwords ?>;
+      showVal(<?php echo $minwords ?>);*/
+    //alert(<?php echo $minwords ?>);
+  })
+
+  window.onload = function() {
+    const storedValue = localStorage.getItem('customRange3');
+    const storedValueModel = localStorage.getItem('ValueModel');
+    if (storedValue !== null) {
+        document.getElementById('customRange3').value = storedValue;
+        saveSettings();
+    } else {
+        localStorage.setItem('customRange3', '60');
+        document.getElementById('customRange3').value = 60;
+        /*document.getElementById('customRange3').value = storedValue;
+        showVal(storedValue);*/
+        saveSettings();
+    }
+
+    if(storedValueModel !== null) {
+        if(storedValueModel == 1) {
+            const radioDavinciElements = document.querySelectorAll('input[id*="radioModeldavinci003"]');
+            for (const radioDavinci of radioDavinciElements) {
+                  radioDavinci.checked = true;
+            }
+        } else {
+            if(storedValueModel == 2) {
+              const radioModel35tuboElements = document.querySelectorAll('input[id*="radioModel35tubo"]');
+              for (const radioModel35tubo of radioModel35tuboElements) {
+                    radioModel35tubo.checked = true;
+              }
+            } else {
+
+            }
+      }
+    } else {
+      localStorage.setItem('ValueModel', '1');
+      const radioDavinciElements = document.querySelectorAll('input[id*="radioModeldavinci003"]');
+      for (const radioDavinci of radioDavinciElements) {
+            radioDavinci.checked = true;
+      }
+    }
+  };
+
+function saveModel(){
+    const storedValueModel = localStorage.getItem('ValueModel');
+    //alert("saveModel: " + storedValueModel);
+    if(storedValueModel == 1) {
+          const radioDavinciElements = document.querySelectorAll('input[id*="radioModeldavinci003"]');
+          for (const radioDavinci of radioDavinciElements) {
+                radioDavinci.checked = true;
+          }
+      } else {
+          if(storedValueModel == 2) {
+            const radioModel35tuboElements = document.querySelectorAll('input[id*="radioModel35tubo"]');
+            for (const radioModel35tubo of radioModel35tuboElements) {
+                  radioModel35tubo.checked = true;
+            }
+          } else {
+
+          }
+    }
+}
+function checkModel() {
+    const radioInput = document.getElementById('radioModeldavinci003all');
+    if (radioInput.checked) {
+        localStorage.setItem('ValueModel', '1');
+        saveModel();
+    } else {
+      const radioInput2 = document.getElementById('radioModel35tuboall');
+      if (radioInput2.checked) {
+        localStorage.setItem('ValueModel', '2');
+        saveModel();
+      } else {
+
+      }
+    }
+}
+function saveSettings() {
+    const currentValue = document.getElementById('customRange3').value;
+    localStorage.setItem('customRange3', currentValue);
+    const inputElements = document.querySelectorAll('input[id*="customRange"]');
+    for (const input of inputElements) {
+          input.value = currentValue;
+    }
+    const spanElements = document.getElementsByTagName("span");
+    for (let i = 0; i < spanElements.length; i++) {
+        const span = spanElements[i];
+        const id = span.getAttribute("id");
+        
+        if (id && id.includes("valBox")) {
+            span.textContent = currentValue;
+        }
+    }
+    //checkModel();
+  }
+
+  function clickSave(){
+    saveSettings();
+    checkModel();
+    $('#modalSettings').modal('hide');
+  }
+
+  function showModalSetting(){
+    $('#modalSettings').modal('show');
+  }
+</script>

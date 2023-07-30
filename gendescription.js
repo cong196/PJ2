@@ -1,4 +1,4 @@
-function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName,$slug,$edttitle,$img2) {
+function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName,$slug,$edttitle,$img2,$storedValue1,$storedValueModel1) {
 
     var title = $title;
     var id = $id;
@@ -10,13 +10,15 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
     var slug = $slug;
     var edttitle = $edttitle;
     var img2 = $img2;
+    var storedValueModel1 = $storedValueModel1;
+    var storedValue1 = $storedValue1;
     function loadlayout(){
         $('#gendes-' + id+'loading').css('display', 'flex');
         $('#gendes-' + id).css('display', 'none');
     }
     loadlayout();
     
-    $.post("gendescription.php", { title:title, prompt:prompt, edtKeyword:edtKeyword, selectmainCategory:selectmainCategory, curPageName:curPageName, edttitle:edttitle},
+    $.post("gendescription.php", { title:title, prompt:prompt, edtKeyword:edtKeyword, selectmainCategory:selectmainCategory, curPageName:curPageName, edttitle:edttitle, storedValue:storedValue1, storedValueModel:storedValueModel1},
     function(data) {
         var datatextbox = 'content-'+id;
         $('#gendes-' + id+'loading').css('display', 'none');

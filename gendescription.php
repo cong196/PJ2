@@ -9,36 +9,62 @@ $edtKeyword = $_POST['edtKeyword'];
 $selectmainCategory = $_POST['selectmainCategory'];
 $curPageName = $_POST['curPageName'];
 $edttitle = $_POST['edttitle'];
-//echo $customprompt;
+$storedValueModel = $_POST['storedValueModel'];
+$storedValue = $_POST['storedValue'];
+
 $prompt = '';
 if($customprompt == '') {
     if($edtKeyword == ''){
-        $prompt = 'write a describe about : '. $title;
+        $prompt = 'write a describe about : '. $title .'. Make paragraph have least at '.$storedValue.' words';
     } else {
-        $prompt = 'write a describe about : '. $title .', focus to design. make paragraph contain "'.$edtKeyword.'" word and have least at 50 words';
+        $prompt = 'write a describe about : '. $title .', focus to design. make paragraph contain "'.$edtKeyword.'" word and have least at '.$storedValue.' words';
     }
     
 } else {
     if($edtKeyword == ''){
         $prompt = $customprompt;
     } else {
-        $prompt = $customprompt . '. Make paragraph contain "'.$edtKeyword.'" word and have least at 50 words';
+        $prompt = $customprompt . '. Make paragraph contain "'.$edtKeyword.'" word and have least at '.$storedValue.' words';
     }
 }
     $open_ai = new OpenAi(getChatGPTKey());
-    $complete = $open_ai->completion([
-        'model' => 'text-davinci-003',
-        'prompt' => $prompt,
-        'temperature' => 1,
-        'max_tokens' => 1050,
-        'top_p' => 1,
-        'frequency_penalty' => 0,
-        'presence_penalty' => 0
-    ]);
+    $rs = "";
 
-    
-    $rs1 = json_decode($complete, true);
-    $rs = $rs1['choices'][0]['text'];
+    if($storedValueModel == 1) {
+        $complete = $open_ai->completion([
+            'model' => 'text-davinci-003',
+            'prompt' => $prompt,
+            'temperature' => 1,
+            'max_tokens' => 1250,
+            'top_p' => 1,
+            'frequency_penalty' => 0,
+            'presence_penalty' => 0
+        ]);
+
+        $rs1 = json_decode($complete, true);
+        $rs = $rs1['choices'][0]['text'];
+    } else{
+        if ($storedValueModel == 2) {
+        $complete = $open_ai->chat([
+           'model' => 'gpt-3.5-turbo',
+           'messages' => [
+               [
+                   "role" => "assistant",
+                   "content" => $prompt
+               ]
+           ],
+           'temperature' => 1.0,
+           'max_tokens' => 2000,
+           'frequency_penalty' => 0,
+           'presence_penalty' => 0,
+            ]);
+        $rs1 = json_decode($complete, true);
+        $rs = $rs1['choices'][0]['message']['content'];
+        } else {
+
+        }
+    }
+
     $result1 = trim($rs);
     $result = str_replace("\"","",$result1);
     $prompt2 = 'make a title for this content: ' . $result;
