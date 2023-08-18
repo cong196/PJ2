@@ -126,17 +126,21 @@ $minwords = "55";
       }
     }
 
+    const iscustomkeyw = document.getElementById('switchkeyword-'+ $id);
+    var selectkeywords = $('#keywords-' + $id + ' option:selected').text();
+    var iscustomkeyw1 = "";
+    if(iscustomkeyw.checked === true) {
+      
+    } else {
+        edtKeywords = selectkeywords;
+    }
+
     generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1);
   }
 
 
   function deleteProduct($idtext) {
-    /*var table = document.getElementById("listdraftProducts");
-    table.deleteRow(1);*/
-    //var values = $idtext.split('-');
-    //var btnDelete = document.getElementById(values[0]);
     var output = $idtext.replace('del', '');
-
     var element = document.getElementById('btnYesDel-' + output);
     if(getComputedStyle(element).getPropertyValue('display') == 'none') {
         element.style.display = 'flex';
@@ -148,6 +152,49 @@ $minwords = "55";
     var row = $btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
   }
+
+  function loadKeyword($id,$defaltcategory){
+    var category = $('#mainCategory-' + $id + ' option:selected').text();
+    var valCategory = $('#mainCategory-' + $id).val();
+    var defaultcategory = $('#selectCategoryyy-' + $id + ' option').filter(function() {
+        return $(this).text() === $defaltcategory;
+    });
+    var valueDefalut = defaultcategory.val();
+    $('#selectCategoryyy-' + $id).val([valCategory, valueDefalut]);
+    $('#selectCategoryyy-' + $id).selectpicker('refresh');
+    var selecttag = $('#listTag-' + $id + ' option').filter(function() {
+        return $(this).text().toLowerCase() === category.toLowerCase();
+    });
+    var valuetag = selecttag.val();
+    $('#listTag-' + $id).val(valuetag);
+    $('#listTag-' + $id).selectpicker('refresh');
+    $.ajax({
+        type: "POST",
+        url: "getKeywordCategory.php",
+        data: {category:category, id:$id},
+        cache: false,
+        success: function(html) {
+        document.getElementById("selectedKeywords-" + $id).innerHTML=html;
+        $('#keywords-' + $id).selectpicker();
+      }
+    });
+  }
+
+function switchKeywordchange($id){
+    var switchweyword = $('#switchkeyword-' + $id);
+    if (switchweyword.length > 0) {
+        if (switchweyword.prop('checked')) {
+          $('#edtKeyword-' + $id).css('display', 'flex');
+          $('#selectedKeywords-'+ $id).css('display','none');
+        } else {
+          $('#edtKeyword-' + $id).css('display', 'none');
+          $('#selectedKeywords-'+ $id).css('display','flex');
+        }
+    } else {
+      
+    }
+}
+
 </script>
 
 <style>
@@ -194,8 +241,12 @@ $minwords = "55";
               <input type="range" class="form-range" value="<?php echo isset($_COOKIE['customRange3']) ? $_COOKIE['customRange3'] : $minwords; ?>" min="50" max="150" step="1" id="customRange3" oninput="showVal(this.value)" onchange="showVal(this.value)">
               <span>Value: </span><span id="valBox"><?php echo $minwords ?></span>
 
-              <!-- <br/>
-              <button class="btn btn-primary btn-sm"><i class="fa-solid fa-gear"></i>Default</button> -->
+              <br/>
+              <br/>
+              <div style="margin-left: 22px;" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="settingflexSwitchKeyword" checked>
+                <label class="form-check-label" for="settingflexSwitchKeyword">Custom keyword</label>
+              </div>
 
       </div>
       <div class="modal-footer">
@@ -263,10 +314,13 @@ $minwords = "55";
           </td>
           <td>
             <textarea class="form-control" id="editprompt-<?php echo $g10[$prz]->id; ?>" rows="3"></textarea>
-            <br/>
+            <div style="margin-left: 20px;" class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" onchange="switchKeywordchange(<?php echo $g10[$prz]->id ?>)" id="switchkeyword-<?php echo $g10[$prz]->id ?>">
+              <label class="form-check-label" for="switchkeyword-<?php echo $g10[$prz]->id ?>">Custom keyword</label>
+            </div>
             <textarea class="form-control" id="edtKeyword-<?php echo $g10[$prz]->id; ?>" rows="1" placeholder="Keyword"></textarea>
             <br/>
-            <select id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
+            <select data-width="180px" id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" onchange="loadKeyword(<?php echo $g10[$prz]->id;?>,<?php echo "'".$g10[$prz]->categories[0]->name."'"; ?>)" data-live-search="true">
               <?php 
                   $index = 0;
                   while($index < count($someArray)) {
@@ -280,6 +334,16 @@ $minwords = "55";
             
             <br/>
             <br/>
+            <div id="selectedKeywords-<?php echo $g10[$prz]->id;?>">
+            <select id="keywords-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" data-live-search="true">
+
+            </select>
+
+
+
+            </div>
+            <br/>
+        
             <textarea class="form-control" id="edtTitle-<?php echo $g10[$prz]->id; ?>" rows="1"></textarea>
 
           </td>
@@ -314,12 +378,23 @@ $minwords = "55";
 
           </td>
           <td>
-            <select id="selectCategoryyy-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
+            <select data-width="200px" id="selectCategoryyy-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
               <?php 
                   $index = 0;
                   while($index < count($someArray)) {
+                    if($g10[$prz]->categories[0]->id == $someArray[$index]["id"]) {
+                      ?>
+                        <option selected value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                      <?php
+                    }
+                      else {
+                        ?>
+                        <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                        <?php
+                      }
+                    
               ?>
-                <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                
               <?php
                   $index++;
                   }
@@ -328,7 +403,7 @@ $minwords = "55";
               <br/>
               <br/>
               <b>Tag</b><br/>
-              <select id="listTag-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
+              <select data-width="200px" id="listTag-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
               <?php 
                   $index2 = 0;
                   while($index2 < count($listTag2)) {
@@ -439,6 +514,19 @@ $minwords = "55";
           showVal(60);
       }
 
+      const customKeywordswitch = localStorage.getItem('customKeywordswitch');
+      if (customKeywordswitch !== null) {
+        if(customKeywordswitch =='true') {
+            $('#settingflexSwitchKeyword').prop('checked', true);
+        } else {
+            $('#settingflexSwitchKeyword').prop('checked', false);
+        }
+      } else {
+          localStorage.setItem('customKeywordswitch', 'false');
+          $('#settingflexSwitchKeyword').prop('checked', false);
+      }
+
+
       /*document.getElementById("customRange3").value= <?php echo $minwords ?>;
       showVal(<?php echo $minwords ?>);*/
     //alert(<?php echo $minwords ?>);
@@ -447,6 +535,22 @@ $minwords = "55";
   window.onload = function() {
     const storedValue = localStorage.getItem('customRange3');
     const storedValueModel = localStorage.getItem('ValueModel');
+    const customKeywordswitch = localStorage.getItem('customKeywordswitch');
+
+    if (customKeywordswitch !== null) {
+        if(customKeywordswitch == 'true') {
+            //console.log(customKeywordswitch);
+            $('#settingflexSwitchKeyword').prop('checked', true);
+        } else {
+            $('#settingflexSwitchKeyword').prop('checked', false);
+        }
+    } else {
+        localStorage.setItem('customKeywordswitch', 'false');
+        $('#settingflexSwitchKeyword').prop('checked', false);
+        //saveSettings();
+    }
+
+
     if (storedValue !== null) {
         document.getElementById('customRange3').value = storedValue;
         saveSettings();
@@ -533,8 +637,49 @@ function saveSettings() {
             span.textContent = currentValue;
         }
     }
-    //checkModel();
-  }
+    var switchkeyword = $('#settingflexSwitchKeyword');
+    if (switchkeyword.length > 0) {
+        if (switchkeyword.prop('checked')) {
+            //console.log('SAVE TRUE');
+            localStorage.setItem('customKeywordswitch', 'true');
+            const checkboxes = document.querySelectorAll('[id^="switchkeyword-"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+
+            const textInputs = document.querySelectorAll('[id^="edtKeyword-"]');
+            const divs = document.querySelectorAll('[id^="selectedKeywords-"]');
+            
+            textInputs.forEach(input => {
+                input.style.display = "flex";
+            });
+            
+            divs.forEach(div => {
+                div.style.display = "none";
+            });
+
+        } else {
+            //console.log('SAVE FALSE');
+            localStorage.setItem('customKeywordswitch', 'false');
+            const checkboxes = document.querySelectorAll('[id^="switchkeyword-"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            const textInputs = document.querySelectorAll('[id^="edtKeyword-"]');
+            const divs = document.querySelectorAll('[id^="selectedKeywords-"]');
+            
+            textInputs.forEach(input => {
+                input.style.display = "none";
+            });
+            
+            divs.forEach(div => {
+                div.style.display = "flex";
+            });
+        }
+    } else {
+      
+    }
+}
 
   function clickSave(){
     saveSettings();

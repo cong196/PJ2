@@ -188,6 +188,19 @@
 </div>
 </div>
 
+<div style="background-color:#F0F0F0; margin-top: 15px;">
+<h3 style="padding-left:25px;padding-top: 25px;">Import CSV keywords</h3>
+<form style="margin-left:30px" action="import_keywords_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
+    <div class="form-group">
+        <label for="csvFile">Choose a CSV File</label>
+        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+<br/>
+</div>
+
 
 <br/>
 <br/>

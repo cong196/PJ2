@@ -358,4 +358,32 @@ function getClosing($site){
     }
 }
 
+function getKeywordCategory($category){
+    $conn = new mysqli('localhost', 'root', '', 'PJ2');
+    
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return [];
+    } else {
+        $sql = "SELECT * FROM keywords_test WHERE `category` = '" . $category . "'";
+
+        $result = $conn->query($sql);
+        
+        if ($result->num_rows > 0) {
+            $data = [];
+            
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;  // Store each row in the $data array
+            }
+            
+            $conn->close();
+            return $data;
+        } else {
+            $conn->close();
+            return [];
+        }
+    }
+}
+
+
 ?>
