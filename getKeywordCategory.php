@@ -21,6 +21,9 @@ if(isset($_POST['category'])) {
         case "MLB Merch":
             $category = "MLB";
             break;
+        case "St. Patricks Day":
+            $category = "St Patricks";
+            break;
         default:
             break;
     }
@@ -31,7 +34,7 @@ if(isset($_POST['category'])) {
         foreach ($c1 as $row) {
             $keyword = htmlspecialchars($row['keyword']);
             $volume = htmlspecialchars($row['volume']);
-            $result .= "<option value='" . htmlspecialchars($keyword) . "' data-subtext='" . $volume . "'>" . htmlspecialchars($keyword) . "</option>";
+            $result .= "<option value='" . $keyword . "' data-subtext='" . $volume . "'>" . $keyword . "</option>";
         }
         $result .= "</select>";
         echo $result;
