@@ -153,7 +153,7 @@ $minwords = "55";
     row.parentNode.removeChild(row);
   }
 
-  function loadKeyword($id,$defaltcategory){
+  function loadKeyword($id,$defaltcategory,$curpage){
     var category = $('#mainCategory-' + $id + ' option:selected').text();
     var valCategory = $('#mainCategory-' + $id).val();
     var defaultcategory = $('#selectCategoryyy-' + $id + ' option').filter(function() {
@@ -178,6 +178,23 @@ $minwords = "55";
         $('#keywords-' + $id).selectpicker();
       }
     });
+
+    $.ajax({
+        type: "POST",
+        url: "getURLcategory.php",
+        data: {site:$curpage,valCategory:valCategory},
+        cache: false,
+        success: function(html) {
+
+        //document.getElementById("click-copy-" + $id).innerHTML=clickhtml;
+        var paragraph = document.getElementById("click-copy-" + $id);
+        paragraph.onclick = function() {
+            copyToClipboard(html, $id);
+        };
+      }
+    });
+
+
   }
 
 function switchKeywordchange($id){
@@ -314,13 +331,16 @@ function switchKeywordchange($id){
           </td>
           <td>
             <textarea class="form-control" id="editprompt-<?php echo $g10[$prz]->id; ?>" rows="3"></textarea>
+
             <div style="margin-left: 20px;" class="form-check form-switch">
               <input class="form-check-input" type="checkbox" role="switch" onchange="switchKeywordchange(<?php echo $g10[$prz]->id ?>)" id="switchkeyword-<?php echo $g10[$prz]->id ?>">
               <label class="form-check-label" for="switchkeyword-<?php echo $g10[$prz]->id ?>">Custom keyword</label>
             </div>
-            <textarea class="form-control" id="edtKeyword-<?php echo $g10[$prz]->id; ?>" rows="1" placeholder="Keyword"></textarea>
+            
+            
+
             <br/>
-            <select data-width="180px" id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" onchange="loadKeyword(<?php echo $g10[$prz]->id;?>,<?php echo "'".$g10[$prz]->categories[0]->name."'"; ?>)" data-live-search="true">
+            <select data-width="180px" id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" onchange="loadKeyword(<?php echo $g10[$prz]->id;?>,<?php echo "'".$g10[$prz]->categories[0]->name."'"; ?>,<?php echo "'". $curPageName ."'" ?>)" data-live-search="true">
               <?php 
                   $index = 0;
                   while($index < count($someArray)) {
@@ -332,8 +352,10 @@ function switchKeywordchange($id){
               ?>
               </select>
             
-            <br/>
-            <br/>
+            <div id="click-copy-<?php echo $g10[$prz]->id;?>">
+                <p style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="copy-<?php echo $g10[$prz]->id;?>" onclick="copyToClipboard('',<?php echo $g10[$prz]->id;?>)">Copy Category URL</p>
+            </div>
+            <textarea class="form-control" id="edtKeyword-<?php echo $g10[$prz]->id; ?>" rows="1" placeholder="Keyword"></textarea>
             <div id="selectedKeywords-<?php echo $g10[$prz]->id;?>">
             <select id="keywords-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" data-live-search="true">
 
@@ -689,5 +711,19 @@ function saveSettings() {
 
   function showModalSetting(){
     $('#modalSettings').modal('show');
+  }
+  function copyToClipboard(text,id) {
+    var input = document.createElement('input');
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+
+    var copyLinkText = document.getElementById('copy-'+ id);
+    copyLinkText.innerHTML = 'Link Copied!';
+    setTimeout(function() {
+        copyLinkText.innerHTML = 'Copy Link';
+    }, 2000);
   }
 </script>
