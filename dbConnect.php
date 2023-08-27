@@ -210,7 +210,7 @@ function updateTag($site,$id,$name,$slug){
         if (!mysqli_select_db($dbh,'PJ2')){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee') {
+            if($site == 'themegatee' || $site == 'themega-editdraftproduct.php') {
 
              $sql_stmt = "INSERT INTO themegatee_tag VALUES ($id,'".$name2."','".$slug."')";
              $result = mysqli_query($dbh,$sql_stmt);

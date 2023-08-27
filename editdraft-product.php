@@ -197,6 +197,43 @@ $minwords = "55";
 
   }
 
+function addtagFunction($site){
+    var tag = $('#inputTag').val();
+    if(tag.trim() === "") {
+        alert("Input cannot be blank!");
+        return;
+    } else {
+      $('#savetag').css('display', 'none');
+      $('#savetagloading').css('display', 'flex');
+      $.ajax({
+        type: "POST",
+        url: "addnewTag.php",
+        data: {site:$site,tag:tag.trim()},
+        cache: false,
+        success: function(html) {
+            if(html=="0") {
+              alert("Tag already exists !");
+            } else {
+                console.log(html + "\n");
+                var dataArray1 = html.split(',');
+                var newOption = '<option value="' + dataArray1[0] + '">' + dataArray1[1] + '</option>';
+                $('select[id^="listTag-"]').each(function() {
+                  $(this).append(newOption);
+                  $(this).selectpicker('refresh');
+              });
+              var messageElement = document.getElementById("successtagtext");
+              messageElement.style.display = "block";
+              setTimeout(function () {
+                  messageElement.style.display = "none";
+              }, 2000);
+            }
+            $('#savetag').css('display', 'flex');
+            $('#savetagloading').css('display', 'none');
+        }
+      });
+    }
+}
+
 function switchKeywordchange($id){
     var switchweyword = $('#switchkeyword-' + $id);
     if (switchweyword.length > 0) {
@@ -274,6 +311,29 @@ function switchKeywordchange($id){
   </div>
 </div>
 
+<!-- Add Tag modal -->
+<div class="modal fade" id="addTagmodal" tabindex="-1" aria-labelledby="addTagmodal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTagmodaltitle">Add new tag</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <input type="text" class="form-control" id="inputTag">
+       <br/>
+       <p id="successtagtext" style="display: none;" class="text-success">Tag add successfully !</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="savetag" type="button" onclick="addtagFunction(<?php echo "'". $curPageName . "'"?>)" class="btn btn-primary">Save changes</button>
+        <button id="savetagloading" style="display:none;" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div class="w-100 p-3">
@@ -436,8 +496,8 @@ function switchKeywordchange($id){
                   }
               ?>
               </select>
-
-              <br/>
+              <p style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtag-<?php echo $g10[$prz]->id;?>" onclick="addTag()">+ Add new tag</p>
+           
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="groupPub<?php echo $g10[$prz]->id?>" id="radPublish-<?php echo $g10[$prz]->id;?>" checked>
                 <label class="form-check-label" for="radPublish-<?php echo $g10[$prz]->id;?>">
@@ -725,5 +785,9 @@ function saveSettings() {
     setTimeout(function() {
         copyLinkText.innerHTML = 'Copy Link';
     }, 2000);
+  }
+
+  function addTag(){
+    $('#addTagmodal').modal('show');
   }
 </script>
