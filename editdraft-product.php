@@ -240,9 +240,13 @@ function switchKeywordchange($id){
         if (switchweyword.prop('checked')) {
           $('#edtKeyword-' + $id).css('display', 'flex');
           $('#selectedKeywords-'+ $id).css('display','none');
+          $('#savekeywords-'+$id).css('display','flex');
+          $('#keywordprops-'+$id).css('display','flex');
         } else {
           $('#edtKeyword-' + $id).css('display', 'none');
           $('#selectedKeywords-'+ $id).css('display','flex');
+          $('#savekeywords-'+$id).css('display','none');
+          $('#keywordprops-'+$id).css('display','none');
         }
     } else {
       
@@ -399,7 +403,6 @@ function switchKeywordchange($id){
             
             
 
-            <br/>
             <select data-width="180px" id="mainCategory-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" onchange="loadKeyword(<?php echo $g10[$prz]->id;?>,<?php echo "'".$g10[$prz]->categories[0]->name."'"; ?>,<?php echo "'". $curPageName ."'" ?>)" data-live-search="true">
               <?php 
                   $index = 0;
@@ -420,12 +423,27 @@ function switchKeywordchange($id){
             <select id="keywords-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" data-live-search="true">
 
             </select>
+            </div>
 
-
-
+            <div id="savekeywords-<?php echo $g10[$prz]->id; ?>" style="margin-left: 20px;" class="form-check form-switch">
+              <input class="form-check-input form-check-sm" type="checkbox" role="switch" id="switchsavekeywords-<?php echo $g10[$prz]->id ?>" checked>
+              <label class="form-check-label" for="switchsavekeywords-<?php echo $g10[$prz]->id ?>">Save keyword</label>
+            </div>
+            <div style="max-width: 200px;" id="keywordprops-<?php echo $g10[$prz]->id;?>">
+              <form>
+                  <div class="form-row align-items-center">
+                      <div class="col-6">
+                          <label class="sr-only" for="txtkeywordvolume-<?php echo $g10[$prz]->id;?>">Input 1</label>
+                          <input type="number" class="form-control form-control-sm mb-1" id="txtkeywordvolume-<?php echo $g10[$prz]->id;?>" placeholder="volume(optional)">
+                      </div>
+                      <div class="col-6">
+                          <label class="sr-only" for="txtkeywordtype-<?php echo $g10[$prz]->id;?>">Input 2</label>
+                          <input type="text" class="form-control form-control-sm mb-1" id="txtkeywordtype-<?php echo $g10[$prz]->id;?>" placeholder="Type(optional)">
+                      </div>
+                  </div>
+              </form>
             </div>
             <br/>
-        
             <textarea class="form-control" id="edtTitle-<?php echo $g10[$prz]->id; ?>" rows="1"></textarea>
 
           </td>
@@ -731,6 +749,8 @@ function saveSettings() {
 
             const textInputs = document.querySelectorAll('[id^="edtKeyword-"]');
             const divs = document.querySelectorAll('[id^="selectedKeywords-"]');
+            const divs2 = document.querySelectorAll('[id^="savekeywords-"]');
+            const divs3 = document.querySelectorAll('[id^="keywordprops-"]');
             
             textInputs.forEach(input => {
                 input.style.display = "flex";
@@ -738,6 +758,12 @@ function saveSettings() {
             
             divs.forEach(div => {
                 div.style.display = "none";
+            });
+            divs2.forEach(div => {
+                div.style.display = "flex";
+            });
+            divs3.forEach(div => {
+                div.style.display = "flex";
             });
 
         } else {
@@ -749,13 +775,20 @@ function saveSettings() {
             });
             const textInputs = document.querySelectorAll('[id^="edtKeyword-"]');
             const divs = document.querySelectorAll('[id^="selectedKeywords-"]');
-            
+            const divs2 = document.querySelectorAll('[id^="savekeywords-"]');
+            const divs3 = document.querySelectorAll('[id^="keywordprops-"]');
             textInputs.forEach(input => {
                 input.style.display = "none";
             });
             
             divs.forEach(div => {
                 div.style.display = "flex";
+            });
+            divs2.forEach(div => {
+                div.style.display = "none";
+            });
+            divs3.forEach(div => {
+                div.style.display = "none";
             });
         }
     } else {

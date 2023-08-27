@@ -5,11 +5,35 @@ function updateProductDraft($id,$site) {
     var title = $('#txttitle-' + id).val();
     var slug = $('#txtslug-' + id).val();
     var selectCategory = $('#selectCategoryyy-' + id).val();
-    //alert(selectCategory);
-    //console.log(selectCategory);
     var lscv = selectCategory.toString();
     var selectTag1 = $('#listTag-' + id).val();
     var selectTag2 = selectTag1.toString();
+    var isCustomkeywords = 0;
+    var isSavekeywords = 0;
+    var keyword = "";
+    var keywordvolume = 0;
+    var keywordtype = "general";
+    var categoryKeyword = "";
+    var isCustomkeywords1 = $('#switchkeyword-' + id).prop('checked');
+    if (isCustomkeywords1) {
+        isCustomkeywords = 1;
+        var isSavekeywords1 = $('#switchsavekeywords-' + id).prop('checked');
+        if(isSavekeywords1) {
+            isSavekeywords = 1;
+            keyword = $('#edtKeyword-'+ id).val();
+            categoryKeyword = $('#mainCategory-' + id).find('option:selected').text();
+            var keywordvl = $('#txtkeywordvolume-'+ id).val();
+            if(keywordvl == "") {
+                keywordvolume = 0;
+            } else {
+                keywordvolume = keywordvl;
+            }
+            var keywordtp = $('#txtkeywordtype-'+ id).val();
+            if(keywordtp != "") {
+                keywordtype = keywordtp;
+            }
+        }
+    }
 
     var pls = 0;
     if(document.getElementById('radPublish-'+id).checked) {
@@ -25,7 +49,8 @@ function updateProductDraft($id,$site) {
     }
     loadlayout();
     
-    $.post("updateProductDraft.php", { id:id, title:title, des:des, site: site , category:lscv, publishss:pls, selectTag:selectTag2, slug:slug},
+    $.post("updateProductDraft.php", { id:id, title:title, des:des, site: site , category:lscv, publishss:pls, selectTag:selectTag2, slug:slug, isCustomkeywords:isCustomkeywords,isSavekeywords:isSavekeywords,
+                                        keyword:keyword, keywordvolume:keywordvolume,keywordtype:keywordtype,categoryKeyword:categoryKeyword},
     function(data) {
         
         var datatextbox = 'content-'+id;

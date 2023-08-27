@@ -385,5 +385,23 @@ function getKeywordCategory($category){
     }
 }
 
+function insertkeywords($site,$category,$keyword,$volume, $type){
+    $dbh = mysqli_connect('localhost', 'root', '');
+    $keyword = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $keyword);
+    if (!$dbh){
+        die("Unable to connect to MySQL: " . mysqli_error());
+    } else {
+        if (!mysqli_select_db($dbh,'PJ2')){
+            die("Unable to select database: " . mysqli_error());
+        } else {
+            $sql_stmt = "INSERT INTO keywords_test (category, keyword, volume, type) 
+             VALUES ('".$category."','".$keyword."',".$volume.",'".$type."') 
+             ON DUPLICATE KEY UPDATE volume = " . $volume . ", type = '".$type."';";
+            $result = mysqli_query($dbh,$sql_stmt);
+            mysqli_close($dbh);
+        }    
+    }
+}
+
 
 ?>

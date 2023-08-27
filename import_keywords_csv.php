@@ -23,7 +23,7 @@ if (isset($_FILES['csvFile']) && $_FILES['csvFile']['error'] === UPLOAD_ERR_OK) 
         }, $data);
         
         $sql = "INSERT INTO keywords_test (category, keyword, volume, type) 
-                VALUES ('" . $data[0] . "', '" . $data[1] . "', '" . $data[2] . "', '" . $data[3] . "')";
+                VALUES ('" . $data[0] . "', '" . $data[1] . "', '" . $data[2] . "', '" . $data[3] . "') ON DUPLICATE KEY UPDATE volume = '" . $data[2] . "';";
 
         if ($conn->query($sql) !== TRUE) {
             echo "Error: " . $sql . "<br>" . $conn->error;

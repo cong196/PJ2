@@ -12,6 +12,12 @@
     $publishss = $_POST['publishss'];
     $selectTag = $_POST['selectTag'];
     $slug = $_POST['slug'];
+    $isCustomkeywords = $_POST['isCustomkeywords'];
+    $isSavekeywords = $_POST['isSavekeywords'];
+    $keyword = $_POST['keyword'];
+    $keywordvolume = $_POST['keywordvolume'];
+    $keywordtype = $_POST['keywordtype'];
+    $categoryKeyword = $_POST['categoryKeyword'];
     //$selectCategory = json_encode($_POST['selectCategory']);
 
     //print($selectCategory);
@@ -94,6 +100,11 @@
     $idText1 = implode(', ', $ids1);
     updateProductlink($s,$prd1[0]->id,$prd1[0]->name,$prd1[0]->slug, $idText1);
 
-    echo $response;    
+    if($isCustomkeywords == 1){
+        if($isSavekeywords == 1) {
+            insertkeywords($s,$categoryKeyword,$keyword,$keywordvolume,$keywordtype);
+        }
+    }
+    echo $response . "- is custom: ". $isCustomkeywords . " is save: ". $isSavekeywords ." - " . $categoryKeyword . "-". $keywordvolume . "-". $keyword . "-". $keywordtype;    
 
 ?>
