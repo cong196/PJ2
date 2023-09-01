@@ -306,6 +306,13 @@ function switchKeywordchange($id){
                 <label class="form-check-label" for="settingflexSwitchKeyword">Custom keyword</label>
               </div>
 
+              <br/>
+              <div style="margin-left: 22px;" class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="settingflexSwitchSaveKeyword" checked>
+                <label class="form-check-label" for="settingflexSwitchSaveKeyword ">Save keyword</label>
+              </div>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -626,6 +633,17 @@ function switchKeywordchange($id){
           $('#settingflexSwitchKeyword').prop('checked', false);
       }
 
+      const savecustomKeywordswitch = localStorage.getItem('savecustomKeywordswitch');
+      if (savecustomKeywordswitch !== null) {
+        if(savecustomKeywordswitch =='true') {
+            $('#settingflexSwitchSaveKeyword').prop('checked', true);
+        } else {
+            $('#settingflexSwitchSaveKeyword').prop('checked', false);
+        }
+      } else {
+          localStorage.setItem('savecustomKeywordswitch', 'false');
+          $('#settingflexSwitchSaveKeyword').prop('checked', false);
+      }
 
       /*document.getElementById("customRange3").value= <?php echo $minwords ?>;
       showVal(<?php echo $minwords ?>);*/
@@ -636,10 +654,10 @@ function switchKeywordchange($id){
     const storedValue = localStorage.getItem('customRange3');
     const storedValueModel = localStorage.getItem('ValueModel');
     const customKeywordswitch = localStorage.getItem('customKeywordswitch');
+    const savecustomKeywordswitch = localStorage.getItem('savecustomKeywordswitch');
 
     if (customKeywordswitch !== null) {
         if(customKeywordswitch == 'true') {
-            //console.log(customKeywordswitch);
             $('#settingflexSwitchKeyword').prop('checked', true);
         } else {
             $('#settingflexSwitchKeyword').prop('checked', false);
@@ -647,7 +665,17 @@ function switchKeywordchange($id){
     } else {
         localStorage.setItem('customKeywordswitch', 'false');
         $('#settingflexSwitchKeyword').prop('checked', false);
-        //saveSettings();
+    }
+
+    if (savecustomKeywordswitch !== null) {
+        if(savecustomKeywordswitch == 'true') {
+            $('#settingflexSwitchSaveKeyword').prop('checked', true);
+        } else {
+            $('#settingflexSwitchSaveKeyword').prop('checked', false);
+        }
+    } else {
+        localStorage.setItem('savecustomKeywordswitch', 'false');
+        $('#settingflexSwitchSaveKeyword').prop('checked', false);
     }
 
 
@@ -794,6 +822,28 @@ function saveSettings() {
     } else {
       
     }
+
+
+    var switchsavekeyword = $('#settingflexSwitchSaveKeyword');
+    if (switchsavekeyword.length > 0) {
+        if (switchsavekeyword.prop('checked')) {
+            localStorage.setItem('savecustomKeywordswitch', 'true');
+            const checkboxes = document.querySelectorAll('[id^="switchsavekeywords-"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        } else {
+            localStorage.setItem('savecustomKeywordswitch', 'false');
+            const checkboxes = document.querySelectorAll('[id^="switchsavekeywords-"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+    } else {
+      
+    }
+
+
 }
 
   function clickSave(){
