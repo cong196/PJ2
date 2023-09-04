@@ -13,6 +13,7 @@ function updateProductDraft($id,$site) {
     var keyword = "";
     var keywordvolume = 0;
     var keywordtype = "general";
+    var price = $('#txtinputprice-' + id).val();
     var categoryKeyword = "";
     var isCustomkeywords1 = $('#switchkeyword-' + id).prop('checked');
     if (isCustomkeywords1) {
@@ -50,7 +51,7 @@ function updateProductDraft($id,$site) {
     loadlayout();
     
     $.post("updateProductDraft.php", { id:id, title:title, des:des, site: site , category:lscv, publishss:pls, selectTag:selectTag2, slug:slug, isCustomkeywords:isCustomkeywords,isSavekeywords:isSavekeywords,
-                                        keyword:keyword, keywordvolume:keywordvolume,keywordtype:keywordtype,categoryKeyword:categoryKeyword},
+                                        keyword:keyword, keywordvolume:keywordvolume,keywordtype:keywordtype,categoryKeyword:categoryKeyword,price:price},
     function(data) {
         
         var datatextbox = 'content-'+id;

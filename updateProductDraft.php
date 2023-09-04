@@ -18,9 +18,7 @@
     $keywordvolume = $_POST['keywordvolume'];
     $keywordtype = $_POST['keywordtype'];
     $categoryKeyword = $_POST['categoryKeyword'];
-    //$selectCategory = json_encode($_POST['selectCategory']);
-
-    //print($selectCategory);
+    $price = $_POST['price'];
 
     $site = json_decode(getKey($s));
 
@@ -62,7 +60,9 @@
             'name' => $title,
             'description' => $des,
             'date_created' => $date,
-            'slug' => $slug
+            'slug' => $slug,
+            'price' => $price,
+            'regular_price' => $price
     ];
 
     if($category != '') {

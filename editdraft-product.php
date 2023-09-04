@@ -362,7 +362,7 @@ function switchKeywordchange($id){
           <th scope="col">Edit prompt</th>
           <th scope="col"></th>
           <th scope="col">Category</th>
-          <th scope="col">Price</th>
+          <!-- <th scope="col">Price</th> -->
           <th scope="col">Save</th>
           <th scope="col">View</th>
         </tr>
@@ -537,9 +537,11 @@ function switchKeywordchange($id){
               </div>
 
           </td>
-          <td><?php echo $g10[$prz]->price ?></td>
+          <!-- <td><?php echo $g10[$prz]->price ?></td> -->
         
           <td>
+            <input id="txtinputprice-<?php echo $g10[$prz]->id ?>" class="form-control form-control-sm" style="width: 60px;" value="<?php echo $g10[$prz]->price ?>">
+            <br/>
              <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">Save</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="saveinfo-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
