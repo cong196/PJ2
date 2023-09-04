@@ -522,7 +522,14 @@ function switchKeywordchange($id){
               ?>
               </select>
               <p style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtag-<?php echo $g10[$prz]->id;?>" onclick="addTag()">+ Add new tag</p>
-           
+              
+              <div class="mb-3 row">
+                <label for="txtinputprice-<?php echo $g10[$prz]->id ?>" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                  <input id="txtinputprice-<?php echo $g10[$prz]->id ?>" class="form-control" style="width: 80px;" value="<?php echo $g10[$prz]->price ?>">
+                </div>
+              </div>
+
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="groupPub<?php echo $g10[$prz]->id?>" id="radPublish-<?php echo $g10[$prz]->id;?>" checked>
                 <label class="form-check-label" for="radPublish-<?php echo $g10[$prz]->id;?>">
@@ -540,8 +547,7 @@ function switchKeywordchange($id){
           <!-- <td><?php echo $g10[$prz]->price ?></td> -->
         
           <td>
-            <input id="txtinputprice-<?php echo $g10[$prz]->id ?>" class="form-control form-control-sm" style="width: 60px;" value="<?php echo $g10[$prz]->price ?>">
-            <br/>
+            
              <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">Save</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="saveinfo-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
