@@ -22,7 +22,15 @@
             ]
         );
         $tagName = $data['name'];
-        $tagExists = $woocommerce->get('products/tags', ['search' => $tagName]);
+        //$tagExists = $woocommerce->get('products/tags', ['name' => $tagName]);
+        $allTags = $woocommerce->get('products/tags');
+        $tagExists = false;
+        foreach ($allTags as $tag) {
+            if (strtolower($tag->name) === strtolower($tagName)) {
+                $tagExists = true;
+                break;
+            }
+        }
 
         if (!empty($tagExists)) {
             return "0";
