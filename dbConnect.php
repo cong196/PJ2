@@ -293,9 +293,9 @@ function getRandomRelatedProduct($site,$id,$title){
             if($site == 'themega-editdraftproduct.php') {
                 //$sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
                 if($title != ''){
-                    $sql = "SELECT * FROM `themegaproductlink` WHERE `name` LIKE '%".$title."%' AND `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                    $sql = "SELECT * FROM `themegaproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
                 } else {
-                    $sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
+                    $sql = "SELECT * FROM `themegaproductlink` WHERE FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
                 }
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
