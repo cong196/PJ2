@@ -136,7 +136,6 @@ $minwords = "55";
     }
 
     generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1);
-    
   }
 
 
@@ -160,15 +159,18 @@ $minwords = "55";
     var defaultcategory = $('#selectCategoryyy-' + $id + ' option').filter(function() {
         return $(this).text() === $defaltcategory;
     });
-    var valueDefalut = defaultcategory.val();
+
+    /*var valueDefalut = defaultcategory.val();
     $('#selectCategoryyy-' + $id).val([valCategory, valueDefalut]);
     $('#selectCategoryyy-' + $id).selectpicker('refresh');
     var selecttag = $('#listTag-' + $id + ' option').filter(function() {
         return $(this).text().toLowerCase() === category.toLowerCase();
-    });
-    var valuetag = selecttag.val();
+    });*/
+    
+    /*var valuetag = selecttag.val();
     $('#listTag-' + $id).val(valuetag);
-    $('#listTag-' + $id).selectpicker('refresh');
+    $('#listTag-' + $id).selectpicker('refresh');*/
+
     $.ajax({
         type: "POST",
         url: "getKeywordCategory.php",
@@ -263,7 +265,7 @@ function switchKeywordchange($id){
 }
 
 .zoomsss:hover {
-  transform: scale(5.5);
+  transform: scale(3.5);
 }
 </style>
 <div class="floating-button">
@@ -490,20 +492,10 @@ function switchKeywordchange($id){
               <?php 
                   $index = 0;
                   while($index < count($someArray)) {
-                    if($g10[$prz]->categories[0]->id == $someArray[$index]["id"]) {
                       ?>
-                        <option selected value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
-                      <?php
-                    }
-                      else {
-                        ?>
                         <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
                         <?php
-                      }
-                    
-              ?>
-                
-              <?php
+                     
                   $index++;
                   }
               ?>

@@ -1,17 +1,25 @@
 <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database_name = "PJ2";
+
+
+
 function getdataCategory($site){
-        $dbh = mysqli_connect('localhost', 'root', ''); 
+    global $servername, $username, $password, $database_name;
+        $dbh = mysqli_connect($servername, $username, $password); 
             // Kết nối tới MySQL server
         //iUooo6)qQ?5t4591
         if (!$dbh){
             die("Unable to connect to MySQL: " . mysqli_error());
             // Nếu kết nối thất bại thì đưa ra thông báo lỗi
         } else {
-            if (!mysqli_select_db($dbh,'PJ2')){
+            if (!mysqli_select_db($dbh,$database_name)){
                 die("Unable to select database: " . mysqli_error());
                 // Thông báo lỗi nếu chọn CSDL thất bại
             } else {
-                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
+                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
                     $sql_stmt = "SELECT * FROM themegatee_category"; 
                     // Câu lệnh select
                     $result = mysqli_query($dbh,$sql_stmt);
@@ -35,18 +43,20 @@ function getdataCategory($site){
 }
 
 function getdataPostCategory($site){
-        $dbh = mysqli_connect('localhost', 'root', ''); 
+    global $servername, $username, $password, $database_name;
+        $dbh = mysqli_connect($servername, $username, $password);
+
             // Kết nối tới MySQL server
         //iUooo6)qQ?5t4591
         if (!$dbh){
             die("Unable to connect to MySQL: " . mysqli_error());
             // Nếu kết nối thất bại thì đưa ra thông báo lỗi
         } else {
-            if (!mysqli_select_db($dbh,'PJ2')){
+            if (!mysqli_select_db($dbh,$database_name)){
                 die("Unable to select database: " . mysqli_error());
                 // Thông báo lỗi nếu chọn CSDL thất bại
             } else {
-                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
+                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
                     $sql_stmt = "SELECT * FROM themegatee_postcategory"; 
                     // Câu lệnh select
                     $result = mysqli_query($dbh,$sql_stmt);
@@ -72,17 +82,18 @@ function getdataPostCategory($site){
 
 function getdataTag($site){
       /*  $conn = mysqli_connect('localhost', 'root', '');*/
-        $dbh = mysqli_connect('localhost', 'root', ''); 
+      global $servername, $username, $password, $database_name;
+        $dbh = mysqli_connect($servername, $username, $password); 
             // Kết nối tới MySQL server
         if (!$dbh){
             die("Unable to connect to MySQL: " . mysqli_error());
             // Nếu kết nối thất bại thì đưa ra thông báo lỗi
         } else {
-            if (!mysqli_select_db($dbh,'PJ2')){
+            if (!mysqli_select_db($dbh,$database_name)){
                 die("Unable to select database: " . mysqli_error());
                 // Thông báo lỗi nếu chọn CSDL thất bại
             } else {
-                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega-editdraftproduct.php') {
+                if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php') {
                     $sql_stmt = "SELECT * FROM themegatee_tag"; 
                     $result = mysqli_query($dbh,$sql_stmt);
                     $rows = mysqli_num_rows($result); 
@@ -106,12 +117,12 @@ function getdataTag($site){
 }
 
 function deletTableCategory($site){
-    
-    $dbh = mysqli_connect('localhost', 'root', ''); 
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password); 
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
             // Thông báo lỗi nếu chọn CSDL thất bại
         } else {
@@ -125,12 +136,12 @@ function deletTableCategory($site){
 }
 
 function deletTablePostCategory($site){
-    
-    $dbh = mysqli_connect('localhost', 'root', ''); 
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password); 
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
             // Thông báo lỗi nếu chọn CSDL thất bại
         } else {
@@ -144,18 +155,23 @@ function deletTablePostCategory($site){
 }
 
 function deletTableTag($site){
-    
-    $dbh = mysqli_connect('localhost', 'root', ''); 
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password); 
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
             // Thông báo lỗi nếu chọn CSDL thất bại
         } else {
             if($site == 'themegatee') {
              $sql_stmt = "DELETE FROM themegatee_tag"; 
              $result = mysqli_query($dbh,$sql_stmt);
+            } else {
+                if($site == 'kacogifts') {
+                     $sql_stmt = "DELETE FROM kacogifts_tag"; 
+                     $result = mysqli_query($dbh,$sql_stmt);
+                }
             }
         }
         mysqli_close($dbh);
@@ -163,12 +179,13 @@ function deletTableTag($site){
 }
 
 function updateCategory($site,$id,$name,$slug, $parent){
-    $dbh = mysqli_connect('localhost', 'root', '');
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
     $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
             if($site == 'themegatee') {
@@ -182,12 +199,13 @@ function updateCategory($site,$id,$name,$slug, $parent){
 }
 
 function updatePostCategory($site,$id,$name,$slug, $parent){
-    $dbh = mysqli_connect('localhost', 'root', '');
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
     $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
             if($site == 'themegatee') {
@@ -202,18 +220,24 @@ function updatePostCategory($site,$id,$name,$slug, $parent){
 
 
 function updateTag($site,$id,$name,$slug){
-    $dbh = mysqli_connect('localhost', 'root', '');
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
     $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee' || $site == 'themega-editdraftproduct.php') {
+            if($site == 'themegatee' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php') {
 
              $sql_stmt = "INSERT INTO themegatee_tag VALUES ($id,'".$name2."','".$slug."')";
              $result = mysqli_query($dbh,$sql_stmt);
+            } else {
+                if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
+                     $sql_stmt = "INSERT INTO kacogifts_tag VALUES ($id,'".$name2."','".$slug."')";
+                     $result = mysqli_query($dbh,$sql_stmt);
+                }
             }
             
             mysqli_close($dbh);
@@ -222,16 +246,17 @@ function updateTag($site,$id,$name,$slug){
 }
 
 function updateProductlink($site,$id,$name,$slug,$category){
-    $dbh = mysqli_connect('localhost', 'root', '');
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
     $name2 = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $name);
 
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
     } else {
-        if (!mysqli_select_db($dbh,'PJ2')){
+        if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee') {
+            if($site == 'themegatee-editproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee') {
 
 
                 $query = "SELECT id FROM themegaproductlink WHERE id = $id";
@@ -247,21 +272,37 @@ function updateProductlink($site,$id,$name,$slug,$category){
                     $result = mysqli_query($dbh,$sql_stmt);
                 }
                  
+            } else {
+                if($site == 'kacogifts-editproduct.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts-setting.php' || $site == 'kacogifts') {
+                    $query = "SELECT id FROM kacogiftsproductlink WHERE id = $id";
+                    $rsExits = mysqli_query($dbh, $query);
+
+                    if (mysqli_num_rows($rsExits) > 0) {
+                        $slug = 'https://kacogifts.com/product/' . $slug;
+                        $updateExits = "UPDATE kacogiftsproductlink SET slug = '".$slug."' WHERE id =".$id;
+                        $result = mysqli_query($dbh,$updateExits);
+                    } else {
+                        $slug = 'https://kacogifts.com/product/' . $slug;
+                        $sql_stmt = "INSERT INTO kacogiftsproductlink VALUES ($id,'".$name2."','".$slug."','".$category."')";
+                        $result = mysqli_query($dbh,$sql_stmt);
+                    }
+                     
+                }
             }
-            
             mysqli_close($dbh);
         }    
     }
 }
 
 function getlinkCategory($site,$id){
-    $conn = new mysqli('localhost', 'root', '','PJ2');
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         return 0;
     } else {
             $sql = "";
-            if($site == 'themega-editdraftproduct.php' || $site == 'themegatee.php' || $site == 'themegatee') {
+            if($site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee.php' || $site == 'themegatee') {
                 $sql = "SELECT * FROM themegatee_category WHERE id = $id;";
                 $result = $conn->query($sql);
                 $row = $result->fetch_assoc();
@@ -284,13 +325,14 @@ function getlinkCategory($site,$id){
 }
 
 function getRandomRelatedProduct($site,$id,$title){
-    $conn = new mysqli('localhost', 'root', '','PJ2');
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         return 0;
     } else {
             $sql = "";
-            if($site == 'themega-editdraftproduct.php') {
+            if($site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php') {
                 //$sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
                 if($title != ''){
                     $sql = "SELECT * FROM `themegaproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
@@ -309,8 +351,8 @@ function getRandomRelatedProduct($site,$id,$title){
 }
 
 function getclosingParagraph(){
-    
-    $conn = new mysqli('localhost', 'root', '','PJ2');
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         return 0;
@@ -324,8 +366,8 @@ function getclosingParagraph(){
 }
 
 function getClosing($site){
-    
-    $conn = new mysqli('localhost', 'root', '','PJ2');
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
         return 0;
@@ -339,7 +381,7 @@ function getClosing($site){
             $ct = $result->fetch_assoc();
             $content = $ct["content"];
 
-            if($site == 'themega-editdraftproduct.php') {
+            if($site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php') {
                 $randomAchortext = "Themegatee.com,Themegatee,our shop";
                 $values = explode(',', $randomAchortext);
                 $values = array_map('trim', $values);
@@ -359,7 +401,8 @@ function getClosing($site){
 }
 
 function getKeywordCategory($category){
-    $conn = new mysqli('localhost', 'root', '', 'PJ2');
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
     
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -386,7 +429,8 @@ function getKeywordCategory($category){
 }
 
 function insertkeywords($site,$category,$keyword,$volume, $type){
-    $dbh = mysqli_connect('localhost', 'root', '');
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
     $keyword = preg_replace('/[^a-zA-Z0-9_ %\[\]\.\(\)%&-]/s', '', $keyword);
     if (!$dbh){
         die("Unable to connect to MySQL: " . mysqli_error());
@@ -403,5 +447,92 @@ function insertkeywords($site,$category,$keyword,$volume, $type){
     }
 }
 
+function check_tags_exist($tag,$page_name) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        //die("Connection failed: " . $mysqli->connect_error);
+        return 3;
+    } else {
+        $query = "";
+        if($page_name == 'kacogifts' || $page_name == 'kacogifts-editdraftproduct.php') {
+            $query = "SELECT COUNT(*) AS tag_count FROM kacogifts_tag WHERE name = '$tag'";
+        }
+
+        $result = $conn->query($query);
+        if ($result) {
+            $row = $result->fetch_assoc();
+            $tagCount = $row['tag_count'];
+            $conn->close();
+            return $tagCount > 0 ? 1 : 2;
+        } else {
+            $conn->close();
+            return 3;;
+        }
+    }
+}
+
+function get_link_tag($tag0,$site) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "";
+            if($site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts') {
+                $sql = "SELECT * FROM kacogifts_tag WHERE name = '".$tag0."'";
+                $result = $conn->query($sql);
+                $row = $result->fetch_assoc();
+                $link = $row["slug"];
+                $conn->close();
+
+                $link = 'https://kacogifts.com/product-tag/' . $link;
+                return $link;
+            }
+    }
+}
+function get_id_tag($name, $site) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "";
+            if($site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts') {
+                $sql = "SELECT * FROM kacogifts_tag WHERE name = '".$name."'";
+                $result = $conn->query($sql);
+                $row = $result->fetch_assoc();
+                $id = $row["id"];
+                $conn->close();
+                return $id;
+            }
+    }
+}
+
+
+function get_related_product($site,$title){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "";
+            if($site == 'kacogifts-editdraftproduct.php') {
+                $sql = "SELECT * FROM `kacogiftsproductlink` WHERE `name` LIKE '%" . $title . "%' ORDER BY RAND() LIMIT 1;";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    return $row;
+                } else {
+                    return 0;
+                }
+            } else {
+                
+            }
+    }
+}
 
 ?>

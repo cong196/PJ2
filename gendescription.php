@@ -189,7 +189,7 @@ if($customprompt == '') {
     
     
     //$close2 = getClosing($curPageName);
-    $closingContent = $closingContent ."<p>".$newText."</p>";
+    $closingContent = $closingContent ."<p>".$result4."</p>";
 
     echo '<h2>'.$result3. '</h2> <p>'. $result .'</p>BD0011'. $closingContent;
 
