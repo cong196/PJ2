@@ -381,7 +381,7 @@ function switchKeywordchange($id){
         <tr style="vertical-align:initial">
           <td scope="row"><?php echo $g10[$prz]->id ?></td>
           <td scope="row">
-            <textarea class="form-control" id="txttitle-<?php echo $g10[$prz]->id; ?>" rows="1"><?php echo $g10[$prz]->name?></textarea>
+            <textarea class="form-control" id="txttitle-<?php echo $g10[$prz]->id; ?>" rows="3"><?php echo $g10[$prz]->name?></textarea>
             <br/>
             <strong>slug</strong>
             <textarea class="form-control" id="txtslug-<?php echo $g10[$prz]->id; ?>" rows="2"><?php echo $g10[$prz]->name?></textarea>
