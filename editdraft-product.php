@@ -281,6 +281,23 @@ function switchKeywordchange($id){
         </button>
       </div>
       <div class="modal-body">
+
+            <b>Status</b>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="groupstatus" id="radioradioPublishAll" value="radioradioPublishAll" checked>
+                <label class="form-check-label" for="radioradioPublishAll">
+                  Publish
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="groupstatus" id="radioradioDraftAll" value="radioradioDraftAll">
+                <label class="form-check-label" for="radioradioDraftAll">
+                  Draft
+                </label>
+              </div>
+              <br/>
+
               <b>Model</b>
               <div class="form-check">
                 <input class="form-check-input" type="radio" name="group5" id="radioModeldavinci003all" value="radioModeldavinci003all" checked>
@@ -620,6 +637,9 @@ function switchKeywordchange($id){
   }
 
   $('#modalSettings').on('show.bs.modal', function (e) {
+
+    
+
       const storedValue = localStorage.getItem('customRange3');
       if (storedValue !== null) {
         document.getElementById('customRange3').value = storedValue;
@@ -664,6 +684,7 @@ function switchKeywordchange($id){
     const storedValueModel = localStorage.getItem('ValueModel');
     const customKeywordswitch = localStorage.getItem('customKeywordswitch');
     const savecustomKeywordswitch = localStorage.getItem('savecustomKeywordswitch');
+    const statusProductDraft = localStorage.getItem('statusProductDraft');
 
     if (customKeywordswitch !== null) {
         if(customKeywordswitch == 'true') {
@@ -722,6 +743,35 @@ function switchKeywordchange($id){
             radioDavinci.checked = true;
       }
     }
+
+    if(statusProductDraft !== null) {
+        if(statusProductDraft == 1) {
+          $('#radioradioPublishAll').prop('checked', true);
+            const radioStatusElementsPublish = document.querySelectorAll('input[id*="radPublish"]');
+            for (const radioPl of radioStatusElementsPublish) {
+                  radioPl.checked = true;
+            }
+        } else {
+            if(statusProductDraft == 2) {
+              $('#radioradioDraftAll').prop('checked', true);
+              const radioStatusElementsDraft = document.querySelectorAll('input[id*="radDefault"]');
+              for (const radioDr of radioStatusElementsDraft) {
+                    radioDr.checked = true;
+              }
+            } else {
+
+            }
+      }
+    } else {
+      localStorage.setItem('statusProductDraft', '1');
+      $('#radioradioPublishAll').prop('checked', true);
+      const radioStatusElementsPublish = document.querySelectorAll('input[id*="radPublish"]');
+      for (const radioPl of radioStatusElementsPublish) {
+            radioPl.checked = true;
+      }
+    }
+
+  
   };
 
 function saveModel(){
@@ -742,6 +792,23 @@ function saveModel(){
 
           }
     }
+
+      const statusProductDraft = localStorage.getItem('statusProductDraft');
+      if(statusProductDraft == 1) {
+          const radioStatusElementsPublish = document.querySelectorAll('input[id*="radPublish"]');
+          for (const radioPl of radioStatusElementsPublish) {
+                radioPl.checked = true;
+          }
+      } else {
+          if(statusProductDraft == 2) {
+            const radioStatusElementsDraft = document.querySelectorAll('input[id*="radDefault"]');
+            for (const radioDr of radioStatusElementsDraft) {
+                  radioDr.checked = true;
+            }
+          } else {
+
+          }
+    }
 }
 function checkModel() {
     const radioInput = document.getElementById('radioModeldavinci003all');
@@ -757,8 +824,45 @@ function checkModel() {
 
       }
     }
+
+    const radStt = document.getElementById('radioradioPublishAll');
+    if (radStt.checked) {
+        localStorage.setItem('statusProductDraft', '1');
+        saveModel();
+    } else {
+      const radioStt2 = document.getElementById('radioradioDraftAll');
+      if (radioStt2.checked) {
+        localStorage.setItem('statusProductDraft', '2');
+        saveModel();
+      } else {
+
+      }
+    }
+
 }
 function saveSettings() {
+
+    /*const radPublishAll1 = document.getElementById('radioradioPublishAll');
+    if (radPublishAll1.checked) {
+        localStorage.setItem('statusProductDraft', '1');
+        const radioStatusElementsPublish = document.querySelectorAll('input[id*="radPublish-"]');
+        for (const radioPl of radioStatusElementsPublish) {
+              radioPl.checked = true;
+        }
+    } else {
+      const radioDraft1 = document.getElementById('radioradioDraftAll');
+      if (radioDraft1.checked) {
+        localStorage.setItem('statusProductDraft', '2');
+        const radioStatusElementsDraft = document.querySelectorAll('input[id*="radDefault-"]');
+        for (const radioDr of radioStatusElementsDraft) {
+              radioDr.checked = true;
+        }
+      } else {
+
+      }
+    }*/
+
+
     const currentValue = document.getElementById('customRange3').value;
     localStorage.setItem('customRange3', currentValue);
     const inputElements = document.querySelectorAll('input[id*="customRange"]');
