@@ -535,4 +535,275 @@ function get_related_product($site,$title){
     }
 }
 
+function get_tags_terms(){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "";
+            $sql = "SELECT tag_terms FROM `tag_terms`";
+            $result = $conn->query($sql);
+            $tags = [];
+            if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                    $tags[] = $row['tag_terms'];
+                }
+                return json_encode($tags);
+            } else {
+                return json_encode([]);
+            }
+            
+    }
+}
+
+function get_tags_terms_2(){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "SELECT tag_terms FROM `tag_terms`";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $tags_string = $row['tag_terms'];
+                $tags = array_map(function($tag) {
+                    return trim($tag, " \"");  // trim spaces and double quotes
+                }, explode(',', $tags_string));
+                return $tags;
+            } else {
+                return [];
+            }
+            $conn->close();
+    }
+}
+
+function insert_tags_terms_to_database($terms){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+            $sql = "SELECT * FROM tag_terms LIMIT 1";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $existingTagTerm = $row["tag_terms"];
+
+                
+                $updatedTagTerm = $existingTagTerm . ',"' . $terms . '"';
+
+                $updateSql = "UPDATE tag_terms SET tag_terms='$updatedTagTerm'"; // Use the appropriate ID or condition for your use case
+
+                if ($conn->query($updateSql) === TRUE) {
+                    echo '<div class="container mt-3">
+                            <div class="alert alert-success">
+                                Tag term updated successfully.
+                            </div>
+                          </div>';
+                } else {
+                    echo '<div class="container mt-3">
+                            <div class="alert alert-danger">
+                                Error updating tag term: ' . $conn->error . '
+                            </div>
+                          </div>';
+                }
+            } else {
+                echo '<div class="container mt-3">
+                        <div class="alert alert-danger">
+                            No existing tag terms found in the database.
+                        </div>
+                      </div>';
+            }
+            $conn->close();      
+    }
+}
+
+function update_tag_terms($originalText, $newText) {
+    global $servername, $username, $password, $database_name;
+
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    } 
+    $stmt = $conn->prepare("UPDATE tag_terms SET tag_terms = REPLACE(tag_terms, ?, ?)");
+    $stmt->bind_param("ss", $originalText, $newText);
+
+    if ($stmt->execute()) {
+        echo "1";
+    } else {
+        echo "0";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+
+function get_product_type_terms(){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    } else {
+        $sql = "SELECT text, product_type FROM producttype_terms";
+        $result = $conn->query($sql);
+        $titleClassifier = ['categories' => []];
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $titleClassifier['categories'][$row['text']] = $row['product_type'];
+            }
+        }
+        return $titleClassifier;
+        $conn->close();
+    }
+}
+
+function add_product_type_terms($text, $type) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    } 
+    $stmt = $conn->prepare("INSERT INTO producttype_terms (text, product_Type) VALUES (?, ?)");
+    $stmt->bind_param("ss", $text, $type);
+
+    if ($stmt->execute()) {
+        return "1";
+    } else {
+        return "Error: " . $stmt->error;;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+
+function delete_product_type_terms($text) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    } 
+    $stmt = $conn->prepare("DELETE FROM producttype_terms WHERE text = ?");
+    $stmt->bind_param("s", $text);
+
+    if ($stmt->execute()) {
+        return "1";
+    } else {
+        return "Error: " . $stmt->error;;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+
+function addScheduleProduct($id,$site){
+    global $servername, $username, $password, $database_name;
+    $dbh = mysqli_connect($servername, $username, $password);
+    if (!$dbh){
+        die("Unable to connect to MySQL: " . mysqli_error());
+    } else {
+        if (!mysqli_select_db($dbh,$database_name)){
+            die("Unable to select database: " . mysqli_error());
+        } else {
+            if($site == 'themegatee' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php') {
+                $sql_stmt = "INSERT INTO schedule_product (id, site) VALUES (?, ?)";
+                $stmt = mysqli_prepare($dbh, $sql_stmt);
+                if ($stmt) {
+                    mysqli_stmt_bind_param($stmt, "is", $id, $site);
+                    $result = mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+                }
+            } else {
+                if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
+                     
+                }
+            }
+            mysqli_close($dbh);
+        }    
+    }
+}
+
+function checkScheduleStatus($id,$site){
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password,$database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return false;
+    } else {
+        $sql = "SELECT id FROM schedule_product WHERE id = $id and site = '".$site."'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $conn->close();
+            return true;
+        } else {
+            $conn->close();
+            return false;
+        }
+        
+        
+    }
+}
+
+
+function deleteScheduleProduct($id, $site) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    if ($conn->connect_error) {
+        throw new Exception("Connection failed: " . $conn->connect_error);
+    }
+    $stmt = $conn->prepare("DELETE FROM schedule_product WHERE id = ? AND site = ?");
+    if (!$stmt) {
+        throw new Exception("Prepare failed: " . $conn->error);
+    }
+    $stmt->bind_param("is", $id, $site);
+    if ($stmt->execute()) {
+        $result = "1";
+    } else {
+        throw new Exception("Execution failed: " . $stmt->error);
+    }
+    $stmt->close();
+    $conn->close();
+
+    return $result;
+}
+
+function getScheduleProductId($site) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+        return 0;
+    }
+    $sql = "SELECT id FROM schedule_product WHERE site = ? LIMIT 1";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("s", $site);
+        $stmt->execute();
+        $stmt->bind_result($id);
+        if ($stmt->fetch()) {
+            $stmt->close();
+            $conn->close();
+            return $id;
+        }
+        $stmt->close();
+    } else {
+        //echo "Error preparing statement: " . $conn->error;
+        return 0;
+    }
+    $conn->close();
+    return 0;
+}
+
+
+
 ?>

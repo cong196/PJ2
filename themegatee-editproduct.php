@@ -64,10 +64,10 @@ $searchTxt = $_GET['searchTitle'];
 
       <div class="masthead">
        
-  
-      <?php include 'edit-product.php'; ?>
+    
 
-        <form style="padding: 50px;">
+      <?php include 'edit-product.php'; ?>
+<form style="padding: 50px;">
             <div class="col-sm-6 my-1">
               <label class="sr-only" for="inlineFormInputGroupSearchText">Title</label>
             <div class="input-group">
@@ -103,7 +103,9 @@ $searchTxt = $_GET['searchTitle'];
 
           <input class="btn btn-primary" type="button" value="Search" name="nextPage" id ="nextPage" onclick="clickSubmit()" />
           </div>
-        </form> 
+        </form>
+         
+
       </div>
     </div>
 

@@ -15,11 +15,12 @@ $perpage = $_GET['perpage'];
 settype($perpage, "int");
 
 $searchTitle = $_GET['searchTitle'];
-
+$sort_by = $_GET['sort_by'];
+settype($sort_by, "int");
 $site = json_decode(getKey($curPageName));
 
 
-function getProducts($pg, $perpage,$site,$searchTitle){
+function getProducts($pg, $perpage,$site,$searchTitle,$sort_by){
   $woocommerce = new Client(
         $site->url, 
         $site->ck, 
@@ -28,11 +29,21 @@ function getProducts($pg, $perpage,$site,$searchTitle){
           'version' => 'wc/v3',
       ]
   );
-  $prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
-    return $prds;
+  if($sort_by == 1) {
+    $prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
+  } else {
+    $prds = $woocommerce->get('products/?status=draft&orderby=date&order=desc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
+  }
+  
+  return $prds;
 };
 
-$g10 = getProducts($page,$perpage,$site,$searchTitle);
+
+$g10 = getProducts($page,$perpage,$site,$searchTitle,$sort_by);
+foreach ($g10 as $product) {
+    $product->is_schedule = checkScheduleStatus($product->id, $curPageName);
+}
+
 $list = getdataCategory($curPageName);
 $someArray = json_decode($list, true);
 
@@ -44,9 +55,6 @@ $testvvv = "10";
 $minwords = "55";
 ?>
 
-<!-- <script src="http://code.jquery.com/jquery-latest.js"></script> -->
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
- -->
 
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="/PJ2/gendescription.js"></script>
@@ -57,6 +65,9 @@ $minwords = "55";
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/PJ2/updateProductDraft.js"></script>
 <script type="text/javascript" src="/PJ2/deleteProduct.js"></script>
+
+<script type="text/javascript" src="/PJ2/tagByTitle.js"></script>
+
 <style>
     /* Custom CSS for the floating button and dragging */
     .floating-button {
@@ -71,6 +82,38 @@ $minwords = "55";
     .floating-button:active {
       cursor: grabbing; /* Set cursor to grabbing when button is being dragged */
     }
+    .schedule-container {
+      color: #4CAF50;
+      font-size: 14px;
+      text-align: center;
+      display: inline-block;
+      padding: 2px;
+      padding-left: 5px;
+      padding-right: 5px;
+      border-radius: 15px;
+      margin-bottom: 5px;
+  }
+  .tick-icon::before {
+    content: "✓";
+    margin-right: 5px;
+  }
+
+  .custom-checkbox {
+    display: flex;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .custom-checkbox input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px; /* Add some spacing between the checkbox and label */
+  }
+
+  .custom-checkbox label {
+    font-size: 14px;
+  }
 
   </style>
 
@@ -160,15 +203,51 @@ $minwords = "55";
     var defaultcategory = $('#selectCategoryyy-' + $id + ' option').filter(function() {
         return $(this).text() === $defaltcategory;
     });
+
     var valueDefalut = defaultcategory.val();
     $('#selectCategoryyy-' + $id).val([valCategory, valueDefalut]);
     $('#selectCategoryyy-' + $id).selectpicker('refresh');
+
     var selecttag = $('#listTag-' + $id + ' option').filter(function() {
         return $(this).text().toLowerCase() === category.toLowerCase();
     });
     var valuetag = selecttag.val();
     $('#listTag-' + $id).val(valuetag);
     $('#listTag-' + $id).selectpicker('refresh');
+
+
+    $.ajax({
+        type: "POST",
+        url: "getTagsTerms.php",
+        data: {title:$('#txttitle-' + $id).val()},
+        cache: false,
+        success: function(html) {
+          //var select_tag_from_title = getTag($('#txttitle-' + $id).val());
+
+          var select_tag_from_title = html;
+          var arr_select_tag_from_title = select_tag_from_title.split(',');
+          arr_select_tag_from_title.forEach(function(value) {
+              value = $.trim(value).toLowerCase();
+              $('#listTag-' + $id + ' option').each(function() {
+                  if ($(this).text().toLowerCase() === value) {
+                      $(this).prop('selected', true);
+                  }
+              });
+          });
+
+          arr_select_tag_from_title.forEach(function(value) {
+              value = ($.trim(value) + 's').toLowerCase();
+              $('#listTag-' + $id + ' option').each(function() {
+                  if ($(this).text().toLowerCase() === value) {
+                      $(this).prop('selected', true);
+                  }
+              });
+          });
+
+          $('#listTag-' + $id).selectpicker('refresh');
+
+        }
+    });
     $.ajax({
         type: "POST",
         url: "getKeywordCategory.php",
@@ -234,6 +313,35 @@ function addtagFunction($site){
       });
     }
 }
+
+function addtagtermsFunction(){
+    var tag = $('#inputTagTerms').val();
+    if(tag.trim() === "") {
+        alert("Input cannot be blank!");
+        return;
+    } else {
+      $('#savetagterms').css('display', 'none');
+      $('#savetagtermsloading').css('display', 'flex');
+      $.ajax({
+        type: "POST",
+        url: "process_tag_term.php",
+        data: {tagTerm:tag},
+        cache: false,
+        success: function(html) {
+              var messageElement = document.getElementById("responseMessageTerms");
+              responseMessageTerms.html = html;
+              messageElement.style.display = "block";
+              setTimeout(function () {
+                  messageElement.style.display = "none";
+              }, 2000);
+            
+            $('#savetagterms').css('display', 'flex');
+            $('#savetagtermsloading').css('display', 'none');
+        }
+      });
+    }
+}
+
 
 function switchKeywordchange($id){
     var switchweyword = $('#switchkeyword-' + $id);
@@ -330,6 +438,15 @@ function switchKeywordchange($id){
                 <label class="form-check-label" for="settingflexSwitchSaveKeyword ">Save keyword</label>
               </div>
 
+              <br/>
+
+              <div class="form-check" style="margin-left: 5px;">
+                <input class="form-check-input" type="checkbox" value="" id="checkBoxScheduleAll">
+                <label class="form-check-label" for="checkBoxScheduleAll">
+                  Add to schedule
+                </label>
+              </div>
+
 
       </div>
       <div class="modal-footer">
@@ -357,6 +474,30 @@ function switchKeywordchange($id){
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button id="savetag" type="button" onclick="addtagFunction(<?php echo "'". $curPageName . "'"?>)" class="btn btn-primary">Save changes</button>
         <button id="savetagloading" style="display:none;" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Tag Terms modal -->
+<div class="modal fade" id="addTagTermsmodal" tabindex="-1" aria-labelledby="addTagTermsmodal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addTagTermsmodaltitle">Add new tag terms</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <input type="text" class="form-control" id="inputTagTerms">
+       <br/>
+       <div style="display: none;" id="responseMessageTerms"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="savetagterms" type="button" onclick="addtagtermsFunction()" class="btn btn-primary">Save changes</button>
+        <button id="savetagtermsloading" style="display:none;" class="btn btn-primary" type="button" disabled>
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         </button>
       </div>
@@ -497,7 +638,27 @@ function switchKeywordchange($id){
               <br/>
               <span>Value: </span><span id="valBox<?php echo $g10[$prz]->id?>"><?php echo $minwords ?></span>
 
-              <br/><br/>
+              <br/>
+              <div id="content-add-schedule">
+              <?php
+                if($g10[$prz]->is_schedule) {
+              ?>
+                <div class="schedule-container">
+                  <span class="tick-icon"></span> Schedule
+                </div>
+              <?php  
+                } else {
+              ?>
+                <div class="form-check custom-checkbox">
+                  <input class="form-check-input" type="checkbox" value="" id="checkaddSchedule-<?php echo $g10[$prz]->id; ?>">
+                  <label class="form-check-label" for="checkaddSchedule-<?php echo $g10[$prz]->id; ?>">
+                    Add to schedule
+                  </label>
+                </div>
+              <?php
+                }
+              ?>
+              </div>
               <button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
               <div style="display:none" class="spinner-border spinner-border-sm" id="gendes-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
 
@@ -507,7 +668,20 @@ function switchKeywordchange($id){
               <?php 
                   $index = 0;
                   while($index < count($someArray)) {
-                    if($g10[$prz]->categories[0]->id == $someArray[$index]["id"]) {
+                      $i5 = 0;
+                      while($i5 < count($g10[$prz]->categories)) {
+                          if($g10[$prz]->categories[$i5]->id == $someArray[$index]["id"]) {
+                            ?>
+                              <option selected value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                            <?php
+                          } else {
+                          ?>
+                            <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                          <?php
+                          }
+                        $i5++;
+                      }
+                    /* if($g10[$prz]->categories[0]->id == $someArray[$index]["id"]) {
                       ?>
                         <option selected value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
                       <?php
@@ -517,10 +691,10 @@ function switchKeywordchange($id){
                         <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
                         <?php
                       }
-                    
-              ?>
-                
-              <?php
+
+                      ?> */
+
+              
                   $index++;
                   }
               ?>
@@ -532,15 +706,33 @@ function switchKeywordchange($id){
               <?php 
                   $index2 = 0;
                   while($index2 < count($listTag2)) {
-              ?>
-                <option value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
-              <?php
-                  $index2++;
+                    if(count($g10[$prz]->tags) == 0) {
+                    ?>
+                      <option value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
+                    <?php
+                    } else {
+                        $i25 = 0;
+                        while($i25 < count($g10[$prz]->tags)) {
+                          if($g10[$prz]->tags[$i25]->id == $listTag2[$index2]["id"]) {
+                  ?>
+                      <option selected value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
+                  <?php       
+                          } else {
+                  ?>
+                      <option value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
+                  <?php
+                          }
+                          $i25++;
+                        }
+                    }
+                    $index2++;
                   }
               ?>
+
               </select>
-              <p style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtag-<?php echo $g10[$prz]->id;?>" onclick="addTag()">+ Add new tag</p>
               
+            <p class="customP" style="margin-bottom: 0; cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtag-<?php echo $g10[$prz]->id;?>" onclick="addTag()">+ Add new tag</p>
+              <p class="customP" style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtagterms-<?php echo $g10[$prz]->id;?>" onclick="addTagTerms()">+ Add tag terms</p>
               <div class="mb-3 row">
                 <label for="txtinputprice-<?php echo $g10[$prz]->id ?>" class="col-sm-2 col-form-label">Price</label>
                 <div class="col-sm-10">
@@ -566,7 +758,7 @@ function switchKeywordchange($id){
         
           <td>
             
-             <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">Save</button>
+             <button onclick="updateProductDraft(<?php echo $g10[$prz]->id . ",'". $curPageName . "'" ;?>)" type="button" style="display:flex" id="saveinfo-<?php echo $g10[$prz]->id;?>"class="btn btn-primary btn-sm">Save</button>
 
               <div style="display:none" class="spinner-border spinner-border-sm" id="saveinfo-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
 
@@ -638,8 +830,6 @@ function switchKeywordchange($id){
 
   $('#modalSettings').on('show.bs.modal', function (e) {
 
-    
-
       const storedValue = localStorage.getItem('customRange3');
       if (storedValue !== null) {
         document.getElementById('customRange3').value = storedValue;
@@ -674,9 +864,18 @@ function switchKeywordchange($id){
           $('#settingflexSwitchSaveKeyword').prop('checked', false);
       }
 
-      /*document.getElementById("customRange3").value= <?php echo $minwords ?>;
-      showVal(<?php echo $minwords ?>);*/
-    //alert(<?php echo $minwords ?>);
+      const saveAddSchedule = localStorage.getItem('isAddSchedule');
+      if (saveAddSchedule !== null) {
+        if(saveAddSchedule =='true') {
+            $('#checkBoxScheduleAll').prop('checked', true);
+        } else {
+            $('#checkBoxScheduleAll').prop('checked', false);
+        }
+      } else {
+          localStorage.setItem('isAddSchedule', 'false');
+          $('#checkBoxScheduleAll').prop('checked', false);
+      }
+
   })
 
   window.onload = function() {
@@ -685,6 +884,7 @@ function switchKeywordchange($id){
     const customKeywordswitch = localStorage.getItem('customKeywordswitch');
     const savecustomKeywordswitch = localStorage.getItem('savecustomKeywordswitch');
     const statusProductDraft = localStorage.getItem('statusProductDraft');
+    const addtoSchedule = localStorage.getItem('isAddSchedule');
 
     if (customKeywordswitch !== null) {
         if(customKeywordswitch == 'true') {
@@ -771,12 +971,23 @@ function switchKeywordchange($id){
       }
     }
 
-  
+    if (addtoSchedule !== null) {
+        if(addtoSchedule == 'true') {
+            $('#checkBoxScheduleAll').prop('checked', true);
+            $('[id^="checkaddSchedule-"]').prop('checked', true);
+        } else {
+            $('#checkBoxScheduleAll').prop('checked', false);
+            $('[id^="checkaddSchedule-"]').prop('checked', false);
+        }
+    } else {
+        localStorage.setItem('isAddSchedule', 'false');
+        $('#checkBoxScheduleAll').prop('checked', false);
+        $('[id^="checkaddSchedule-"]').prop('checked', false);
+    }
   };
 
 function saveModel(){
     const storedValueModel = localStorage.getItem('ValueModel');
-    //alert("saveModel: " + storedValueModel);
     if(storedValueModel == 1) {
           const radioDavinciElements = document.querySelectorAll('input[id*="radioModeldavinci003"]');
           for (const radioDavinci of radioDavinciElements) {
@@ -809,6 +1020,9 @@ function saveModel(){
 
           }
     }
+
+    
+
 }
 function checkModel() {
     const radioInput = document.getElementById('radioModeldavinci003all');
@@ -839,29 +1053,21 @@ function checkModel() {
       }
     }
 
+    const checkisAddSchedule = document.getElementById('checkBoxScheduleAll');
+    if (checkisAddSchedule.checked) {
+        
+        localStorage.setItem('isAddSchedule', 'true');
+        $('#checkBoxScheduleAll').prop('checked', true);
+        $('[id^="checkaddSchedule-"]').prop('checked', true);
+    } else {
+
+      localStorage.setItem('isAddSchedule', 'false');
+      $('#checkBoxScheduleAll').prop('checked', false);
+      $('[id^="checkaddSchedule-"]').prop('checked', false);
+    }
+
 }
 function saveSettings() {
-
-    /*const radPublishAll1 = document.getElementById('radioradioPublishAll');
-    if (radPublishAll1.checked) {
-        localStorage.setItem('statusProductDraft', '1');
-        const radioStatusElementsPublish = document.querySelectorAll('input[id*="radPublish-"]');
-        for (const radioPl of radioStatusElementsPublish) {
-              radioPl.checked = true;
-        }
-    } else {
-      const radioDraft1 = document.getElementById('radioradioDraftAll');
-      if (radioDraft1.checked) {
-        localStorage.setItem('statusProductDraft', '2');
-        const radioStatusElementsDraft = document.querySelectorAll('input[id*="radDefault-"]');
-        for (const radioDr of radioStatusElementsDraft) {
-              radioDr.checked = true;
-        }
-      } else {
-
-      }
-    }*/
-
 
     const currentValue = document.getElementById('customRange3').value;
     localStorage.setItem('customRange3', currentValue);
@@ -956,7 +1162,6 @@ function saveSettings() {
       
     }
 
-
 }
 
   function clickSave(){
@@ -986,4 +1191,12 @@ function saveSettings() {
   function addTag(){
     $('#addTagmodal').modal('show');
   }
+  function addTagTerms(){
+    $('#addTagTermsmodal').modal('show');
+  }
+  var inputTagTerms = document.getElementById('inputTagTerms');
+
+  $('#addTagTermsmodal').on('show.bs.modal', function (e) {
+    inputTagTerms.value = '';
+  });
 </script>

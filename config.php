@@ -9,7 +9,7 @@ function getChatGPTKey(){
 }
 
 function getKey($site){
-    if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee') {
+    if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee' || $site == 'themegatee-schedule-product.php') {
         $data = '{
             "url": "https://themegatee.com",
             "ck" : "ck_87beed3473355a6ace23dcbb2ae8a5493baef275",

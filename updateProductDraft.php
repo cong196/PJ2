@@ -92,6 +92,7 @@
 
     if($publishss == 1) {
         $data['status'] = 'publish';
+        deleteScheduleProduct($id,$s);
     }
     
     $response = updateproduct($data,$site,$id);

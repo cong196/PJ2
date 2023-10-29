@@ -1,7 +1,3 @@
-
-
-
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
   <div class="container">
     <a class="navbar-brand" href="/PJ2/">Home</a>
@@ -21,8 +17,11 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/PJ2/themegatee.php">Creat Post</a>
           <a class="dropdown-item" href="/PJ2/themegatee-editproduct.php?page=1&perpage=10&searchTitle=">Edit product</a>
-          <a class="dropdown-item" href="/PJ2/themega-editdraftproduct.php?page=1&perpage=10&searchTitle=">Edit draft product</a>
-          <a class="dropdown-item" href="/PJ2/themega_editdraftproduct.php?page=1&perpage=10&searchTitle=">Edit draft</a>
+          <a class="dropdown-item" href="/PJ2/themega-editdraftproduct.php?page=1&perpage=10&sort_by=1&searchTitle=">Edit draft product</a>
+          <a class="dropdown-item" href="/PJ2/themega_editdraftproduct.php?page=1&perpage=10&sort_by=1&searchTitle=">Edit draft</a>
+          <a class="dropdown-item" href="/PJ2/themegatee-schedule-product.php?page=1&perpage=10&sort_by=1&searchTitle=">Schedule product</a>
+          <a class="dropdown-item" href="/PJ2/append_tag_terms.php">Edit terms tags</a>
+          <a class="dropdown-item" href="/PJ2/product_type_terms.php">Edit term product type</a>
           <a class="dropdown-item" href="/PJ2/themegatee-setting.php">Setting</a>
         </div>
       </li>

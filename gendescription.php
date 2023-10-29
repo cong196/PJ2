@@ -11,7 +11,9 @@ $curPageName = $_POST['curPageName'];
 $edttitle = $_POST['edttitle'];
 $storedValueModel = $_POST['storedValueModel'];
 $storedValue = $_POST['storedValue'];
-
+$ispublic = $_POST['ispublic'];
+$isaddtoschedule = $_POST['isaddtoschedule'];
+$id = $_POST['id'];
 $prompt = '';
 if($customprompt == '') {
     if($edtKeyword == ''){
@@ -191,6 +193,9 @@ if($customprompt == '') {
     //$close2 = getClosing($curPageName);
     $closingContent = $closingContent ."<p>".$result4."</p>";
 
+    if($isaddtoschedule && $ispublic == 0) {
+        addScheduleProduct($id,$curPageName);
+    }
     echo '<h2>'.$result3. '</h2> <p>'. $result .'</p>BD0011'. $closingContent;
 
 ?>
