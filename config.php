@@ -7,7 +7,9 @@ function getChatGPTKey(){
     //return "";
     return "";
 }
-
+function getGoogleGeminiAPI(){
+    return "AIzaSyAGjqkz8LhlPplXDRCeEGfGaaXKzv8WBpw";
+}
 function getKey($site){
     if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee' || $site == 'themegatee-schedule-product.php') {
         $data = '{
@@ -19,7 +21,7 @@ function getKey($site){
 
         return $data;
     } else {
-        if($site == 'kacogifts-editproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-setting.php' || $site == 'kacogifts') {
+        if($site == 'kacogifts-editproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-setting.php' || $site == 'kacogifts' || $site == 'kacogifts-createpost.php') {
              $data = '{
                 "url": "https://kacogifts.com",
                 "ck" : "ck_26e2b0b45e5b19190e5dc0504002cca4cd7702a8",

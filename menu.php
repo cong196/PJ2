@@ -32,6 +32,7 @@
         </a>
 
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/PJ2/kacogifts-createpost.php">Post</a>
           <a class="dropdown-item" href="/PJ2/kacogifts-editdraftproduct.php?page=1&perpage=10&searchTitle=">Edit draft product</a>
           <a class="dropdown-item" href="/PJ2/kacogifts-setting.php">Setting</a>
         </div>

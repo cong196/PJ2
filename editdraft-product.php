@@ -165,7 +165,11 @@ $minwords = "55";
       if($('#radioModel35tubo' + $id).prop('checked')) {
         storedValueModel1 = 2;
       } else {
+          if($('#radioModelgemini' + $id).prop('checked')) {
+            storedValueModel1 = 3;
+          } else {
 
+          }
       }
     }
 
@@ -420,6 +424,14 @@ function switchKeywordchange($id){
                   gpt-3.5-turbo
                 </label>
               </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="group5" id="radioModelgeminiall" value="radioModelgeminiall">
+                <label class="form-check-label" for="radioModelgeminiall">
+                  google gemini
+                </label>
+              </div>
+
               <br/>
               <label for="customRange3" class="form-label">Minimum words</label>
               <input type="range" class="form-range" value="<?php echo isset($_COOKIE['customRange3']) ? $_COOKIE['customRange3'] : $minwords; ?>" min="50" max="150" step="1" id="customRange3" oninput="showVal(this.value)" onchange="showVal(this.value)">
@@ -629,6 +641,13 @@ function switchKeywordchange($id){
                 <input class="form-check-input" type="radio" name="group<?php echo $g10[$prz]->id?>" id="radioModel35tubo<?php echo $g10[$prz]->id?>" value="option1">
                 <label class="form-check-label" for="radioModel35tubo<?php echo $g10[$prz]->id?>">
                   gpt-3.5-turbo
+                </label>
+              </div>
+
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="group<?php echo $g10[$prz]->id?>" id="radioModelgemini<?php echo $g10[$prz]->id?>" value="option3">
+                <label class="form-check-label" for="radioModelgemini<?php echo $g10[$prz]->id?>">
+                  google gemini
                 </label>
               </div>
 
@@ -933,7 +952,14 @@ function switchKeywordchange($id){
                     radioModel35tubo.checked = true;
               }
             } else {
+                  if(storedValueModel == 3) {
+                    const radioModelgeminiElements = document.querySelectorAll('input[id*="radioModelgemini"]');
+                    for (const radioModelgemini of radioModelgeminiElements) {
+                          radioModelgemini.checked = true;
+                    }
+                  } else {
 
+                  }
             }
       }
     } else {
@@ -1000,7 +1026,14 @@ function saveModel(){
                   radioModel35tubo.checked = true;
             }
           } else {
+                if(storedValueModel == 3) {
+                  const radioModelgeminiElements = document.querySelectorAll('input[id*="radioModelgemini"]');
+                  for (const radioModelgemini of radioModelgeminiElements) {
+                        radioModelgemini.checked = true;
+                  }
+                } else {
 
+                }
           }
     }
 
@@ -1035,7 +1068,13 @@ function checkModel() {
         localStorage.setItem('ValueModel', '2');
         saveModel();
       } else {
+        const radioInput3 = document.getElementById('radioModelgeminiall');
+          if (radioInput3.checked) {
+            localStorage.setItem('ValueModel', '3');
+            saveModel();
+          } else {
 
+          }
       }
     }
 

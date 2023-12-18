@@ -63,7 +63,57 @@ if($customprompt == '') {
         $rs1 = json_decode($complete, true);
         $rs = $rs1['choices'][0]['message']['content'];
         } else {
+            if($storedValueModel == 3) {
+                $api_key = getGoogleGeminiAPI();
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" . $api_key;
+                $data = array(
+                    "contents" => array(
+                        array(
+                            "parts" => array(
+                                array(
+                                    "text" => $prompt
+                                )
+                            )
+                        )
+                    ),
+                    "generationConfig" => array(
+                        "temperature" => 0.9,
+                        "topK" => 1,
+                        "topP" => 1,
+                        "maxOutputTokens" => 2048,
+                        "stopSequences" => array()
+                    ),
+                    "safetySettings" => array(
+                        array("category" => "HARM_CATEGORY_HARASSMENT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE")
+                    )
+                );
 
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+                $response = curl_exec($ch);
+                if (!$response) {
+                    die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+                }
+                curl_close($ch);
+
+                $responseArray = json_decode($response, true); // decode as associative array
+
+                if (isset($responseArray['candidates']) && count($responseArray['candidates']) > 0) {
+                    $text = $responseArray['candidates'][0]['content']['parts'][0]['text'];
+                    $rs = $text;
+                } else {
+                    $rs = $title;
+                }
+            } else {
+
+            }
         }
     }
 
@@ -106,7 +156,57 @@ if($customprompt == '') {
         $rs3 = $rsg['choices'][0]['message']['content'];
 
         } else {
+            if($storedValueModel == 3) {
+                $api_key = getGoogleGeminiAPI();
+                $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" . $api_key;
+                $data = array(
+                    "contents" => array(
+                        array(
+                            "parts" => array(
+                                array(
+                                    "text" => $prompt2
+                                )
+                            )
+                        )
+                    ),
+                    "generationConfig" => array(
+                        "temperature" => 0.9,
+                        "topK" => 1,
+                        "topP" => 1,
+                        "maxOutputTokens" => 2048,
+                        "stopSequences" => array()
+                    ),
+                    "safetySettings" => array(
+                        array("category" => "HARM_CATEGORY_HARASSMENT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_HATE_SPEECH", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE"),
+                        array("category" => "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold" => "BLOCK_MEDIUM_AND_ABOVE")
+                    )
+                );
 
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+
+                $response = curl_exec($ch);
+                if (!$response) {
+                    die('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
+                }
+                curl_close($ch);
+
+                $responseArray = json_decode($response, true); // decode as associative array
+
+                if (isset($responseArray['candidates']) && count($responseArray['candidates']) > 0) {
+                    $text2 = $responseArray['candidates'][0]['content']['parts'][0]['text'];
+                    $rs3 = $text2;
+                } else {
+                    $rs3 = $title;
+                }
+            } else {
+
+            }
         }
     }
 
