@@ -8,7 +8,7 @@ function getChatGPTKey(){
     return "";
 }
 function getGoogleGeminiAPI(){
-    return "AIzaSyAGjqkz8LhlPplXDRCeEGfGaaXKzv8WBpw";
+    return "";
 }
 function getKey($site){
     if($site == 'themegatee-editproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee' || $site == 'themegatee-schedule-product.php') {

@@ -13,6 +13,8 @@ $storedValueModel = $_POST['storedValueModel'];
 $storedValue = $_POST['storedValue'];
 $ispublic = $_POST['ispublic'];
 $isaddtoschedule = $_POST['isaddtoschedule'];
+$is_add_related = $_POST['is_add_related'];
+$is_add_homepage = $_POST['is_add_homepage'];
 $id = $_POST['id'];
 $prompt = '';
 if($customprompt == '') {
@@ -225,21 +227,25 @@ if($customprompt == '') {
             // link category chen vao keyword
             $linkkw = getlinkCategory($curPageName,$selectmainCategory);
         }
-        $c1 = getclosingParagraph();
-        $closingContent = $c1["content"];
-        //link sp cung category.
-        $linkrelated = getRandomRelatedProduct($curPageName,$selectmainCategory,$edttitle);
-        //$czzzzz = $linkkw["slug"];
-        //echo $link;
-        if($linkrelated != 0) {
-            $insLink = "<strong><a href=". $linkrelated["slug"] .">". $linkrelated["name"] . "</a></strong>";
-            $position = strrpos($closingContent, 'ProductB');
-            if ($position !== false) {
-                $closingContent = substr_replace($closingContent, $insLink, $position, strlen('ProductB'));
+
+        if($is_add_related == 1) {
+            $c1 = getclosingParagraph();
+            $closingContent = $c1["content"];
+            //link sp cung category.
+            $linkrelated = getRandomRelatedProduct($curPageName,$selectmainCategory,$edttitle);
+            //$czzzzz = $linkkw["slug"];
+            //echo $link;
+            if($linkrelated != 0) {
+                $insLink = "<strong><a href=". $linkrelated["slug"] .">". $linkrelated["name"] . "</a></strong>";
+                $position = strrpos($closingContent, 'ProductB');
+                if ($position !== false) {
+                    $closingContent = substr_replace($closingContent, $insLink, $position, strlen('ProductB'));
+                }
+            } else {
+                $closingContent = '';
             }
-        } else {
-            $closingContent = '';
         }
+        
     }
     // Chèn link category
     if($linkkw != ''){
@@ -255,44 +261,45 @@ if($customprompt == '') {
         }
     }
     
-    
-    $complete33 = $open_ai->chat([
-       'model' => 'gpt-3.5-turbo',
-       'messages' => [
-           [
-               "role" => "assistant",
-               "content" => 'Write a short ending thanking the customer at the bottom of the product page and insert 1 my homepage url in an anchor text. Where to insert links please add the following format so I can recognize [anchor:anchor text]. My url is: https://themegatee.com, my store name is Themegatee.'
-           ]
-       ],
-       'temperature' => 1.0,
-       'max_tokens' => 1000,
-       'frequency_penalty' => 0,
-       'presence_penalty' => 0,
-        ]);
-        $rsg3 = json_decode($complete33, true);
-        $rs333 = $rsg3['choices'][0]['message']['content'];
-    
-    $pattern = '/\[anchor:(.*?)\]/';
-    
-    $newText = preg_replace_callback($pattern, function($matches) {
-        return '<b><a href="https://themegatee.com">' . $matches[1] . '</a></b>';
-    }, $rs333);
+    if($is_add_homepage == 1) {
+        $complete33 = $open_ai->chat([
+           'model' => 'gpt-3.5-turbo',
+           'messages' => [
+               [
+                   "role" => "assistant",
+                   "content" => 'Write a short ending thanking the customer at the bottom of the product page and insert 1 my homepage url in an anchor text. Where to insert links please add the following format so I can recognize [anchor:anchor text]. My url is: https://themegatee.com, my store name is Themegatee.'
+               ]
+           ],
+           'temperature' => 1.0,
+           'max_tokens' => 1000,
+           'frequency_penalty' => 0,
+           'presence_penalty' => 0,
+            ]);
+            $rsg3 = json_decode($complete33, true);
+            $rs333 = $rsg3['choices'][0]['message']['content'];
+        
+        $pattern = '/\[anchor:(.*?)\]/';
+        
+        $newText = preg_replace_callback($pattern, function($matches) {
+            return '<b><a href="https://themegatee.com">' . $matches[1] . '</a></b>';
+        }, $rs333);
 
-    $pattern2 = '/<a\s+(?:[^>]*?\s+)?href=([\'"])(.*?)\1[^>]*>(.*?)<\/a>/i';
-    $counter = 0;
-    $result4 = preg_replace_callback($pattern2, function($match) use (&$counter) {
-        if ($counter == 0) {
-            $counter++;
-            return $match[0];
-        } else {
-            return $match[3];
-        }
-    }, $newText);
+        $pattern2 = '/<a\s+(?:[^>]*?\s+)?href=([\'"])(.*?)\1[^>]*>(.*?)<\/a>/i';
+        $counter = 0;
+        $result4 = preg_replace_callback($pattern2, function($match) use (&$counter) {
+            if ($counter == 0) {
+                $counter++;
+                return $match[0];
+            } else {
+                return $match[3];
+            }
+        }, $newText);
+        
+        
+        //$close2 = getClosing($curPageName);
+        $closingContent = $closingContent ."<p>".$result4."</p>";
+    }
     
-    
-    //$close2 = getClosing($curPageName);
-    $closingContent = $closingContent ."<p>".$result4."</p>";
-
     if($isaddtoschedule && $ispublic == 0) {
         addScheduleProduct($id,$curPageName);
     }

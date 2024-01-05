@@ -101,8 +101,7 @@ $minwords = "55";
   .custom-checkbox {
     display: flex;
     align-items: center;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    
   }
 
   .custom-checkbox input[type="checkbox"] {
@@ -153,6 +152,8 @@ $minwords = "55";
     var edttitle = $('#edtTitle-' + $id).val();
     var element = document.getElementById('img2-' + $id);
     var img2 = '';
+    var is_add_related = 0;
+    var is_add_homepage = 0;
     if(element){
       img2 = $('#img2-' + $id).prop('src');
     }
@@ -181,8 +182,15 @@ $minwords = "55";
     } else {
         edtKeywords = selectkeywords;
     }
+    if($('#check_is_add_related_product_' + $id).prop('checked')) {
+      is_add_related = 1;
+    }
 
-    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1);
+    if($('#check_is_add_homepage_url_' + $id).prop('checked')) {
+      is_add_homepage = 1;
+    }
+
+    generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1,is_add_related, is_add_homepage);
     
   }
 
@@ -459,6 +467,19 @@ function switchKeywordchange($id){
                 </label>
               </div>
 
+              <div class="form-check" style="margin-left: 5px;">
+                <input class="form-check-input" type="checkbox" value="" id="setting_add_related_product">
+                <label class="form-check-label" for="setting_add_related_product">
+                  Add related product?
+                </label>
+              </div>
+              
+              <div class="form-check" style="margin-left: 5px;">
+                <input class="form-check-input" type="checkbox" value="" id="setting_add_homepage_url">
+                <label class="form-check-label" for="setting_add_homepage_url">
+                  Add URL home page?
+                </label>
+              </div>
 
       </div>
       <div class="modal-footer">
@@ -677,7 +698,23 @@ function switchKeywordchange($id){
               <?php
                 }
               ?>
+
               </div>
+
+              <div class="form-check custom-checkbox">
+                <input class="form-check-input" type="checkbox" value="" id="check_is_add_related_product_<?php echo $g10[$prz]->id; ?>">
+                <label class="form-check-label" for="check_is_add_related_product_<?php echo $g10[$prz]->id; ?>">
+                  Add related product?
+                </label>
+              </div>
+
+              <div class="form-check custom-checkbox">
+                <input class="form-check-input" type="checkbox" value="" id="check_is_add_homepage_url_<?php echo $g10[$prz]->id; ?>">
+                <label class="form-check-label" for="check_is_add_homepage_url_<?php echo $g10[$prz]->id; ?>">
+                  Add homepage url?
+                </label>
+              </div>
+
               <button onclick="pregenDes(<?php echo $g10[$prz]->id . ",'". $curPageName. "'" ;?>)" type="button" style="display:flex" id="gendes-<?php echo $g10[$prz]->id;?>"class="btn btn-secondary btn-sm">New des</button>
               <div style="display:none" class="spinner-border spinner-border-sm" id="gendes-<?php echo $g10[$prz]->id; ?>loading" role="status"><span class="sr-only"></span> </div>
 
@@ -895,6 +932,38 @@ function switchKeywordchange($id){
           $('#checkBoxScheduleAll').prop('checked', false);
       }
 
+
+      const is_add_related = localStorage.getItem('is_add_related');
+      if (is_add_related !== null) {
+        if(is_add_related =='true') {
+            var checkbox_setting_related = document.getElementById("setting_add_related_product");
+            checkbox_setting_related.checked = true;
+        } else {
+            var checkbox_setting_related = document.getElementById("setting_add_related_product");
+            checkbox_setting_related.checked = false;
+        }
+      } else {
+          localStorage.setItem('is_add_related', 'false');
+          var checkbox_setting_related = document.getElementById("setting_add_related_product");
+          checkbox_setting_related.checked = false;
+      }
+
+      const is_add_homepage = localStorage.getItem('is_add_homepage');
+      if (is_add_homepage !== null) {
+        if(is_add_homepage =='true') {
+            var checkbox_add_home_page = document.getElementById("setting_add_homepage_url");
+            checkbox_add_home_page.checked = true;
+        } else {
+            //$('#setting_add_homepage_url').prop('checked', false);
+            var checkbox_add_home_page = document.getElementById("setting_add_homepage_url");
+            checkbox_add_home_page.checked = false;
+        }
+      } else {
+          localStorage.setItem('is_add_homepage', 'false');
+          var checkbox_add_home_page = document.getElementById("setting_add_homepage_url");
+          checkbox_add_home_page.checked = false;
+      }
+
   })
 
   window.onload = function() {
@@ -904,6 +973,9 @@ function switchKeywordchange($id){
     const savecustomKeywordswitch = localStorage.getItem('savecustomKeywordswitch');
     const statusProductDraft = localStorage.getItem('statusProductDraft');
     const addtoSchedule = localStorage.getItem('isAddSchedule');
+
+    const is_add_related = localStorage.getItem('is_add_related');
+    const is_add_homepage = localStorage.getItem('is_add_homepage');
 
     if (customKeywordswitch !== null) {
         if(customKeywordswitch == 'true') {
@@ -925,6 +997,29 @@ function switchKeywordchange($id){
     } else {
         localStorage.setItem('savecustomKeywordswitch', 'false');
         $('#settingflexSwitchSaveKeyword').prop('checked', false);
+    }
+
+
+    if (is_add_related !== null) {
+      if(is_add_related =='true') {
+          $('#setting_add_related_product').prop('checked', true);
+      } else {
+          $('#setting_add_related_product').prop('checked', false);
+      }
+    } else {
+        localStorage.setItem('is_add_related', 'false');
+        $('#setting_add_related_product').prop('checked', false);
+    }
+
+    if (is_add_homepage !== null) {
+      if(is_add_homepage =='true') {
+          $('#setting_add_homepage_url').prop('checked', true);
+      } else {
+          $('#setting_add_homepage_url').prop('checked', false);
+      }
+    } else {
+        localStorage.setItem('is_add_homepage', 'false');
+        $('#setting_add_homepage_url').prop('checked', false);
     }
 
 
@@ -1201,6 +1296,39 @@ function saveSettings() {
       
     }
 
+    var checkbox_add_home_page = document.getElementById("setting_add_homepage_url");
+    if (checkbox_add_home_page.checked) {
+        localStorage.setItem('is_add_homepage', 'true');
+        var checkboxes = document.querySelectorAll('input[type="checkbox"][id*="check_is_add_homepage_url"]');
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = true;
+        });
+    } else {
+        localStorage.setItem('is_add_homepage', 'false');
+        var checkboxes = document.querySelectorAll('input[type="checkbox"][id*="check_is_add_homepage_url"]');
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = false;
+        });
+    }
+
+    var checkbox_add_related_1 = document.getElementById("setting_add_related_product");
+    if (checkbox_add_related_1.checked) {
+        localStorage.setItem('is_add_related', 'true');
+        var checkboxes = document.querySelectorAll('input[type="checkbox"][id*="check_is_add_related_product"]');
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = true;
+        });
+    } else {
+        localStorage.setItem('is_add_related', 'false');
+        var checkboxes = document.querySelectorAll('[id*="check_is_add_related_product"]');
+        checkboxes.forEach(function(checkbox) {
+          checkbox.checked = false;
+        });
+        /*var checkboxes = document.querySelectorAll('input[type="checkbox"][id*="check_is_add_related_product "]');
+        checkboxes.forEach(function (checkbox) {
+          checkbox.checked = false;
+        });*/
+    }
 }
 
   function clickSave(){

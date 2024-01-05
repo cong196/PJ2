@@ -1,5 +1,5 @@
 
-function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName,$slug,$edttitle,$img2,$storedValue1,$storedValueModel1) {
+function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainCategory,$curPageName,$slug,$edttitle,$img2,$storedValue1,$storedValueModel1,$is_add_related,$is_add_homepage) {
 
     var title = $title;
     var id = $id;
@@ -15,6 +15,8 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
     var storedValue1 = $storedValue1;
     var isaddtoschedule = false;
     var ispublic = 0;
+    var is_add_related = $is_add_related;
+    var is_add_homepage = $is_add_homepage;
     if(document.getElementById('radPublish-'+id).checked) {
            ispublic = 1;
     }else if(document.getElementById('radDefault-'+id).checked) {
@@ -32,7 +34,7 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
     }
     loadlayout();
     
-    $.post("gendescription.php", {id:id, title:title, prompt:prompt, edtKeyword:edtKeyword, selectmainCategory:selectmainCategory, curPageName:curPageName, edttitle:edttitle, storedValue:storedValue1, storedValueModel:storedValueModel1,isaddtoschedule:isaddtoschedule,ispublic:ispublic },
+    $.post("gendescription.php", {id:id, title:title, prompt:prompt, edtKeyword:edtKeyword,is_add_related:is_add_related,is_add_homepage:is_add_homepage, selectmainCategory:selectmainCategory, curPageName:curPageName, edttitle:edttitle, storedValue:storedValue1, storedValueModel:storedValueModel1,isaddtoschedule:isaddtoschedule,ispublic:ispublic },
     function(data) {
         var datatextbox = 'content-'+id;
         $('#gendes-' + id+'loading').css('display', 'none');
