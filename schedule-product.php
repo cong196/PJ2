@@ -29,4 +29,12 @@
     updateproduct($data,$site,$id);
     deleteScheduleProduct($id,'themega-editdraftproduct.php');
   }
+
+  $id_kaco = getScheduleProductId('kacogifts-editdraftproduct.php');
+  if($id_kaco != 0) {
+    $site_kaco = json_decode(getKey('kacogifts'));
+    updateproduct($data,$site_kaco,$id_kaco);
+    deleteScheduleProduct($id_kaco,'kacogifts-editdraftproduct.php');
+  }
+
 ?>

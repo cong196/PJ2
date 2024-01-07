@@ -29,7 +29,7 @@ function getTag($title) {
         //echo $modifiedString;
         return $tags_strings;
 }
-function getProducts($pg, $perpage,$site, $searchTitle){
+function getProducts($pg, $perpage,$site, $searchTitle,$sort_by){
   
   $woocommerce = new Client(
         $site->url, 
@@ -39,7 +39,12 @@ function getProducts($pg, $perpage,$site, $searchTitle){
           'version' => 'wc/v3',
       ]
   );
-  $prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
+  if($sort_by == 1) {
+    $prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
+  } else {
+    $prds = $woocommerce->get('products/?status=draft&orderby=date&order=desc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
+  }
+  //$prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
 
   $indx = 0;
   while($indx<count($prds)){

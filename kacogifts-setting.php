@@ -4,8 +4,8 @@
     include "dbConnect.php";
     include "config.php";
 
-   $list = getdataCategory('kacogifts');
-   $someArray = json_decode($list, true);
+  /* $list = getdataCategory('kacogifts');
+   $someArray = json_decode($list, true);*/
 
    $listTag = getdataTag('kacogifts');
    $listTag2 = json_decode($listTag, true);
@@ -19,7 +19,7 @@
 <title>kacogifts Setting</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-<link rel="icon" href="/favicon.png" type="image/x-icon">
+
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -35,7 +35,7 @@
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="/PJ2/getCategoryDB.js"></script>
 <script type="text/javascript" src="/PJ2/getCategorySite.js"></script>
-<script type="text/javascript" src="/PJ2/test123.js"></script>
+
 <script type="text/javascript" src="/PJ2/getTagSite.js"></script>
 <script type="text/javascript" src="/PJ2/getProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getnewProductLink.js"></script>
@@ -66,17 +66,7 @@
 
 <div style="padding:25px">
 <div id="data"> 
-    <select id="sdsd" class="form-control selectpicker" multiple data-live-search="true">
-    <?php 
-        $index = 0;
-        while($index < count($someArray)) {
-    ?>
-      <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
-    <?php
-        $index++;
-        }
-    ?>
-    </select>
+    
 </div>
 </div>
 </div>

@@ -13,7 +13,7 @@
     $slug = $_POST['slug'];
     $price = $_POST['price'];
     $site = json_decode(getKey($s));
-
+    $isaddtoschedule = $_POST['isaddtoschedule'];
     function updateproduct($data,$site,$id){ 
         $woocommerce = new Client(
         $site->url, 
@@ -70,6 +70,11 @@
     }
     if($publishss == 1) {
         $data['status'] = 'publish';
+        deleteScheduleProduct($id,$s);
+    } else {
+        if($isaddtoschedule && $publishss == 0) {
+            addScheduleProduct($id,$s);
+        }
     }
     $response = updateproduct($data,$site,$id);
 

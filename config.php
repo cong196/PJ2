@@ -29,6 +29,17 @@ function getKey($site){
             }';
 
             return $data;
+        } else {
+            if($site == 'customjoygifts-editproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-setting.php' || $site == 'customjoygifts' || $site == 'customjoygifts-schedule-product.php') {
+                $data = '{
+                    "url": "https://customjoygifts.com",
+                    "ck" : "ck_288a3fc2bf3503385f8442ab4353392d115c296d",
+                    "cs" : "cs_5a3ed2d7aac56ae7c94e0050a08a9893f9b8058f"
+
+                }';
+
+                return $data;
+            }
         }
     }
 }

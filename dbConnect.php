@@ -725,7 +725,13 @@ function addScheduleProduct($id,$site){
                 }
             } else {
                 if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
-                     
+                    $sql_stmt = "INSERT INTO schedule_product (id, site) VALUES (?, ?)";
+                    $stmt = mysqli_prepare($dbh, $sql_stmt);
+                    if ($stmt) {
+                        mysqli_stmt_bind_param($stmt, "is", $id, $site);
+                        $result = mysqli_stmt_execute($stmt);
+                        mysqli_stmt_close($stmt);
+                    } 
                 }
             }
             mysqli_close($dbh);

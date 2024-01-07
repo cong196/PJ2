@@ -9,6 +9,8 @@ settype($perpage, "int");
 
 $searchTxt = $_GET['searchTitle'];
 
+$sort_by = $_GET['sort_by'];
+settype($sort_by, "int");
 
 ?>
 
@@ -17,7 +19,7 @@ $searchTxt = $_GET['searchTitle'];
 <head>
 <meta charset="UTF-8">
 
-<title>Kacogifts Edit Product</title>
+<title>Customjoygifts Edit Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css"> -->
@@ -58,11 +60,9 @@ $searchTxt = $_GET['searchTitle'];
    <div class="col-12">
 
       <div>
-       
-  
-      <?php include 'editdraft-product2.php'; ?>
-
-        <form style="padding: 0px 50px 50px 50px;">
+      <?php include 'editdraft-product-2.php'; ?>
+      
+      <form style="padding: 0px 50px 50px 50px;">
         <div class="row">
         <div class="col-sm-3 my-1">
           <select class="form-select" id="select_sort_by" aria-label="Default select example">
@@ -118,17 +118,17 @@ $searchTxt = $_GET['searchTitle'];
         document.getElementById("searchTitle").value = "<?php echo $searchTxt?>";
         document.getElementById("searchPage").value = "<?php echo $page?>";
         document.getElementById("searchPerPage").value = "<?php echo $perpage?>";
+        document.getElementById("select_sort_by").value = "<?php echo $sort_by?>";
     });
 
     function clickSubmit(){
         let searchPage = document.getElementById("searchPage").value;
         let searchTitle = document.getElementById("searchTitle").value;
         let searchPerPage = document.getElementById("searchPerPage").value;
+
         let selectSortby = document.getElementById("select_sort_by");
         let selectedSortbyValue = selectSortby.value;
-        //alert(searchPerPage);
-        //getPrducts(searchPage,searchPerPage,searchTitle);
-        window.location.href = '/PJ2/kacogifts-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue + '&searchTitle='+ searchTitle;
+        window.location.href = '/PJ2/themega-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue +'&searchTitle='+ searchTitle;
     }
   </script>
 
