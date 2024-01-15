@@ -37,4 +37,11 @@
     deleteScheduleProduct($id_kaco,'kacogifts-editdraftproduct.php');
   }
 
+  $id_customyoy = getScheduleProductId('customjoygifts-editdraftproduct.php');
+  if($id_customyoy != 0) {
+    $site_customyoy = json_decode(getKey('customjoygifts'));
+    updateproduct($data,$site_customyoy,$id_customyoy);
+    deleteScheduleProduct($id_customyoy,'customjoygifts-editdraftproduct.php');
+  }
+
 ?>

@@ -56,6 +56,7 @@ $minwords = "55";
 ?>
 
 
+
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="/PJ2/gendescription.js"></script>
 <script type="text/javascript" src="/PJ2/updateProduct.js"></script>
@@ -63,6 +64,7 @@ $minwords = "55";
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script type="text/javascript" src="/PJ2/updateProductDraft.js"></script>
 <script type="text/javascript" src="/PJ2/deleteProduct.js"></script>
 
@@ -73,7 +75,7 @@ $minwords = "55";
     .floating-button {
       position: fixed;
       bottom: 150px;
-      right: 50px;
+      right: 20px;
       z-index: 9999;
       cursor: pointer;
       transition: opacity 0.3s;
@@ -210,15 +212,74 @@ $minwords = "55";
   }
 
   function loadKeyword($id,$defaltcategory,$curpage){
+
+    /*var category = $('#mainCategory-' + $id + ' option:selected').text();
+    var valCategory = $('#mainCategory-' + $id).val();
+    
+    var title2 = document.getElementById("txttitle-" + $id).value;
+
+    $.ajax({
+      type: "POST",
+      url: "process_category_term.php",
+      data: {title:title2},
+      cache: false,
+      success: function(html) {
+        //console.log(html);
+        if(html == "") {
+          html = "Trending";
+        }
+        var text = html;
+        var items = text.split(',');
+        items.push($defaltcategory);
+
+        var valuesToSelect = [];
+
+        $('#selectCategoryyy-' + $id + ' option').each(function() {
+            var $this = $(this);
+            if (items.indexOf($this.text()) !== -1) {
+                valuesToSelect.push($this.val());
+            }
+        });
+        $('#selectCategoryyy-' + $id).val(valuesToSelect);
+        $('#selectCategoryyy-' + $id).selectpicker('refresh');
+
+      }
+    });*/
+
+    
     var category = $('#mainCategory-' + $id + ' option:selected').text();
     var valCategory = $('#mainCategory-' + $id).val();
-    var defaultcategory = $('#selectCategoryyy-' + $id + ' option').filter(function() {
-        return $(this).text() === $defaltcategory;
+    var title2 = $('#txttitle-' + $id).val();
+    
+    $.ajax({
+        type: "POST",
+        url: "process_category_term.php",
+        data: { title: title2 },
+        cache: false,
+        success: function(html) {
+          html = html.trim();
+            if (html === "") {
+                html = "Trending";
+            }
+            //console.log('LOAD KEY ' + $id + ' - ' + $defaltcategory + ' - ' + $curpage + ' - ' + title2 + ' -' + html);
+            var categories = html.split(',');
+            categories.push($defaltcategory);
+
+            var valuesToSelect = [];
+            $('#selectCategoryyy-' + $id + ' option').each(function() {
+                var $this = $(this);
+                if (categories.indexOf($this.text()) !== -1) {
+                    valuesToSelect.push($this.val());
+                }
+            });
+            $('#selectCategoryyy-' + $id).val(valuesToSelect);
+            $('#selectCategoryyy-' + $id).selectpicker('refresh');
+        },
+        error: function(xhr, status, error) {
+            console.error("An error occurred: " + error);
+        }
     });
 
-    var valueDefalut = defaultcategory.val();
-    $('#selectCategoryyy-' + $id).val([valCategory, valueDefalut]);
-    $('#selectCategoryyy-' + $id).selectpicker('refresh');
 
     var selecttag = $('#listTag-' + $id + ' option').filter(function() {
         return $(this).text().toLowerCase() === category.toLowerCase();
@@ -326,6 +387,54 @@ function addtagFunction($site){
     }
 }
 
+function addcategoryFunction($site){
+    var tag = $('#inputCategory').val();
+    var selectmainCategory = $('#addCategory').val();
+    var selectmainCategory2 = selectmainCategory.toString();
+
+    if(tag.trim() === "") {
+        alert("Input cannot be blank!");
+        return;
+    } else {
+      $('#savecategory').css('display', 'none');
+      $('#savecategoryloading').css('display', 'flex');
+      $.ajax({
+        type: "POST",
+        url: "addnewCategory.php",
+        data: {site:$site,tag:tag.trim(),parent:selectmainCategory2},
+        cache: false,
+        success: function(html) {
+            if(html=="0") {
+              alert("Category already exists !");
+            } else {
+              
+                console.log(html + "\n");
+                var dataArray1 = html.split(',');
+                var newOption = '<option value="' + dataArray1[0] + '">' + dataArray1[1] + '</option>';
+                $('select[id^="mainCategory-"]').each(function() {
+                  $(this).append(newOption);
+                  $(this).selectpicker('refresh');
+                  });
+
+                $('select[id^="selectCategoryyy-"]').each(function() {
+                  $(this).append(newOption);
+                  $(this).selectpicker('refresh');
+
+                });
+              var messageElement = document.getElementById("successcategorytext");
+              messageElement.style.display = "block";
+              setTimeout(function () {
+                  messageElement.style.display = "none";
+              }, 2000);
+            }
+            $('#savecategory').css('display', 'flex');
+            $('#savecategoryloading').css('display', 'none');
+        }
+      });
+    
+  }
+}
+
 function addtagtermsFunction(){
     var tag = $('#inputTagTerms').val();
     if(tag.trim() === "") {
@@ -352,6 +461,51 @@ function addtagtermsFunction(){
         }
       });
     }
+}
+
+function clickButtonWithDelay(button, delay) {
+      setTimeout(() => {
+          button.click();
+      }, delay);
+}
+
+function genall(){
+  
+  /*$('#clickALL').css('display', 'none');
+  $('#loadingALL').css('display', 'flex');*/
+  const buttons = document.querySelectorAll("button[id^='gendes-']");
+
+  buttons.forEach((button, index) => {
+      let numberID = button.id.split('-')[1];
+      
+      let title1 = $(`#txttitle-${numberID}`).val();
+
+      $.ajax({
+          type: "POST",
+          url: "process_category_term.php",
+          data: { title: title1 },
+          cache: false,
+          success: function(html) {
+              html = html || "Trending";
+              let items = html.split(',');
+              let randomIndex = Math.floor(Math.random() * items.length);
+              let normalizedText = items[randomIndex].trim().toLowerCase();
+
+              $(`#mainCategory-${numberID} option`).each(function() {
+                  if ($(this).text().toLowerCase() === normalizedText) {
+                      $(this).prop('selected', true).trigger('change');
+                      return false; // break the loop
+                  }
+              });
+
+              $(`#mainCategory-${numberID}`).selectpicker('refresh');
+              clickButtonWithDelay(button, index * 2000);
+          },
+          error: function(xhr, status, error) {
+              console.error("AJAX Error:", status, error);
+          }
+      });
+  });
 }
 
 
@@ -387,6 +541,13 @@ function switchKeywordchange($id){
 }
 </style>
 <div class="floating-button">
+    <button class="btn btn-primary" type="button" style="display: none;" id="loadingALL" disabled>
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    </button>
+    
+    <button style="display: flex;" id="clickALL" class="btn btn-primary" onclick="genall()">All ~</i></button>
+    
+    <br/>
     <button class="btn btn-info" onclick="showModalSetting()"><i class="fa-solid fa-gear"></i></button>
 </div>
 
@@ -514,6 +675,8 @@ function switchKeywordchange($id){
   </div>
 </div>
 
+
+
 <!-- Add Tag Terms modal -->
 <div class="modal fade" id="addTagTermsmodal" tabindex="-1" aria-labelledby="addTagTermsmodal" aria-hidden="true">
   <div class="modal-dialog">
@@ -538,6 +701,43 @@ function switchKeywordchange($id){
   </div>
 </div>
 
+<!-- Add new category modal -->
+<div class="modal fade" id="addCategorymodal" tabindex="-1" aria-labelledby="addCategorymodal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addaddCategorymodaltitle">Add new category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <input type="text" class="form-control" id="inputCategory">
+       <br/>
+       <p>Parent category</p>
+       <select data-width="180px" id="addCategory" class="form-control selectpicker" multiple data-live-search="true">
+              <?php 
+                  $index = 0;
+                  while($index < count($someArray)) {
+              ?>
+                <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+              <?php
+                  $index++;
+                  }
+              ?>
+        </select>
+
+       <br/>
+       <p id="successcategorytext" style="display: none;" class="text-success">Category add successfully !</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button id="savecategory" type="button" onclick="addcategoryFunction(<?php echo "'". $curPageName . "'"?>)" class="btn btn-primary">Save changes</button>
+        <button id="savecategoryloading" style="display:none;" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="w-100 p-3">
   <div class="row">
@@ -552,7 +752,7 @@ function switchKeywordchange($id){
           <th scope="col">Image</th>
           <th scope="col">Description</th>
           <th scope="col">Edit prompt</th>
-          <th scope="col"></th>
+          <th scope="col"><button onclick="genall()" type="button" style="display:flex" id="genalll"class="btn btn-secondary btn-sm">All</button></th>
           <th scope="col">Category</th>
           <!-- <th scope="col">Price</th> -->
           <th scope="col">Save</th>
@@ -755,8 +955,9 @@ function switchKeywordchange($id){
                   }
               ?>
               </select>
-              <br/>
-              <br/>
+              <p class="customP" style="margin-bottom: 0; cursor: pointer;text-decoration: underline; font-size: 12px;" id="addnewcategory-<?php echo $g10[$prz]->id;?>" onclick="addCategory()">+ Add new category</p>
+              <!-- <p class="customP" style="cursor: pointer;text-decoration: underline; font-size: 12px;" id="addtagterms-<?php echo $g10[$prz]->id;?>" onclick="addTagTerms()">+ Add category terms</p> -->
+              
               <b>Tag</b><br/>
               <select data-width="200px" id="listTag-<?php echo $g10[$prz]->id;?>" class="form-control selectpicker" multiple data-live-search="true">
               <?php 
@@ -1357,6 +1558,9 @@ function saveSettings() {
 
   function addTag(){
     $('#addTagmodal').modal('show');
+  }
+  function addCategory() {
+    $('#addCategorymodal').modal('show');
   }
   function addTagTerms(){
     $('#addTagTermsmodal').modal('show');

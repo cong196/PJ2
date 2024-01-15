@@ -47,6 +47,7 @@ foreach ($g10 as $product) {
 $list = getdataCategory($curPageName);
 $someArray = json_decode($list, true);
 
+
 $listTag = getdataTag($curPageName);
 
 $listTag2 = json_decode($listTag, true);

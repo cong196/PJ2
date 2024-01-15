@@ -4,13 +4,13 @@
     include "dbConnect.php";
     include "config.php";
 
-   $list = getdataCategory('themegatee');
+   $list = getdataCategory('customjoygifts');
    $someArray = json_decode($list, true);
 
-   $listTag = getdataTag('themegatee');
+   $listTag = getdataTag('customjoygifts');
    $listTag2 = json_decode($listTag, true);
 
-   $listPostcat = getdataPostCategory('themegatee');
+   $listPostcat = getdataPostCategory('customjoygifts');
    $listPostcategory = json_decode($listPostcat, true);
 ?>
 
@@ -19,7 +19,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>Setting</title>
+<title>Customjoygifts Setting</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -61,7 +61,7 @@
 <div style="background-color:#F0F0F0">
 <h3 style="padding-left:25px;padding-top: 65px;">Category</h3>
 <div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButton" onclick="getCategoriesSite('themegatee')" class="btn btn-primary">Update category from store</button>
+  <button type="button" id="btnButton" onclick="getCategoriesSite('customjoygifts')" class="btn btn-primary">Update category from store</button>
 
 <button id="btnButton-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -91,7 +91,7 @@
 <div style="background-color:#F0F0F0; margin-top: 15px;">
 <h3 style="padding-left:25px;padding-top: 25px;">TAG</h3>
 <div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButtonTag" onclick="getTagsSite('themegatee')" class="btn btn-primary">Update tag from store</button>
+  <button type="button" id="btnButtonTag" onclick="getTagsSite('customjoygifts')" class="btn btn-primary">Update tag from store</button>
 
 <button id="btnButtonTag-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -122,7 +122,7 @@
 <h3 style="padding-left:25px;padding-top: 25px;">Update product link</h3>
 
 <div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btngetProductLink" onclick="getProductLink('themegatee')" class="btn btn-primary">Get all products</button>
+  <button type="button" id="btngetProductLink" onclick="getProductLink('customjoygifts')" class="btn btn-primary">Get all products</button>
 
 <button id="btngetProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -135,7 +135,7 @@
 <div style="padding-left: 25px; padding-top: 25px;">
 <div class="row">
   <div class="col-1">
-    <button type="button" id="btngetnewProductLink" onclick="getnewProductLink('themegatee')" class="btn btn-primary">Get new products</button>
+    <button type="button" id="btngetnewProductLink" onclick="getnewProductLink('customjoygifts')" class="btn btn-primary">Get new products</button>
     <button id="btngetnewProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
         <span class="visually-hidden"></span>
@@ -149,7 +149,7 @@
 </div>
 
 <div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnDeleteProductLink" onclick="deleteProductLink('themegatee')" class="btn btn-danger">Delete all products</button>
+  <button type="button" id="btnDeleteProductLink" onclick="deleteProductLink('customjoygifts')" class="btn btn-danger">Delete all products</button>
 <button id="btnDeleteProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden"></span>
@@ -163,7 +163,7 @@
 <div style="background-color:#F0F0F0; margin-top: 15px;">
 <h3 style="padding-left:25px;padding-top: 25px;">Post category</h3>
 <div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('themegatee')" class="btn btn-primary">Update Post category</button>
+  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('customjoygifts')" class="btn btn-primary">Update Post category</button>
 
 <button id="btnButtonPostcategory-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
   <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -200,20 +200,6 @@
 
 <br/>
 </div>
-
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Import Category Terms</h3>
-<form style="margin-left:30px" action="import_category_terms_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
-    <div class="form-group">
-        <label for="csvFile">Choose a CSV File</label>
-        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
-
-<br/>
-</div>
-
 
 
 <br/>

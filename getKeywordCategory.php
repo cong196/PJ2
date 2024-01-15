@@ -31,11 +31,21 @@ if(isset($_POST['category'])) {
 
     if (!empty($c1)) {
         $result = '<select id="keywords-' . $id . '" class="form-control selectpicker" data-live-search="true">';
-        foreach ($c1 as $row) {
+        $randomIndex = array_rand($c1);
+
+        /*foreach ($c1 as $row) {
             $keyword = htmlspecialchars($row['keyword']);
             $volume = htmlspecialchars($row['volume']);
             $result .= "<option value='" . $keyword . "' data-subtext='" . $volume . "'>" . $keyword . "</option>";
+        }*/
+
+        foreach ($c1 as $index => $row) {
+            $keyword = htmlspecialchars($row['keyword']);
+            $volume = htmlspecialchars($row['volume']);
+            $selected = ($index === $randomIndex) ? ' selected' : '';
+            $result .= "<option value='" . $keyword . "' data-subtext='" . $volume . "'" . $selected . ">" . $keyword . "</option>";
         }
+
         $result .= "</select>";
         echo $result;
     } else {

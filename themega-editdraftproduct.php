@@ -60,7 +60,7 @@ settype($sort_by, "int");
    <div class="col-12">
 
       <div>
-      <?php include 'editdraft-product.php'; ?>
+      <?php include 'editdraft-product-2.php'; ?>
       
       <form style="padding: 0px 50px 50px 50px;">
         <div class="row">

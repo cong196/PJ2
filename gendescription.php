@@ -17,6 +17,16 @@ $is_add_related = $_POST['is_add_related'];
 $is_add_homepage = $_POST['is_add_homepage'];
 $id = $_POST['id'];
 $prompt = '';
+
+$randNum = rand(1, 100);
+
+if ($randNum <= 75) {
+    $edtKeyword = "";
+} else {
+    
+}
+    
+
 if($customprompt == '') {
     if($edtKeyword == ''){
         $prompt = 'write a describe about : '. $title .'. Make paragraph have least at '.$storedValue.' words and dont include "'. $title .'"';

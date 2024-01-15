@@ -41,6 +41,7 @@ function generateDescription($title,$id,$prompt,$urlimg,$edtKeyword,$selectmainC
         $('#gendes-' + id).css('display', 'flex');
         
         var data1 = CKEDITOR.instances['content-'+id].getData();
+         data1 = data1.replace(/{title}/g, title);
          var parts = data.split("BD0011");
          
          var contentDescription = '';

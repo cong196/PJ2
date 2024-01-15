@@ -38,6 +38,18 @@
         </div>
       </li>
 
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          CustomJoyGifts
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/PJ2/customjoygifts-createpost.php">Post</a>
+          <a class="dropdown-item" href="/PJ2/customjoygifts-editdraftproduct.php?page=1&perpage=10&sort_by=1&searchTitle=">Draft product</a>
+          <a class="dropdown-item" href="/PJ2/customjoygifts-setting.php">Setting</a>
+        </div>
+      </li>
+
       </ul>
     </div>
   </div>

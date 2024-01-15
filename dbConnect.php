@@ -21,7 +21,6 @@ function getdataCategory($site){
             } else {
                 if($site == 'themegatee' || $site == 'themegatee-editproducts.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee.php') {
                     $sql_stmt = "SELECT * FROM themegatee_category"; 
-                    // Câu lệnh select
                     $result = mysqli_query($dbh,$sql_stmt);
                     $rows = mysqli_num_rows($result); 
                     $responseCategory = array();
@@ -36,7 +35,25 @@ function getdataCategory($site){
                     }
                     mysqli_close($dbh);
                     return json_encode($responseCategory);
-            }
+                } else {
+                    if($site == 'customjoygifts' || $site == 'customjoygifts-editproducts.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts.php') {
+                        $sql_stmt = "SELECT * FROM customjoygifts_category"; 
+                        $result = mysqli_query($dbh,$sql_stmt);
+                        $rows = mysqli_num_rows($result); 
+                        $responseCategory = array();
+                        if ($rows) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $responseCategory [] = array(
+                                    'id' => $row['id'],
+                                    'name' => $row['name'],
+                                    'slug' => $row['slug']
+                                );
+                            } 
+                        }
+                        mysqli_close($dbh);
+                        return json_encode($responseCategory);
+                    }
+                }
             mysqli_close($dbh);
         }
     }
@@ -110,6 +127,25 @@ function getdataTag($site){
                     }
                     mysqli_close($dbh); // Đóng kết nối CSDL
                     return json_encode($responseCategory);
+                } else {
+                    if($site == 'customjoygifts' || $site == 'customjoygifts-editproducts.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php') {
+                        $sql_stmt = "SELECT * FROM customjoygifts_tag"; 
+                        $result = mysqli_query($dbh,$sql_stmt);
+                        $rows = mysqli_num_rows($result); 
+                        
+                        $responseCategory = array();
+                        if ($rows) {
+                            while ($row = mysqli_fetch_array($result)) {
+                                $responseCategory [] = array(
+                                    'id' => $row['id'],
+                                    'name' => $row['name'],
+                                    'slug' => $row['slug']
+                                );
+                            } 
+                        }
+                        mysqli_close($dbh); // Đóng kết nối CSDL
+                        return json_encode($responseCategory);
+                    }
                 }
             mysqli_close($dbh);
         }
@@ -129,6 +165,11 @@ function deletTableCategory($site){
             if($site == 'themegatee') {
              $sql_stmt = "DELETE FROM themegatee_category"; 
              $result = mysqli_query($dbh,$sql_stmt);
+            } else {
+                if($site == 'customjoygifts') {
+                 $sql_stmt = "DELETE FROM customjoygifts_category"; 
+                 $result = mysqli_query($dbh,$sql_stmt);
+                }
             }
         }
         mysqli_close($dbh);
@@ -171,6 +212,11 @@ function deletTableTag($site){
                 if($site == 'kacogifts') {
                      $sql_stmt = "DELETE FROM kacogifts_tag"; 
                      $result = mysqli_query($dbh,$sql_stmt);
+                } else {
+                    if($site == 'customjoygifts') {
+                         $sql_stmt = "DELETE FROM customjoygifts_tag"; 
+                         $result = mysqli_query($dbh,$sql_stmt);
+                    }
                 }
             }
         }
@@ -188,14 +234,58 @@ function updateCategory($site,$id,$name,$slug, $parent){
         if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee') {
-             $sql_stmt = "INSERT INTO themegatee_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
-             $result = mysqli_query($dbh,$sql_stmt);
+            if($site == 'themegatee' || $site == 'themega-editdraftproduct.php') {
+                $check_sql = "SELECT * FROM themegatee_category WHERE id = $id";
+                $check_result = mysqli_query($dbh, $check_sql);
+                if (mysqli_num_rows($check_result) == 0) {
+                     $sql_stmt = "INSERT INTO themegatee_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
+                     $result = mysqli_query($dbh,$sql_stmt);
+                }
+            } else {
+                if($site == 'customjoygifts' || $site == 'customjoygifts-editdraftproduct.php') {
+                    $check_sql = "SELECT * FROM customjoygifts_category WHERE id = $id";
+                    $check_result = mysqli_query($dbh, $check_sql);
+                    if (mysqli_num_rows($check_result) == 0) {
+                        $sql_stmt = "INSERT INTO customjoygifts_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
+                        $result = mysqli_query($dbh,$sql_stmt);
+                    }
+                }
             }
             
             mysqli_close($dbh);
         }    
     }
+}
+
+function addCategoryTerms($name) {
+    global $servername, $username, $password, $database_name;
+    $conn = new mysqli($servername, $username, $password, $database_name);
+    if($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $conn->begin_transaction();
+
+    $checkStmt = $conn->prepare("SELECT COUNT(*) FROM category_term WHERE category = ? AND term = ?");
+    $checkStmt->bind_param("ss", $name, $name);
+    $checkStmt->execute();
+    $checkStmt->bind_result($count);
+    $checkStmt->fetch();
+    $checkStmt->close();
+
+    if ($count == 0) {
+        // Insert the record if it doesn't exist
+        $stmt = $conn->prepare("INSERT INTO category_term (category, term) VALUES (?, ?)");
+        if ($stmt === FALSE) {
+            exit;
+        }
+
+        $stmt->bind_param("ss", $name, $name);
+
+        if (!$stmt->execute()) {
+        }
+        $stmt->close();
+    }
+    $conn->commit();
 }
 
 function updatePostCategory($site,$id,$name,$slug, $parent){
@@ -237,6 +327,11 @@ function updateTag($site,$id,$name,$slug){
                 if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
                      $sql_stmt = "INSERT INTO kacogifts_tag VALUES ($id,'".$name2."','".$slug."')";
                      $result = mysqli_query($dbh,$sql_stmt);
+                } else {
+                    if($site == 'customjoygifts' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php') {
+                         $sql_stmt = "INSERT INTO customjoygifts_tag VALUES ($id,'".$name2."','".$slug."')";
+                         $result = mysqli_query($dbh,$sql_stmt);
+                    }
                 }
             }
             
@@ -244,6 +339,7 @@ function updateTag($site,$id,$name,$slug){
         }    
     }
 }
+
 
 function updateProductlink($site,$id,$name,$slug,$category){
     global $servername, $username, $password, $database_name;
@@ -287,6 +383,22 @@ function updateProductlink($site,$id,$name,$slug,$category){
                         $result = mysqli_query($dbh,$sql_stmt);
                     }
                      
+                } else {
+                    if($site == 'customjoygifts-editproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts-setting.php' || $site == 'customjoygifts') {
+                        $query = "SELECT id FROM customjoygiftsproductlink WHERE id = $id";
+                        $rsExits = mysqli_query($dbh, $query);
+
+                        if (mysqli_num_rows($rsExits) > 0) {
+                            $slug = 'https://customjoygifts.com/product/' . $slug;
+                            $updateExits = "UPDATE customjoygiftsproductlink SET slug = '".$slug."' WHERE id =".$id;
+                            $result = mysqli_query($dbh,$updateExits);
+                        } else {
+                            $slug = 'https://customjoygifts.com/product/' . $slug;
+                            $sql_stmt = "INSERT INTO customjoygiftsproductlink VALUES ($id,'".$name2."','".$slug."','".$category."')";
+                            $result = mysqli_query($dbh,$sql_stmt);
+                        }
+                         
+                    }
                 }
             }
             mysqli_close($dbh);
@@ -320,6 +432,26 @@ function getlinkCategory($site,$id){
                 $conn->close();
                 $link = 'https://themegatee.com/' . $link;
                 return $link;
+            } else {
+                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts.php' || $site == 'customjoygifts') {
+                    $sql = "SELECT * FROM customjoygifts_category WHERE id = $id;";
+                    $result = $conn->query($sql);
+                    $row = $result->fetch_assoc();
+
+                    $parent1 = $row["parent"];
+                    $link = $row["slug"];
+
+                    while ($parent1 != 0 ) {
+                        $sql = "SELECT * FROM `customjoygifts_category` WHERE id = $parent1;";
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        $parent1 = $row["parent"];
+                        $link = $row["slug"] . '/' . $link;
+                    }
+                    $conn->close();
+                    $link = 'https://customjoygifts.com/' . $link;
+                    return $link;
+                }
             }
     }
 }
@@ -345,6 +477,21 @@ function getRandomRelatedProduct($site,$id,$title){
                     return $row;
                 } else {
                     return 0;
+                }
+            } else {
+                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php') {
+                    if($title != ''){
+                        $sql = "SELECT * FROM `customjoygiftsproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
+                    } else {
+                        $sql = "SELECT * FROM `customjoygiftsproductlink` WHERE FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
+                    }
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        return $row;
+                    } else {
+                        return 0;
+                    }
                 }
             }
     }
@@ -457,6 +604,10 @@ function check_tags_exist($tag,$page_name) {
         $query = "";
         if($page_name == 'kacogifts' || $page_name == 'kacogifts-editdraftproduct.php') {
             $query = "SELECT COUNT(*) AS tag_count FROM kacogifts_tag WHERE name = '$tag'";
+        } else {
+            if($page_name == 'customjoygifts' || $page_name == 'customjoygifts-editdraftproduct.php') {
+                $query = "SELECT COUNT(*) AS tag_count FROM customjoygifts_tag WHERE name = '$tag'";
+            }
         }
 
         $result = $conn->query($query);
@@ -489,6 +640,17 @@ function get_link_tag($tag0,$site) {
 
                 $link = 'https://kacogifts.com/product-tag/' . $link;
                 return $link;
+            } else {
+                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts') {
+                    $sql = "SELECT * FROM customjoygifts_tag WHERE name = '".$tag0."'";
+                    $result = $conn->query($sql);
+                    $row = $result->fetch_assoc();
+                    $link = $row["slug"];
+                    $conn->close();
+
+                    $link = 'https://customjoygifts.com/product-tag/' . $link;
+                    return $link;
+                }
             }
     }
 }
@@ -507,6 +669,15 @@ function get_id_tag($name, $site) {
                 $id = $row["id"];
                 $conn->close();
                 return $id;
+            } else {
+                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts') {
+                    $sql = "SELECT * FROM customjoygifts_tag WHERE name = '".$name."'";
+                    $result = $conn->query($sql);
+                    $row = $result->fetch_assoc();
+                    $id = $row["id"];
+                    $conn->close();
+                    return $id;
+                }
             }
     }
 }
@@ -530,10 +701,50 @@ function get_related_product($site,$title){
                     return 0;
                 }
             } else {
-                
+                if($site == 'customjoygifts-editdraftproduct.php') {
+                    $sql = "SELECT * FROM `customjoygiftsproductlink` WHERE `name` LIKE '%" . $title . "%' ORDER BY RAND() LIMIT 1;";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        return $row;
+                    } else {
+                        return 0;
+                    }
+                }
             }
     }
 }
+
+
+function findCategoriesInTitle($title) {
+    global $servername, $username, $password, $database_name;
+
+    // Kết nối đến cơ sở dữ liệu
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    // Kiểm tra kết nối
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "SELECT term FROM category_term";
+    $result = $conn->query($sql);
+
+    $matchingTerms = [];
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            if (stripos($title, $row['term']) !== false) {
+                $matchingTerms[] = $row['term'];
+            }
+        }
+    }
+
+    $conn->close();
+    return implode(",", $matchingTerms);
+}
+
+
 
 function get_tags_terms(){
     global $servername, $username, $password, $database_name;
@@ -732,6 +943,16 @@ function addScheduleProduct($id,$site){
                         $result = mysqli_stmt_execute($stmt);
                         mysqli_stmt_close($stmt);
                     } 
+                } else {
+                    if($site == 'customjoygifts' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php') {
+                        $sql_stmt = "INSERT INTO schedule_product (id, site) VALUES (?, ?)";
+                        $stmt = mysqli_prepare($dbh, $sql_stmt);
+                        if ($stmt) {
+                            mysqli_stmt_bind_param($stmt, "is", $id, $site);
+                            $result = mysqli_stmt_execute($stmt);
+                            mysqli_stmt_close($stmt);
+                        } 
+                    }
                 }
             }
             mysqli_close($dbh);

@@ -19,7 +19,7 @@ settype($sort_by, "int");
 <head>
 <meta charset="UTF-8">
 
-<title>Customjoygifts Edit Product</title>
+<title>Customjoygifts Draft Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css"> -->
@@ -128,7 +128,7 @@ settype($sort_by, "int");
 
         let selectSortby = document.getElementById("select_sort_by");
         let selectedSortbyValue = selectSortby.value;
-        window.location.href = '/PJ2/themega-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue +'&searchTitle='+ searchTitle;
+        window.location.href = '/PJ2/customjoygifts-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue +'&searchTitle='+ searchTitle;
     }
   </script>
 
