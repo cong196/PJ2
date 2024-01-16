@@ -364,8 +364,8 @@ function addtagFunction($site){
         data: {site:$site,tag:tag.trim()},
         cache: false,
         success: function(html) {
-            if(html=="0") {
-              alert("Tag already exists !");
+            if(html == "0") {
+              alert(html);
             } else {
                 console.log(html + "\n");
                 var dataArray1 = html.split(',');
@@ -404,11 +404,12 @@ function addcategoryFunction($site){
         data: {site:$site,tag:tag.trim(),parent:selectmainCategory2},
         cache: false,
         success: function(html) {
-            if(html=="0") {
-              alert("Category already exists !");
+          console.log(html + "\n");
+            if(html.includes("Error message")) {
+              alert(html);
             } else {
               
-                console.log(html + "\n");
+                //console.log(html + "\n");
                 var dataArray1 = html.split(',');
                 var newOption = '<option value="' + dataArray1[0] + '">' + dataArray1[1] + '</option>';
                 $('select[id^="mainCategory-"]').each(function() {
