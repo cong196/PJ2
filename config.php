@@ -39,6 +39,17 @@ function getKey($site){
                 }';
 
                 return $data;
+            } else {
+                if($site == 'printfusionusa-editproduct.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-setting.php' || $site == 'printfusionusa' || $site == 'printfusionusa-schedule-product.php') {
+                    $data = '{
+                        "url": "https://printfusionusa.com",
+                        "ck" : "ck_470213ca3b65521e5b47e6378e06d1ca1c6c3f4e",
+                        "cs" : "cs_b521322e8940d3bd83b1c58a41db9081448c4dba"
+
+                    }';
+
+                    return $data;
+                }
             }
         }
     }

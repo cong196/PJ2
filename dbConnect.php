@@ -52,6 +52,24 @@ function getdataCategory($site){
                         }
                         mysqli_close($dbh);
                         return json_encode($responseCategory);
+                    } else {
+                        if($site == 'printfusionusa' || $site == 'printfusionusa-editproducts.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa.php') {
+                            $sql_stmt = "SELECT * FROM printfusionusa_category"; 
+                            $result = mysqli_query($dbh,$sql_stmt);
+                            $rows = mysqli_num_rows($result); 
+                            $responseCategory = array();
+                            if ($rows) {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    $responseCategory [] = array(
+                                        'id' => $row['id'],
+                                        'name' => $row['name'],
+                                        'slug' => $row['slug']
+                                    );
+                                } 
+                            }
+                            mysqli_close($dbh);
+                            return json_encode($responseCategory);
+                        }
                     }
                 }
             mysqli_close($dbh);
@@ -145,6 +163,25 @@ function getdataTag($site){
                         }
                         mysqli_close($dbh); // Đóng kết nối CSDL
                         return json_encode($responseCategory);
+                    } else {
+                        if($site == 'printfusionusa' || $site == 'printfusionusa-editproducts.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct.php') {
+                            $sql_stmt = "SELECT * FROM printfusionusa_tag"; 
+                            $result = mysqli_query($dbh,$sql_stmt);
+                            $rows = mysqli_num_rows($result); 
+                            
+                            $responseCategory = array();
+                            if ($rows) {
+                                while ($row = mysqli_fetch_array($result)) {
+                                    $responseCategory [] = array(
+                                        'id' => $row['id'],
+                                        'name' => $row['name'],
+                                        'slug' => $row['slug']
+                                    );
+                                } 
+                            }
+                            mysqli_close($dbh); // Đóng kết nối CSDL
+                            return json_encode($responseCategory);
+                        }
                     }
                 }
             mysqli_close($dbh);
@@ -169,6 +206,11 @@ function deletTableCategory($site){
                 if($site == 'customjoygifts') {
                  $sql_stmt = "DELETE FROM customjoygifts_category"; 
                  $result = mysqli_query($dbh,$sql_stmt);
+                } else {
+                    if($site == 'printfusionusa') {
+                     $sql_stmt = "DELETE FROM printfusionusa_category"; 
+                     $result = mysqli_query($dbh,$sql_stmt);
+                    }
                 }
             }
         }
@@ -216,6 +258,11 @@ function deletTableTag($site){
                     if($site == 'customjoygifts') {
                          $sql_stmt = "DELETE FROM customjoygifts_tag"; 
                          $result = mysqli_query($dbh,$sql_stmt);
+                    } else {
+                        if($site == 'printfusionusa') {
+                             $sql_stmt = "DELETE FROM printfusionusa_tag"; 
+                             $result = mysqli_query($dbh,$sql_stmt);
+                        }
                     }
                 }
             }
@@ -234,7 +281,7 @@ function updateCategory($site,$id,$name,$slug, $parent){
         if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee' || $site == 'themega-editdraftproduct.php') {
+            if($site == 'themegatee' || $site == 'themega-editdraftproduct.php' || $site == 'themega-editdraftproduct-2.php') {
                 $check_sql = "SELECT * FROM themegatee_category WHERE id = $id";
                 $check_result = mysqli_query($dbh, $check_sql);
                 if (mysqli_num_rows($check_result) == 0) {
@@ -242,12 +289,21 @@ function updateCategory($site,$id,$name,$slug, $parent){
                      $result = mysqli_query($dbh,$sql_stmt);
                 }
             } else {
-                if($site == 'customjoygifts' || $site == 'customjoygifts-editdraftproduct.php') {
+                if($site == 'customjoygifts' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct-2.php') {
                     $check_sql = "SELECT * FROM customjoygifts_category WHERE id = $id";
                     $check_result = mysqli_query($dbh, $check_sql);
                     if (mysqli_num_rows($check_result) == 0) {
                         $sql_stmt = "INSERT INTO customjoygifts_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
                         $result = mysqli_query($dbh,$sql_stmt);
+                    }
+                } else {
+                    if($site == 'printfusionusa' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct-2.php') {
+                        $check_sql = "SELECT * FROM printfusionusa_category WHERE id = $id";
+                        $check_result = mysqli_query($dbh, $check_sql);
+                        if (mysqli_num_rows($check_result) == 0) {
+                            $sql_stmt = "INSERT INTO printfusionusa_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
+                            $result = mysqli_query($dbh,$sql_stmt);
+                        }
                     }
                 }
             }
@@ -319,18 +375,23 @@ function updateTag($site,$id,$name,$slug){
         if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php') {
+            if($site == 'themegatee' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega-editdraftproduct-2.php') {
 
              $sql_stmt = "INSERT INTO themegatee_tag VALUES ($id,'".$name2."','".$slug."')";
              $result = mysqli_query($dbh,$sql_stmt);
             } else {
-                if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
+                if($site == 'kacogifts' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts-editdraftproduct-2.php') {
                      $sql_stmt = "INSERT INTO kacogifts_tag VALUES ($id,'".$name2."','".$slug."')";
                      $result = mysqli_query($dbh,$sql_stmt);
                 } else {
-                    if($site == 'customjoygifts' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php') {
+                    if($site == 'customjoygifts' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct-2.php') {
                          $sql_stmt = "INSERT INTO customjoygifts_tag VALUES ($id,'".$name2."','".$slug."')";
                          $result = mysqli_query($dbh,$sql_stmt);
+                    } else {
+                        if($site == 'printfusionusa' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct-2.php') {
+                             $sql_stmt = "INSERT INTO printfusionusa_tag VALUES ($id,'".$name2."','".$slug."')";
+                             $result = mysqli_query($dbh,$sql_stmt);
+                        }
                     }
                 }
             }
@@ -352,7 +413,7 @@ function updateProductlink($site,$id,$name,$slug,$category){
         if (!mysqli_select_db($dbh,$database_name)){
             die("Unable to select database: " . mysqli_error());
         } else {
-            if($site == 'themegatee-editproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee') {
+            if($site == 'themegatee-editproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themega-editdraftproduct.php' || $site == 'themegatee-setting.php' || $site == 'themegatee' || $site == 'themega-editdraftproduct-2.php') {
 
 
                 $query = "SELECT id FROM themegaproductlink WHERE id = $id";
@@ -369,7 +430,7 @@ function updateProductlink($site,$id,$name,$slug,$category){
                 }
                  
             } else {
-                if($site == 'kacogifts-editproduct.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts-setting.php' || $site == 'kacogifts') {
+                if($site == 'kacogifts-editproduct.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts-setting.php' || $site == 'kacogifts' || $site == 'kacogifts-editdraftproduct-2.php') {
                     $query = "SELECT id FROM kacogiftsproductlink WHERE id = $id";
                     $rsExits = mysqli_query($dbh, $query);
 
@@ -384,7 +445,7 @@ function updateProductlink($site,$id,$name,$slug,$category){
                     }
                      
                 } else {
-                    if($site == 'customjoygifts-editproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts-setting.php' || $site == 'customjoygifts') {
+                    if($site == 'customjoygifts-editproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts-setting.php' || $site == 'customjoygifts' || $site == 'customjoygifts-editdraftproduct-2.php') {
                         $query = "SELECT id FROM customjoygiftsproductlink WHERE id = $id";
                         $rsExits = mysqli_query($dbh, $query);
 
@@ -398,6 +459,22 @@ function updateProductlink($site,$id,$name,$slug,$category){
                             $result = mysqli_query($dbh,$sql_stmt);
                         }
                          
+                    } else {
+                        if($site == 'printfusionusa-editproduct.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa-setting.php' || $site == 'printfusionusa' || $site == 'printfusionusa-editdraftproduct-2.php') {
+                            $query = "SELECT id FROM printfusionusaproductlink WHERE id = $id";
+                            $rsExits = mysqli_query($dbh, $query);
+
+                            if (mysqli_num_rows($rsExits) > 0) {
+                                $slug = 'https://printfusionusa.com/product/' . $slug;
+                                $updateExits = "UPDATE printfusionusaproductlink SET slug = '".$slug."' WHERE id =".$id;
+                                $result = mysqli_query($dbh,$updateExits);
+                            } else {
+                                $slug = 'https://printfusionusa.com/product/' . $slug;
+                                $sql_stmt = "INSERT INTO printfusionusaproductlink VALUES ($id,'".$name2."','".$slug."','".$category."')";
+                                $result = mysqli_query($dbh,$sql_stmt);
+                            }
+                             
+                        }
                     }
                 }
             }
@@ -414,7 +491,7 @@ function getlinkCategory($site,$id){
         return 0;
     } else {
             $sql = "";
-            if($site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php' || $site == 'themegatee.php' || $site == 'themegatee') {
+            if($site == 'themega-editdraftproduct-2.php'  || $site == 'themega-editdraftproduct.php'  || $site == 'themega_editdraftproduct.php' || $site == 'themegatee.php' || $site == 'themegatee') {
                 $sql = "SELECT * FROM themegatee_category WHERE id = $id;";
                 $result = $conn->query($sql);
                 $row = $result->fetch_assoc();
@@ -433,7 +510,7 @@ function getlinkCategory($site,$id){
                 $link = 'https://themegatee.com/' . $link;
                 return $link;
             } else {
-                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts.php' || $site == 'customjoygifts') {
+                if($site == 'customjoygifts-editdraftproduct-2.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php' || $site == 'customjoygifts.php' || $site == 'customjoygifts') {
                     $sql = "SELECT * FROM customjoygifts_category WHERE id = $id;";
                     $result = $conn->query($sql);
                     $row = $result->fetch_assoc();
@@ -451,6 +528,26 @@ function getlinkCategory($site,$id){
                     $conn->close();
                     $link = 'https://customjoygifts.com/' . $link;
                     return $link;
+                } else {
+                    if($site == 'printfusionusa-editdraftproduct-2.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa.php' || $site == 'printfusionusa') {
+                        $sql = "SELECT * FROM printfusionusa_category WHERE id = $id;";
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+
+                        $parent1 = $row["parent"];
+                        $link = $row["slug"];
+
+                        while ($parent1 != 0 ) {
+                            $sql = "SELECT * FROM `printfusionusa_category` WHERE id = $parent1;";
+                            $result = $conn->query($sql);
+                            $row = $result->fetch_assoc();
+                            $parent1 = $row["parent"];
+                            $link = $row["slug"] . '/' . $link;
+                        }
+                        $conn->close();
+                        $link = 'https://printfusionusa.com/' . $link;
+                        return $link;
+                    }
                 }
             }
     }
@@ -464,7 +561,7 @@ function getRandomRelatedProduct($site,$id,$title){
         return 0;
     } else {
             $sql = "";
-            if($site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php') {
+            if($site == 'themega-editdraftproduct-2.php' || $site == 'themega-editdraftproduct.php' || $site == 'themega_editdraftproduct.php') {
                 //$sql = "SELECT * FROM `themegaproductlink` WHERE `productcategory` LIKE '%" . $id . "%' ORDER BY RAND() LIMIT 1;";
                 if($title != ''){
                     $sql = "SELECT * FROM `themegaproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
@@ -479,7 +576,7 @@ function getRandomRelatedProduct($site,$id,$title){
                     return 0;
                 }
             } else {
-                if($site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php') {
+                if($site == 'customjoygifts-editdraftproduct-2.php' || $site == 'customjoygifts-editdraftproduct.php' || $site == 'customjoygifts_editdraftproduct.php') {
                     if($title != ''){
                         $sql = "SELECT * FROM `customjoygiftsproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
                     } else {
@@ -491,6 +588,21 @@ function getRandomRelatedProduct($site,$id,$title){
                         return $row;
                     } else {
                         return 0;
+                    }
+                } else {
+                    if($site == 'printfusionusa-editdraftproduct-2.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa_editdraftproduct.php') {
+                        if($title != ''){
+                            $sql = "SELECT * FROM `printfusionusaproductlink` WHERE `name` LIKE '%".$title."%' AND FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
+                        } else {
+                            $sql = "SELECT * FROM `printfusionusaproductlink` WHERE FIND_IN_SET('$id', `productcategory`) ORDER BY RAND() LIMIT 1;";
+                        }
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            return $row;
+                        } else {
+                            return 0;
+                        }
                     }
                 }
             }
@@ -607,6 +719,10 @@ function check_tags_exist($tag,$page_name) {
         } else {
             if($page_name == 'customjoygifts' || $page_name == 'customjoygifts-editdraftproduct.php') {
                 $query = "SELECT COUNT(*) AS tag_count FROM customjoygifts_tag WHERE name = '$tag'";
+            } else {
+                if($page_name == 'printfusionusa' || $page_name == 'printfusionusa-editdraftproduct.php') {
+                    $query = "SELECT COUNT(*) AS tag_count FROM printfusionusa_tag WHERE name = '$tag'";
+                }
             }
         }
 
@@ -650,6 +766,17 @@ function get_link_tag($tag0,$site) {
 
                     $link = 'https://customjoygifts.com/product-tag/' . $link;
                     return $link;
+                } else {
+                    if($site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa') {
+                        $sql = "SELECT * FROM printfusionusa_tag WHERE name = '".$tag0."'";
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        $link = $row["slug"];
+                        $conn->close();
+
+                        $link = 'https://printfusionusa.com/product-tag/' . $link;
+                        return $link;
+                    }
                 }
             }
     }
@@ -677,6 +804,15 @@ function get_id_tag($name, $site) {
                     $id = $row["id"];
                     $conn->close();
                     return $id;
+                } else {
+                    if($site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa') {
+                        $sql = "SELECT * FROM printfusionusa_tag WHERE name = '".$name."'";
+                        $result = $conn->query($sql);
+                        $row = $result->fetch_assoc();
+                        $id = $row["id"];
+                        $conn->close();
+                        return $id;
+                    }
                 }
             }
     }
@@ -709,6 +845,17 @@ function get_related_product($site,$title){
                         return $row;
                     } else {
                         return 0;
+                    }
+                } else {
+                    if($site == 'printfusionusa-editdraftproduct.php') {
+                        $sql = "SELECT * FROM `printfusionusaproductlink` WHERE `name` LIKE '%" . $title . "%' ORDER BY RAND() LIMIT 1;";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            $row = $result->fetch_assoc();
+                            return $row;
+                        } else {
+                            return 0;
+                        }
                     }
                 }
             }
@@ -952,6 +1099,16 @@ function addScheduleProduct($id,$site){
                             $result = mysqli_stmt_execute($stmt);
                             mysqli_stmt_close($stmt);
                         } 
+                    } else {
+                        if($site == 'printfusionusa' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa-editdraftproduct.php') {
+                            $sql_stmt = "INSERT INTO schedule_product (id, site) VALUES (?, ?)";
+                            $stmt = mysqli_prepare($dbh, $sql_stmt);
+                            if ($stmt) {
+                                mysqli_stmt_bind_param($stmt, "is", $id, $site);
+                                $result = mysqli_stmt_execute($stmt);
+                                mysqli_stmt_close($stmt);
+                            } 
+                        }
                     }
                 }
             }
