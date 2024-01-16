@@ -212,40 +212,6 @@ $minwords = "55";
   }
 
   function loadKeyword($id,$defaltcategory,$curpage){
-
-    /*var category = $('#mainCategory-' + $id + ' option:selected').text();
-    var valCategory = $('#mainCategory-' + $id).val();
-    
-    var title2 = document.getElementById("txttitle-" + $id).value;
-
-    $.ajax({
-      type: "POST",
-      url: "process_category_term.php",
-      data: {title:title2},
-      cache: false,
-      success: function(html) {
-        //console.log(html);
-        if(html == "") {
-          html = "Trending";
-        }
-        var text = html;
-        var items = text.split(',');
-        items.push($defaltcategory);
-
-        var valuesToSelect = [];
-
-        $('#selectCategoryyy-' + $id + ' option').each(function() {
-            var $this = $(this);
-            if (items.indexOf($this.text()) !== -1) {
-                valuesToSelect.push($this.val());
-            }
-        });
-        $('#selectCategoryyy-' + $id).val(valuesToSelect);
-        $('#selectCategoryyy-' + $id).selectpicker('refresh');
-
-      }
-    });*/
-
     
     var category = $('#mainCategory-' + $id + ' option:selected').text();
     var valCategory = $('#mainCategory-' + $id).val();

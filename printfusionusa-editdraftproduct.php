@@ -128,7 +128,7 @@ settype($sort_by, "int");
 
         let selectSortby = document.getElementById("select_sort_by");
         let selectedSortbyValue = selectSortby.value;
-        window.location.href = '/PJ2/customjoygifts-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue +'&searchTitle='+ searchTitle;
+        window.location.href = '/PJ2/printfusionusa-editdraftproduct.php?page=' + searchPage + '&perpage='+ searchPerPage + '&sort_by='+ selectedSortbyValue +'&searchTitle='+ searchTitle;
     }
   </script>
 

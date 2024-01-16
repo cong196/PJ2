@@ -44,4 +44,11 @@
     deleteScheduleProduct($id_customyoy,'customjoygifts-editdraftproduct.php');
   }
 
+  $id_printfusionusa = getScheduleProductId('printfusionusa-editdraftproduct.php');
+  if($id_printfusionusa != 0) {
+    $site_printfusionusa = json_decode(getKey('printfusionusa'));
+    updateproduct($data,$site_printfusionusa,$id_printfusionusa);
+    deleteScheduleProduct($id_printfusionusa,'printfusionusa-editdraftproduct.php');
+  }
+
 ?>
