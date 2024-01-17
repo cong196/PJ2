@@ -227,11 +227,15 @@ $minwords = "55";
             if (html === "") {
                 html = "Trending";
             }
-            //console.log('LOAD KEY ' + $id + ' - ' + $defaltcategory + ' - ' + $curpage + ' - ' + title2 + ' -' + html);
-            var categories = html.split(',');
-            categories.push($defaltcategory);
 
-            var valuesToSelect = [];
+          var selectElement = document.getElementById('selectCategoryyy-' + $id);
+          var categories = html.split(',');
+          var selectedOptions = Array.from(selectElement.selectedOptions);
+          selectedOptions.forEach(function(option) {
+              categories.push(option.text);
+          });
+
+            /*var valuesToSelect = [];
             $('#selectCategoryyy-' + $id + ' option').each(function() {
                 var $this = $(this);
                 if (categories.indexOf($this.text()) !== -1) {
@@ -239,7 +243,18 @@ $minwords = "55";
                 }
             });
             $('#selectCategoryyy-' + $id).val(valuesToSelect);
-            $('#selectCategoryyy-' + $id).selectpicker('refresh');
+            $('#selectCategoryyy-' + $id).selectpicker('refresh');*/
+
+          categories.forEach(function(value) {
+              value = $.trim(value).toLowerCase();
+              $('#selectCategoryyy-' + $id + ' option').each(function() {
+                  if ($(this).text().toLowerCase() === value) {
+                      $(this).prop('selected', true);
+                  }
+              });
+          });
+          $('#selectCategoryyy-' + $id).selectpicker('refresh');
+
         },
         error: function(xhr, status, error) {
             console.error("An error occurred: " + error);
