@@ -223,6 +223,7 @@ $minwords = "55";
         data: { title: title2 },
         cache: false,
         success: function(html) {
+          console.log(html);
           html = html.trim();
             if (html === "") {
                 html = "Trending";

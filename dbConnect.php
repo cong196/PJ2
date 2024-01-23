@@ -526,7 +526,7 @@ function getlinkCategory($site,$id){
                         $link = $row["slug"] . '/' . $link;
                     }
                     $conn->close();
-                    $link = 'https://customjoygifts.com/' . $link;
+                    $link = 'https://customjoygifts.com/product-category/' . $link;
                     return $link;
                 } else {
                     if($site == 'printfusionusa-editdraftproduct-2.php' || $site == 'printfusionusa-editdraftproduct.php' || $site == 'printfusionusa_editdraftproduct.php' || $site == 'printfusionusa.php' || $site == 'printfusionusa') {
@@ -545,7 +545,7 @@ function getlinkCategory($site,$id){
                             $link = $row["slug"] . '/' . $link;
                         }
                         $conn->close();
-                        $link = 'https://printfusionusa.com/' . $link;
+                        $link = 'https://printfusionusa.com/product-category/' . $link;
                         return $link;
                     }
                 }
@@ -879,9 +879,11 @@ function findCategoriesInTitle($title) {
 
     $matchingTerms = [];
 
+    $title_without_quotes = str_replace("'", "", $title);
+
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            if (stripos($title, $row['term']) !== false) {
+            if (stripos($title_without_quotes, $row['term']) !== false) {
                 $matchingTerms[] = $row['term'];
             }
         }
