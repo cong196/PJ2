@@ -27,8 +27,11 @@ function getProducts($pg, $perpage,$site,$searchTitle,$sort_by){
         $site->cs,
       [
           'version' => 'wc/v3',
+          'verify_ssl' => false
       ]
   );
+  //$woocommerce->http_request_args['sslverify'] = false;
+
   if($sort_by == 1) {
     $prds = $woocommerce->get('products/?status=draft&orderby=date&order=asc&page='.$pg.'&per_page='.$perpage . '&search='. $searchTitle);
   } else {

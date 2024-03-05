@@ -29,6 +29,7 @@
         $site->cs,
             [
                 'version' => 'wc/v3',
+                'verify_ssl' => false
             ]
         );
     
@@ -43,6 +44,7 @@
             $site->cs,
           [
               'version' => 'wc/v3',
+              'verify_ssl' => false
           ]
       );
       $listCategory = $woocommerce->get('products/?orderby=date&status=publish&page=1&per_page=1');
