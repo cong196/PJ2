@@ -1,6 +1,7 @@
 <?php 
     include "dbConnect.php";
     $title = $_POST['title'];
+    //$title = 'Personalized NFL Atlanta Falcons Hawaiian Shirt Trending Summer, Aloha Shirt  For Fans';
 	function tagbyTitle($title) {
 	    $textList = get_tags_terms_2();
 	    return findMatch($textList, $title);

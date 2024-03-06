@@ -206,7 +206,7 @@ $minwords = "55";
             if (response.logged_in) {
                 generateDescription(tt,$id,customprompt,url,edtKeywords,selectmainCategory2,$curPageName,slug,edttitle,img2,storedValue1,storedValueModel1,is_add_related, is_add_homepage);
             } else {
-                window.location.href = "/project1/login.php";
+                window.location.href = "/PJ2/login.php";
             }
         }
     };
@@ -319,10 +319,12 @@ $minwords = "55";
         success: function(html) {
           //var select_tag_from_title = getTag($('#txttitle-' + $id).val());
 
+          //console.log('Tag terms ' + html);
           var select_tag_from_title = html;
           var arr_select_tag_from_title = select_tag_from_title.split(',');
           arr_select_tag_from_title.forEach(function(value) {
               value = $.trim(value).toLowerCase();
+              value = value.split(/\s+/).filter(word => word !== "").join(" ");
               $('#listTag-' + $id + ' option').each(function() {
                   if ($(this).text().toLowerCase() === value) {
                       $(this).prop('selected', true);
