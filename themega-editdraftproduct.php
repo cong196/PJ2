@@ -1,4 +1,25 @@
 <?php 
+
+    session_start();
+  if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+      
+  } else {
+      header("location: login.php");
+      exit;
+  }
+
+
+  // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+  if(isset($_POST['logout'])) {
+      // Xóa tất cả các biến session
+      session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;
+  }
+
 $nextpage = 1;
 
 $page = $_GET['page'];
@@ -20,95 +41,74 @@ settype($sort_by, "int");
 <meta charset="UTF-8">
 
 <title>Themegatee Edit Product</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css"> -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/PJ2/custom_css.css">
 
-
-
-<style>
-
-.masthead {
-  height: 100vh;
-  min-height: 500px;
-  background-size: 1000px 1000px;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding-top: 45px;
-}
-
-</style>
-<script type="text/javascript">
-
-</script>
 </head>
 
-<body style="padding-bottom: 20px;">
-<?php include 'menu.php'; ?>
+<body>
 
-<div>
-  <div class="row">
-   <div class="col-12">
-
-      <div>
-      <?php include 'editdraft-product-2.php'; ?>
+<?php include 'topbar.php'; ?>
+<div class="row" id="body-row">
+    <?php include 'slider_bar.php'; ?>
+    <div class="col p-4">
+        <h2 class="display-4">Sửa sản phẩm draft cho site Themegatee.com</h2>
+        <?php include 'editdraft-product-5.php'; ?>
       
       <form style="padding: 0px 50px 50px 50px;">
-        <div class="row">
-        <div class="col-sm-3 my-1">
-          <select class="form-select" id="select_sort_by" aria-label="Default select example">
-            <option value="1">Sort by Old to New</option>
-            <option value="2">Sort by New to Old</option>
-          </select>
-        </div>
-      </div>
-
-        <div class="row">
+            <div class="row">
             <div class="col-sm-3 my-1">
-                <label class="sr-only" for="searchTitle">Title</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Search title</div>
+              <select class="form-select" id="select_sort_by" aria-label="Default select example">
+                <option value="1">Sort by Old to New</option>
+                <option value="2">Sort by New to Old</option>
+              </select>
+            </div>
+          </div>
+
+            <div class="row">
+                <div class="col-sm-3 my-1">
+                    <label class="sr-only" for="searchTitle">Title</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Search title</div>
+                        </div>
+                        <input type="text" class="form-control" id="searchTitle" placeholder="">
                     </div>
-                    <input type="text" class="form-control" id="searchTitle" placeholder="">
+                </div>
+                <div class="col-sm-1 my-1">
+                    <label class="sr-only" for="searchPage">Page</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Page</div>
+                        </div>
+                        <input type="number" class="form-control" id="searchPage" value=1>
+                    </div>
+                </div>
+                <div class="col-sm-2 my-1">
+                    <label class="sr-only" for="inlineFormInputGroupPage">Per/Page</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">Per/Page</div>
+                        </div>
+                        <input type="number" class="form-control" value=10 id="searchPerPage">
+                    </div>
+                </div>
+                <div class="col-sm-2 my-1">
+                    <input class="btn btn-primary" type="button" value="Search" name="nextPage" id="nextPage" onclick="clickSubmit()" />
                 </div>
             </div>
-            <div class="col-sm-1 my-1">
-                <label class="sr-only" for="searchPage">Page</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Page</div>
-                    </div>
-                    <input type="number" class="form-control" id="searchPage" value=1>
-                </div>
-            </div>
-            <div class="col-sm-2 my-1">
-                <label class="sr-only" for="inlineFormInputGroupPage">Per/Page</label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">Per/Page</div>
-                    </div>
-                    <input type="number" class="form-control" value=10 id="searchPerPage">
-                </div>
-            </div>
-            <div class="col-sm-2 my-1">
-                <input class="btn btn-primary" type="button" value="Search" name="nextPage" id="nextPage" onclick="clickSubmit()" />
-            </div>
-        </div>
-    </form>
-      </div>
+        </form>
     </div>
-
-
+</div>
 
 
   <script type="text/javascript">

@@ -1,4 +1,24 @@
 <?php
+
+  session_start();
+  if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+      
+  } else {
+      header("location: login.php");
+      exit;
+  }
+
+
+  // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+  if(isset($_POST['logout'])) {
+      // Xóa tất cả các biến session
+      session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;
+  }
     use Automattic\WooCommerce\Client;
     require __DIR__ . '/vendor/autoload.php';
     include "dbConnect.php";
@@ -45,18 +65,19 @@
 <script type="text/javascript" src="/PJ2/getProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getnewProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getPostcategory.js"></script>
-<style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/PJ2/custom_css.css">
 
-</style>
-<script type="text/javascript">
-
-</script>
 
 </head>
 
 <body>
 
-<?php include 'menu.php'; ?>
+<?php include 'topbar.php'; ?>
+    <div class="row" id="body-row">
+        <?php include 'slider_bar.php'; ?>
+        <div class="col p-4">
+            <h2>Printfusionusa.com setting</h2>
 
 <div style="background-color:#F0F0F0">
 <h3 style="padding-left:25px;padding-top: 65px;">Category</h3>
@@ -202,9 +223,8 @@
 </div>
 
 
-<br/>
-<br/>
-<br/>
+</div>
+</div>
 </body>
 </html>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>

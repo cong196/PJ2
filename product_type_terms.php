@@ -1,3 +1,26 @@
+<?php 
+
+  session_start();
+  if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+      
+  } else {
+      header("location: login.php");
+      exit;
+  }
+
+
+  // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+  if(isset($_POST['logout'])) {
+      // Xóa tất cả các biến session
+      session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,9 +32,10 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- FontAwesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="/PJ2/custom_css.css">
     <style type="text/css">
         .custom-table {
             background-color: #f8f9fa;
@@ -38,9 +62,17 @@
 </head>
 
 <body>
-<?php include 'menu.php'; ?>
 
-<div class="container mt-5">
+    <?php include 'topbar.php'; ?>
+<!-- Bootstrap row -->
+<div class="row" id="body-row">
+    <!-- Sidebar -->
+    <?php include 'slider_bar.php'; ?>
+    <!-- sidebar-container END -->
+    <!-- MAIN -->
+    <div class="col p-4">
+
+
     <h2>Add/Edit/Delete Products type terms</h2>
 
     <!-- Form for adding/editing -->
@@ -70,8 +102,9 @@
             <!-- TODO: Fetch and display entries from the database using AJAX -->
         </tbody>
     </table>
-</div>
 
+</div>
+</div>
 <!-- AJAX Scripts -->
 <script>
     $(document).ready(function() {

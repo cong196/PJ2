@@ -1,11 +1,38 @@
+<?php
+    session_start();
+      if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+          
+      } else {
+          header("location: login.php");
+          exit;
+      }
+
+
+      // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+      if(isset($_POST['logout'])) {
+          // Xóa tất cả các biến session
+          session_unset();
+          // Hủy phiên
+          session_destroy();
+          // Chuyển hướng người dùng đến trang đăng nhập
+          header("location: login.php");
+          exit;
+      }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Add Tag Terms</title>
-    <!-- Include Bootstrap CSS here -->
     <link rel="icon" href="/favicon.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/PJ2/custom_css.css">
+
     <style>
         .tag-term {
             display: inline-block;
@@ -51,47 +78,17 @@
 
 </head>
 <body>
-   <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow">
-  <div class="container">
-    <a class="navbar-brand" href="/PJ2/">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="themegateeDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Themegatee
-          </a>
-          <div class="dropdown-menu" aria-labelledby="themegateeDropdown">
-            <a class="dropdown-item" href="/PJ2/themegatee.php">Create Post</a>
-            <a class="dropdown-item" href="/PJ2/themegatee-editproduct.php?page=1&perpage=10&searchTitle=">Edit product</a>
-            <a class="dropdown-item" href="/PJ2/themega-editdraftproduct.php?page=1&perpage=10&sort_by=1&searchTitle=">Edit draft product</a>
-            <a class="dropdown-item" href="/PJ2/themega_editdraftproduct.php?page=1&perpage=10&sort_by=1&searchTitle=">Edit draft</a>
-            <a class="dropdown-item" href="/PJ2/append_tag_terms.php">Edit terms tags</a>
-            <a class="dropdown-item" href="/PJ2/product_type_terms.php">Edit term product type</a>
-            <a class="dropdown-item" href="/PJ2/themegatee-setting.php">Setting</a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="kacogiftsDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Kacogifts
-          </a>
-          <div class="dropdown-menu" aria-labelledby="kacogiftsDropdown">
-            <a class="dropdown-item" href="/PJ2/kacogifts-editdraftproduct.php?page=1&perpage=10&searchTitle=">Edit draft product</a>
-            <a class="dropdown-item" href="/PJ2/kacogifts-setting.php">Setting</a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+   <?php include 'topbar.php'; ?>
+<!-- Bootstrap row -->
+<div class="row" id="body-row">
+    <!-- Sidebar -->
+    <?php include 'slider_bar.php'; ?>
+    <!-- sidebar-container END -->
+    <!-- MAIN -->
+    <div class="col p-4">
 
 
-   </div>
-
-    <div class="container mt-5">
+    
         <h2>Add Tag Terms</h2>
         <form id="tagTermForm">
             <div class="row">
@@ -106,14 +103,13 @@
             </div>
         </form>
         <div id="responseMessage"></div>
-    </div>
-
-    <div class="container mt-3">
+   
+  
         <h2>Tag Terms in Database:</h2>
         <div id="tagTermsList">
             <?php include 'get_tag_terms.php'; ?>
         </div>
-    </div>
+   
 
     <div id="notification" class="notification">
         <p>Success! Save was completed.</p>
@@ -121,6 +117,8 @@
     <div id="errorNotification" class="notification error">
         <p>Error! Something went wrong.</p>
     </div>
+</div>
+</div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

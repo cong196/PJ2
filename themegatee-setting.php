@@ -1,4 +1,23 @@
 <?php
+    session_start();
+      if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+          
+      } else {
+          header("location: login.php");
+          exit;
+      }
+
+
+      // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+      if(isset($_POST['logout'])) {
+          // Xóa tất cả các biến session
+          session_unset();
+          // Hủy phiên
+          session_destroy();
+          // Chuyển hướng người dùng đến trang đăng nhập
+          header("location: login.php");
+          exit;
+      }
     use Automattic\WooCommerce\Client;
     require __DIR__ . '/vendor/autoload.php';
     include "dbConnect.php";
@@ -45,180 +64,182 @@
 <script type="text/javascript" src="/PJ2/getProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getnewProductLink.js"></script>
 <script type="text/javascript" src="/PJ2/getPostcategory.js"></script>
-<style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/PJ2/custom_css.css">
 
-</style>
-<script type="text/javascript">
-
-</script>
 
 </head>
 
 <body>
 
-<?php include 'menu.php'; ?>
+<?php include 'topbar.php'; ?>
+    <!-- Bootstrap row -->
+    <div class="row" id="body-row">
+        <!-- Sidebar -->
+        <?php include 'slider_bar.php'; ?>
+        <!-- sidebar-container END -->
+        <!-- MAIN -->
+        <div class="col p-4">
+            <h2>Themegatee setting</h2>
 
-<div style="background-color:#F0F0F0">
-<h3 style="padding-left:25px;padding-top: 65px;">Category</h3>
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButton" onclick="getCategoriesSite('themegatee')" class="btn btn-primary">Update category from store</button>
+                <div style="background-color:#F0F0F0">
+                <h3 style="padding-left:25px;padding-top: 25px;">Category</h3>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                  <button type="button" id="btnButton" onclick="getCategoriesSite('themegatee')" class="btn btn-primary">Update category from store</button>
 
-<button id="btnButton-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
+                <button id="btnButton-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
 
-<!-- <button type="button" onclick="test11()" class="btn btn-primary">Clicked</button>
- --></div>
+                <!-- <button type="button" onclick="test11()" class="btn btn-primary">Clicked</button>
+                 --></div>
 
-<div style="padding:25px">
-<div id="data"> 
-    <select id="sdsd" class="form-control selectpicker" multiple data-live-search="true">
-    <?php 
-        $index = 0;
-        while($index < count($someArray)) {
-    ?>
-      <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
-    <?php
-        $index++;
-        }
-    ?>
-    </select>
-</div>
-</div>
-</div>
+                <div style="padding:25px">
+                <div id="data"> 
+                    <select id="sdsd" class="form-control selectpicker" multiple data-live-search="true">
+                    <?php 
+                        $index = 0;
+                        while($index < count($someArray)) {
+                    ?>
+                      <option value="<?php echo $someArray[$index]["id"] ?>"><?php echo $someArray[$index]["name"] ?></option>
+                    <?php
+                        $index++;
+                        }
+                    ?>
+                    </select>
+                </div>
+                </div>
+                </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">TAG</h3>
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButtonTag" onclick="getTagsSite('themegatee')" class="btn btn-primary">Update tag from store</button>
+                <div style="background-color:#F0F0F0; margin-top: 15px;">
+                <h3 style="padding-left:25px;padding-top: 25px;">TAG</h3>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                  <button type="button" id="btnButtonTag" onclick="getTagsSite('themegatee')" class="btn btn-primary">Update tag from store</button>
 
-<button id="btnButtonTag-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
+                <button id="btnButtonTag-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
 
-<!-- <button type="button" onclick="test11()" class="btn btn-primary">Clicked</button>
- --></div>
+                <!-- <button type="button" onclick="test11()" class="btn btn-primary">Clicked</button>
+                 --></div>
 
-<div style="padding:25px">
-<div id="data"> 
-    <select id="listTaggg" class="form-control selectpicker" multiple data-live-search="true">
-    <?php 
-        $index2 = 0;
-        while($index2 < count($listTag2)) {
-    ?>
-      <option value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
-    <?php
-        $index2++;
-        }
-    ?>
-    </select>
-</div>
-</div>
-</div>
+                <div style="padding:25px">
+                <div id="data"> 
+                    <select id="listTaggg" class="form-control selectpicker" multiple data-live-search="true">
+                    <?php 
+                        $index2 = 0;
+                        while($index2 < count($listTag2)) {
+                    ?>
+                      <option value="<?php echo $listTag2[$index2]["id"] ?>"><?php echo $listTag2[$index2]["name"] ?></option>
+                    <?php
+                        $index2++;
+                        }
+                    ?>
+                    </select>
+                </div>
+                </div>
+                </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Update product link</h3>
+                <div style="background-color:#F0F0F0; margin-top: 15px;">
+                <h3 style="padding-left:25px;padding-top: 25px;">Update product link</h3>
 
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btngetProductLink" onclick="getProductLink('themegatee')" class="btn btn-primary">Get all products</button>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                  <button type="button" id="btngetProductLink" onclick="getProductLink('themegatee')" class="btn btn-primary">Get all products</button>
 
-<button id="btngetProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
+                <button id="btngetProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
 
-</div>
-
-
-<div style="padding-left: 25px; padding-top: 25px;">
-<div class="row">
-  <div class="col-1">
-    <button type="button" id="btngetnewProductLink" onclick="getnewProductLink('themegatee')" class="btn btn-primary">Get new products</button>
-    <button id="btngetnewProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-        <span class="visually-hidden"></span>
-    </button>
-  </div>
-  <div class="col-1">
-    
-    <input type="number" id="txtgetnewProductLink" class="form-control" placeholder="Enter number">
-  </div>
-</div>
-</div>
-
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnDeleteProductLink" onclick="deleteProductLink('themegatee')" class="btn btn-danger">Delete all products</button>
-<button id="btnDeleteProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
-</div>
+                </div>
 
 
-<br/>
-</div>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                <div class="row">
+                  <div class="col-1">
+                    <button type="button" id="btngetnewProductLink" onclick="getnewProductLink('themegatee')" class="btn btn-primary">Get new products</button>
+                    <button id="btngetnewProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="visually-hidden"></span>
+                    </button>
+                  </div>
+                  <div class="col-1">
+                    
+                    <input type="number" id="txtgetnewProductLink" class="form-control" placeholder="Enter number">
+                  </div>
+                </div>
+                </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Post category</h3>
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('themegatee')" class="btn btn-primary">Update Post category</button>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                  <button type="button" id="btnDeleteProductLink" onclick="deleteProductLink('themegatee')" class="btn btn-danger">Delete all products</button>
+                <button id="btnDeleteProductLink-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
+                </div>
 
-<button id="btnButtonPostcategory-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
-</div>
 
-<div style="padding:25px">
-<div id="data"> 
-    <select id="selectlistPostcategory" class="form-control selectpicker" multiple data-live-search="true">
-    <?php 
-        $index2 = 0;
-        while($index2 < count($listPostcategory)) {
-    ?>
-      <option value="<?php echo $listPostcategory[$index2]["id"] ?>"><?php echo $listPostcategory[$index2]["name"] ?></option>
-    <?php
-        $index2++;
-        }
-    ?>
-    </select>
-</div>
-</div>
-</div>
+                <br/>
+                </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Import CSV keywords</h3>
-<form style="margin-left:30px" action="import_keywords_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
-    <div class="form-group">
-        <label for="csvFile">Choose a CSV File</label>
-        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
+                <div style="background-color:#F0F0F0; margin-top: 15px;">
+                <h3 style="padding-left:25px;padding-top: 25px;">Post category</h3>
+                <div style="padding-left: 25px; padding-top: 25px;">
+                  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('themegatee')" class="btn btn-primary">Update Post category</button>
+
+                <button id="btnButtonPostcategory-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span class="visually-hidden"></span>
+                </button>
+                </div>
+
+                <div style="padding:25px">
+                <div id="data"> 
+                    <select id="selectlistPostcategory" class="form-control selectpicker" multiple data-live-search="true">
+                    <?php 
+                        $index2 = 0;
+                        while($index2 < count($listPostcategory)) {
+                    ?>
+                      <option value="<?php echo $listPostcategory[$index2]["id"] ?>"><?php echo $listPostcategory[$index2]["name"] ?></option>
+                    <?php
+                        $index2++;
+                        }
+                    ?>
+                    </select>
+                </div>
+                </div>
+                </div>
+
+                <div style="background-color:#F0F0F0; margin-top: 15px;">
+                <h3 style="padding-left:25px;padding-top: 25px;">Import CSV keywords</h3>
+                <form style="margin-left:30px" action="import_keywords_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
+                    <div class="form-group">
+                        <label for="csvFile">Choose a CSV File</label>
+                        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+
+                <br/>
+                </div>
+
+                <div style="background-color:#F0F0F0; margin-top: 15px;">
+                <h3 style="padding-left:25px;padding-top: 25px;">Import Category Terms</h3>
+                <form style="margin-left:30px" action="import_category_terms_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
+                    <div class="form-group">
+                        <label for="csvFile">Choose a CSV File</label>
+                        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+
+                <br/>
+                </div>
     </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
-
-<br/>
 </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Import Category Terms</h3>
-<form style="margin-left:30px" action="import_category_terms_csv.php" method="post" enctype="multipart/form-data" class="mt-3">
-    <div class="form-group">
-        <label for="csvFile">Choose a CSV File</label>
-        <input type="file" class="form-control-file" name="csvFile" accept=".csv" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
-</form>
-
-<br/>
-</div>
-
-
-
-<br/>
-<br/>
-<br/>
 </body>
 </html>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>

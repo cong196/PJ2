@@ -1,4 +1,25 @@
 <?php 
+
+  session_start();
+  if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+      
+  } else {
+      header("location: login.php");
+      exit;
+  }
+
+
+  // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+  if(isset($_POST['logout'])) {
+      // Xóa tất cả các biến session
+      session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;
+  }
+
 use Automattic\WooCommerce\Client;
 require __DIR__ . '/vendor/autoload.php';
 include "dbConnect.php";
@@ -30,41 +51,25 @@ $listPostcategory = json_decode($listPostcat, true);
 
 <title>Themegatee</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css"> -->
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<link rel="stylesheet" type="text/css" href="/project1/bootstrap/css/bootstrap.min.css">
+<link rel="icon" href="/fav.png" type="image/x-icon">
+<script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-
-
-<script src="https://code.jquery.com/jquery-latest.js"></script>
-<!-- <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="/PJ2/gennewposttitle.js"></script>
 <script type="text/javascript" src="/PJ2/createPost.js"></script>
 <script type="text/javascript" src="/PJ2/generatenewintro.js"></script>
 <link rel="stylesheet" href="/PJ2/mystyle.css">
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="/PJ2/custom_css.css">
+
 
 <style>
 
@@ -82,10 +87,19 @@ $listPostcategory = json_decode($listPostcat, true);
 
 </script>
 </head>
-<body style="padding-bottom: 20px;">
-<?php include 'menu.php'; ?>
+<body>
 
-<div class="w-100 p-3">
+
+<?php include 'topbar.php'; ?>
+<!-- Bootstrap row -->
+<div class="row" id="body-row">
+    <!-- Sidebar -->
+    <?php include 'slider_bar.php'; ?>
+    <!-- sidebar-container END -->
+    <!-- MAIN -->
+    <div class="col p-4">
+        <h2 class="display-4">Viết bài post</h2>
+        <div class="w-100 p-3">
   <div class="row">
    <div class="col-4">
 
@@ -181,8 +195,6 @@ $listPostcategory = json_decode($listPostcat, true);
 <br/>
   <form class="row g-3">
       <div class="col-7">
-        <!-- <label for="txtintropost" class="visually-hidden">Intro</label>
-        <textarea class="form-control" id="txtintropost" rows="3"></textarea> -->
         <label for="txtintropost">Intro</label>
         <textarea class="ckeditor" id="txtintropost" name="txtintropost" rows="2"></textarea>
 
@@ -294,6 +306,10 @@ $listPostcategory = json_decode($listPostcat, true);
     </div>
   </div>
 </div>
+
+    </div>
+</div>
+
 
 
 

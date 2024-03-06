@@ -1,25 +1,31 @@
-<?php 
 
-	/*require __DIR__ . '/vendor/autoload.php';
-	use Orhanerday\OpenAi\OpenAi;
-	$open_ai = new OpenAi('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');
-	// get prompt parameter
-	$prompt = $_GET['prompt'];
-	// set api data
-	$complete = $open_ai->completion([
-	    'model' => 'text-davinci-003',
-	    'prompt' => $prompt,
-	    'temperature' => 1,
-	    'max_tokens' => 1050,
-	    'top_p' => 1,
-	    'frequency_penalty' => 0,
-	    'presence_penalty' => 0
-	]);
+<?php
+  session_start();
+  if(isset($_SESSION['PJ2_loggedin']) && $_SESSION['PJ2_loggedin'] === true) {
+      /*session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;*/
+  } else {
+      header("location: login.php");
+      exit;
+  }
 
-	var_dump($complete);*/
-	
+
+  // Xử lý logout nếu người dùng bấm nút "Đăng xuất"
+  if(isset($_POST['logout'])) {
+      // Xóa tất cả các biến session
+      session_unset();
+      // Hủy phiên
+      session_destroy();
+      // Chuyển hướng người dùng đến trang đăng nhập
+      header("location: login.php");
+      exit;
+  }
+
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -28,73 +34,67 @@
 
 <title>HOME PAGE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" type="text/css" href="/project1/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="/project1/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/PJ2/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/PJ2/mystyle.css">
-
-
-
+<link rel="icon" href="/fav.png" type="image/x-icon">
 <script type="text/javascript" src="ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="/PJ2/processimg.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <style>
 
-.masthead {
-  height: 100vh;
-  min-height: 500px;
-  background-size: 1000px 1000px;
-  background-position: center;
-  background-repeat: no-repeat;
-  padding-top: 25px;
-}
+
 
 </style>
 
 </head>
 
 <body>
-<?php include 'menu.php'; ?>
-
-<!-- Full Page Image Header with Vertically Centered Content -->
-<header class="masthead">
-  <div class="container h-100">
-    <div class="row h-100 align-items-center">
-      <div class="col-12 text-center">
-
-
-      	<form class="row g-3">
-      <div class="col-7">
-        <label for="sssss" class="visually-hidden">Post title</label>
-        <input class="form-control" type="text" id="sssss" placeholder="Post title" aria-label="default input example">
-      </div>
-      <div class="col-5">
-        <button type="button" style="display:flex" class="btn btn-primary mb-3" id="gennewtitlepost" onclick="submit111()">Generate new title</button>
-
-        <button class="btn btn-primary" style="display:none" id="gennewtitlepost-loading" type="button" disabled>
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Loading...
-        </button>
-
-
-      </div>
-  </form>
 
 
 
-      </div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    
+    <img src="/PJ2/logo.gif" alt="Logo" style="padding-left: 50px;" width="310">
+    <div class="collapse navbar-collapse" id="navbarNav" style="padding-right: 40px;">
+        <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+                    <a class="nav-link" href="#"><?php echo $_SESSION['PJ2_name']; ?></a>
+                </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          
+                    <img src="/PJ2/avatar-user.jpg" alt="Avatar" style="width: 30px; height: 30px; border-radius: 50%;">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Link 1</a>
+                    <a class="dropdown-item" href="#">Link 2</a>
+                    <div class="dropdown-divider"></div>
+                    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+                        <input type="submit" class="dropdown-item" name="logout" value="Đăng xuất">
+                    </form>
+                </div>
+            </li>
+        </ul>
     </div>
-  </div>
-</header>
-<script type="text/javascript">
-	function submit111(){
-			
-			var url = document.getElementById('sssss').value;
-			submitImg(url);
-	}
-</script>
+</nav>
+
+
+
+<div class="container mt-5">
+    <h1>Welcome</h1>
+    <p>Xin chào, <?php echo $_SESSION['PJ2_name']; ?>!</p>
+    
+    <?php include 'menu.php'; ?> 
+
+
+</div>
+  
 
 </body>
 </html>   

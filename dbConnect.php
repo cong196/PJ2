@@ -1190,7 +1190,41 @@ function getScheduleProductId($site) {
     return 0;
 }
 
+function login($username_1,$password_1) {
 
+    global $servername, $username, $password, $database_name;
+
+    // Kết nối đến cơ sở dữ liệu
+    $conn = new mysqli($servername, $username, $password, $database_name);
+
+    // Kiểm tra kết nối
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "SELECT * FROM user WHERE username = '" . $username_1 . "' and password = '" . $password_1 . "'";
+    $result = $conn->query($sql);
+
+    $data = array();
+
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $data['username'] = $row['username'];
+            $data['name'] = $row['name'];
+            $data['is_success'] = 1;
+            $data['role'] = $row['role'];
+        }
+    } else {
+            $data['username'] = "";
+            $data['name'] = "";
+            $data['is_success'] = 0;
+            $data['role'] = "";
+    }
+
+    $conn->close();
+    return json_encode($data);
+
+}
 
 
 ?>
