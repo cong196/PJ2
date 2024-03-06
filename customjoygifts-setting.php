@@ -29,8 +29,8 @@
    $listTag = getdataTag('customjoygifts');
    $listTag2 = json_decode($listTag, true);
 
-   $listPostcat = getdataPostCategory('customjoygifts');
-   $listPostcategory = json_decode($listPostcat, true);
+   /*$listPostcat = getdataPostCategory('customjoygifts');
+   $listPostcategory = json_decode($listPostcat, true);*/
 ?>
 
 <!DOCTYPE html>
@@ -180,33 +180,7 @@
 <br/>
 </div>
 
-<div style="background-color:#F0F0F0; margin-top: 15px;">
-<h3 style="padding-left:25px;padding-top: 25px;">Post category</h3>
-<div style="padding-left: 25px; padding-top: 25px;">
-  <button type="button" id="btnButtonPostcategory" onclick="getPostcategory('customjoygifts')" class="btn btn-primary">Update Post category</button>
 
-<button id="btnButtonPostcategory-loading" style="display: none;" class="btn btn-primary" type="button" disabled>
-  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden"></span>
-</button>
-</div>
-
-<div style="padding:25px">
-<div id="data"> 
-    <select id="selectlistPostcategory" class="form-control selectpicker" multiple data-live-search="true">
-    <?php 
-        $index2 = 0;
-        while($index2 < count($listPostcategory)) {
-    ?>
-      <option value="<?php echo $listPostcategory[$index2]["id"] ?>"><?php echo $listPostcategory[$index2]["name"] ?></option>
-    <?php
-        $index2++;
-        }
-    ?>
-    </select>
-</div>
-</div>
-</div>
 
 <div style="background-color:#F0F0F0; margin-top: 15px;">
 <h3 style="padding-left:25px;padding-top: 25px;">Import CSV keywords</h3>

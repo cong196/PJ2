@@ -69,6 +69,24 @@ function getdataCategory($site){
                             }
                             mysqli_close($dbh);
                             return json_encode($responseCategory);
+                        } else {
+                            if($site == 'kacogifts' || $site == 'kacogifts-editproducts.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts.php') {
+                                $sql_stmt = "SELECT * FROM kacogifts_category"; 
+                                $result = mysqli_query($dbh,$sql_stmt);
+                                $rows = mysqli_num_rows($result); 
+                                $responseCategory = array();
+                                if ($rows) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        $responseCategory [] = array(
+                                            'id' => $row['id'],
+                                            'name' => $row['name'],
+                                            'slug' => $row['slug']
+                                        );
+                                    } 
+                                }
+                                mysqli_close($dbh);
+                                return json_encode($responseCategory);
+                            }
                         }
                     }
                 }
@@ -181,6 +199,25 @@ function getdataTag($site){
                             }
                             mysqli_close($dbh); // Đóng kết nối CSDL
                             return json_encode($responseCategory);
+                        } else {
+                            if($site == 'kacogifts' || $site == 'kacogifts-editproducts.php' || $site == 'kacogifts_editdraftproduct.php' || $site == 'kacogifts-editdraftproduct.php') {
+                                $sql_stmt = "SELECT * FROM kacogifts_tag"; 
+                                $result = mysqli_query($dbh,$sql_stmt);
+                                $rows = mysqli_num_rows($result); 
+                                
+                                $responseCategory = array();
+                                if ($rows) {
+                                    while ($row = mysqli_fetch_array($result)) {
+                                        $responseCategory [] = array(
+                                            'id' => $row['id'],
+                                            'name' => $row['name'],
+                                            'slug' => $row['slug']
+                                        );
+                                    } 
+                                }
+                                mysqli_close($dbh); // Đóng kết nối CSDL
+                                return json_encode($responseCategory);
+                            }
                         }
                     }
                 }
@@ -210,6 +247,11 @@ function deletTableCategory($site){
                     if($site == 'printfusionusa') {
                      $sql_stmt = "DELETE FROM printfusionusa_category"; 
                      $result = mysqli_query($dbh,$sql_stmt);
+                    } else {
+                        if($site == 'kacogifts') {
+                         $sql_stmt = "DELETE FROM kacogifts_category"; 
+                         $result = mysqli_query($dbh,$sql_stmt);
+                        }
                     }
                 }
             }
@@ -303,6 +345,15 @@ function updateCategory($site,$id,$name,$slug, $parent){
                         if (mysqli_num_rows($check_result) == 0) {
                             $sql_stmt = "INSERT INTO printfusionusa_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
                             $result = mysqli_query($dbh,$sql_stmt);
+                        }
+                    } else {
+                        if($site == 'kacogifts' || $site == 'kacogifts-editdraftproduct.php' || $site == 'kacogifts-editdraftproduct-2.php') {
+                            $check_sql = "SELECT * FROM kacogifts_category WHERE id = $id";
+                            $check_result = mysqli_query($dbh, $check_sql);
+                            if (mysqli_num_rows($check_result) == 0) {
+                                $sql_stmt = "INSERT INTO kacogifts_category VALUES ($id,'".$name2."','".$slug."','".$parent."')";
+                                $result = mysqli_query($dbh,$sql_stmt);
+                            }
                         }
                     }
                 }
