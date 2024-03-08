@@ -710,7 +710,7 @@ function getClosing($site){
     }
 }
 
-function getKeywordCategory($category){
+function getKeywordCategory($category,$product_type){
     global $servername, $username, $password, $database_name;
     $conn = new mysqli($servername, $username, $password, $database_name);
     
@@ -718,7 +718,8 @@ function getKeywordCategory($category){
         die("Connection failed: " . $conn->connect_error);
         return [];
     } else {
-        $sql = "SELECT * FROM keywords_test WHERE `category` = '" . $category . "'";
+        //$sql = "SELECT * FROM keywords_test WHERE `category` = '" . $category . "' and LOWER(type) = LOWER('". $product_type ."')";
+        $sql = "SELECT * FROM keywords_test WHERE `category` LIKE '%" . $category . "%' AND ( LOWER(type) = LOWER('" . $product_type . "') OR LOWER(type) = 'chung')";
 
         $result = $conn->query($sql);
         
@@ -1276,6 +1277,5 @@ function login($username_1,$password_1) {
     return json_encode($data);
 
 }
-
 
 ?>

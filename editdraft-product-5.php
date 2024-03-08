@@ -122,6 +122,50 @@ $minwords = "55";
   </style>
 
 <script>
+    function get_product_type_by_title_2(title) {
+    title = title.toLowerCase();
+    if (title.includes('jersey')) {
+        return 'jersey';
+    } else if (title.includes('cap') || title.includes('caps')) {
+        return 'cap';
+    } else if (title.includes('hoodie')) {
+        return 'hoodie';
+    } else if (title.includes('sweatshirt') || title.includes('sweater')) {
+        return 'sweatshirt';
+    } else if (title.includes('tumbler')) {
+        return 'tumbler';
+    } else if (title.includes('crocs')) {
+        return 'crocs';
+    } else if (title.includes('hawaiian shirt') || title.includes('hawaiians shirt') || title.includes('button shirt') || title.includes('aloha shirt')) {
+        return 'hawaiian shirt';
+    } else if (title.includes('blanket')) {
+        return 'blanket';
+    } else if (title.includes('mugs')) {
+        return 'mug';
+    } else if (title.includes('legging')) {
+        return 'legging';
+    } else if (title.includes('polo')) {
+        return 'polo';
+    } else if (title.includes('jacket')) {
+        return 'jacket';
+    } else if (title.includes('poster')) {
+        return 'poster';
+    } else if (title.includes('phone case')) {
+        return 'phone case';
+    } else if (title.includes('ornament')) {
+        return 'ornaments';
+    } else if (title.includes('flag')) {
+        return 'flag';
+    } else if (title.includes('shoe') || title.includes('jordan 1') || title.includes('sneaker')) {
+        return 'shoes';
+    } else if (title.includes('shirt')) {
+        return 'shirt';
+    } else {
+        return 'chung';
+    }
+}
+
+
     function getPrducts($page,$perage,$searchTitle) {
         //var query_parameter = document.getElementById("name").value;
         //var dataString = 'parameter=' + query_parameter;
@@ -311,6 +355,8 @@ $minwords = "55";
     $('#listTag-' + $id).selectpicker('refresh');
 
 
+    
+
     $.ajax({
         type: "POST",
         url: "getTagsTerms.php",
@@ -345,10 +391,11 @@ $minwords = "55";
 
         }
     });
+    var product_type_2 = get_product_type_by_title_2($('#txttitle-' + $id).val());
     $.ajax({
         type: "POST",
         url: "getKeywordCategory.php",
-        data: {category:category, id:$id},
+        data: {category:category, id:$id, product_type: product_type_2},
         cache: false,
         success: function(html) {
         document.getElementById("selectedKeywords-" + $id).innerHTML=html;

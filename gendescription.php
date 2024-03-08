@@ -20,7 +20,7 @@ $prompt = '';
 
 $randNum = rand(1, 100);
 
-if ($randNum <= 65) {
+if ($randNum <= 50) {
     $edtKeyword = "";
 } else {
     

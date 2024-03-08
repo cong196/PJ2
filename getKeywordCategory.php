@@ -8,6 +8,7 @@ if(isset($_POST['category'])) {
     // Get the category value from the POST data
     $category = $_POST['category'];
     $id = $_POST['id'];
+    $product_type = $_POST['product_type'];
     switch ($category) {
         case "NHL merch":
             $category = "NHL";
@@ -27,7 +28,7 @@ if(isset($_POST['category'])) {
         default:
             break;
     }
-    $c1 = getKeywordCategory($category);
+    $c1 = getKeywordCategory($category, $product_type);
 
     if (!empty($c1)) {
         $result = '<select id="keywords-' . $id . '" class="form-control selectpicker" data-live-search="true">';
